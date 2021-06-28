@@ -52,9 +52,9 @@ async def register_user(message: types.Message):
         text += ("\n"
                   "Добавить новый товар: /add_item"
                   "Сейчас в базе {count_users} человек!\n")
-    if message.from_user.id == admin_id: 
-        text += message.answer(reply_markup=admin_markup)
     await bot.send_message(chat_id, text)
+    if message.from_user.id == admin_id:
+        await bot.send_message(chat_id, reply_markup=admin_markup)
 
 
 # Альтернативно можно использовать фильтр text_contains, он улавливает то, что указано в call.data
