@@ -516,7 +516,22 @@ async def mailing(call: CallbackQuery):
     await call.message.answer("Пришлите текст рассылки")
     await Mailing.Mall.set()
 
-@dp.callback_query_handler(user_id=admin_id, state=Mailing.Mall)
+dp.message_handler(user_id=admin_id, state=Mailing.Text)
+async def mailing(message: types.Message, state: FSMContext):
+    text = message.text
+    await state.update_data(text=text)
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [InlineKeyboardButton(text=("Да"), callback_data="confirm_mall")],
+            [InlineKeyboardButton(text=("Отмена"), callback_data="/start")],
+        ]
+    )
+    await message.answer("Текст:\n {text}\n Уверены?", reply_markup=markup)
+    await Mailing.Mall.set()
+
+
+@dp.callback_query_handler(user_id=admin_id, text_contains="confirm_mall", state=Mailing.Mall)
 async def mailing_start(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     text = data.get("text")
