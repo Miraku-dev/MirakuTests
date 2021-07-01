@@ -12,8 +12,8 @@ from states import NewItem, Mailing
 from database import Accessories, User, Malling, Other, Pants, Shoes, Hats
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="admin_panel")
-async def admin_panel(call: CallbackQuery):
+@dp.message_handler(user_id=admin_id, commands=["admin_panel"])
+async def admin_panel(message: types.Message):
     admin_panel_markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
@@ -26,7 +26,7 @@ async def admin_panel(call: CallbackQuery):
             ]
         ]
     )
-    await call.message.answer("Что вы хотите сделать?", reply_markup=admin_panel_markup)
+    await message.answer("Что вы хотите сделать?", reply_markup=admin_panel_markup)
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_item")
 async def item_category(call: CallbackQuery):

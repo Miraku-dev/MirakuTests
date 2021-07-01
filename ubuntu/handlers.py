@@ -124,7 +124,7 @@ async def categories(call: CallbackQuery):
             ]
         ]
     )
-    await call.message.answer("Выберите товар из присутствующих категорий:", reply_markup=categories_markup)
+    await call.answer("Выберите товар из присутствующих категорий:", reply_markup=categories_markup)
 
 
 
