@@ -24,7 +24,7 @@ async def cancel(call: CallbackQuery, state: FSMContext):
     await call.answer("Действие отменено")
     await state.reset_state()
     chat_id = call.from_user.id
-    referral =call.get_args()
+    referral = call.get_args()
     user = await db.add_new_user(referral=referral)
     id = user.id
     count_users = await db.count_users()
@@ -64,17 +64,17 @@ async def register_user(message: types.Message):
     referral = message.get_args()
     user = await db.add_new_user(referral=referral)
     id = user.id
-    count_users = await db.count_users()
 
-    # Отдадим пользователю клавиатуру с выбором языков
     admin_markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
             [
-                InlineKeyboardButton(text="Список товаров", callback_data="category_list")],
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [   
                 InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
                 InlineKeyboardButton(text="Поддержка", callback_data="help")
-        ]
+            ]
+       ]
     )
 
     bot_username = (await bot.me).username
@@ -82,15 +82,11 @@ async def register_user(message: types.Message):
 
     text = ("Привет!\n"
              "\n"
-             "Что вы хотите увидеть?").format(
-        count_users=count_users,
-        bot_link=bot_link
-    )
+             "Что вы хотите увидеть?")
+
     if message.from_user.id == admin_id:
-        text += (("\n"
-                  "Следующее видит только администратор.\n"
-                  "Панель администрации: /admin_panel"
-                  "Сейчас в базе {count_users} человек!\n").format(count_uesrs=count_users))
+        text += ("\n"
+                  "Чтобы увидеть админ-панель нажмите: /admin_panel")
     await bot.send_message(chat_id, text, reply_markup=admin_markup)
 
 # Альтернативно можно использовать фильтр text_contains, он улавливает то, что указано в call.data
@@ -132,10 +128,11 @@ async def categories(call: CallbackQuery):
 
 
 
-@dp.сallback_query_handler(text_contains="hats")
-async def show_items(call: CallbackQuery):
+@dp.message_handler(text="hats")
+async def show_hats_items(message: Message):
     # Достаем товары из базы данных
     all_items = await db.show_hats()
+    chat_id = message.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, hats in enumerate(all_items):
         text = ("<b>Товар</b> \t№{hats_id}: <u>{hats_name}</u>\n"
@@ -151,7 +148,7 @@ async def show_items(call: CallbackQuery):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(
+        await message.answer_photo(
             hats_photo=hats.hat_photo,
             caption=text.format(
                 hats_id=hats.hat_id,
@@ -165,7 +162,7 @@ async def show_items(call: CallbackQuery):
 
 
 @dp.callback_query_handler(text_contains="accessories")
-async def show_items(call: CallbackQuery):
+async def show_accessories_items(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_accessories()
     # Проходимся по товарам, пронумеровывая
@@ -197,7 +194,7 @@ async def show_items(call: CallbackQuery):
 
 
 @dp.callback_query_handler(text_contains="malling")
-async def show_items(call: CallbackQuery):
+async def show_malling_items(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_malling()
     # Проходимся по товарам, пронумеровывая
@@ -229,7 +226,7 @@ async def show_items(call: CallbackQuery):
 
 
 @dp.callback_query_handler(text_contains="pants")
-async def show_items(call: CallbackQuery):
+async def show_pants_items(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_pants()
     # Проходимся по товарам, пронумеровывая
@@ -261,7 +258,7 @@ async def show_items(call: CallbackQuery):
 
 
 @dp.callback_query_handler(text_contains="shoes")
-async def show_items(call: CallbackQuery):
+async def show_shoes_items(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_shoes()
     # Проходимся по товарам, пронумеровывая
@@ -293,8 +290,8 @@ async def show_items(call: CallbackQuery):
 
 ###################################
 # Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="accessories")
-async def show_items(call: CallbackQuery):
+@dp.callback_query_handler(text_contains="other")
+async def show_other_items(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_other()
     # Проходимся по товарам, пронумеровывая
