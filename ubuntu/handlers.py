@@ -151,7 +151,7 @@ async def show_items(call: CallbackQuery):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.answer_photo(
+        await bot.send_photo(
             hats_photo=hats.hat_photo,
             caption=text.format(
                 hats_id=hats.hat_id,
@@ -183,7 +183,7 @@ async def show_items(call: CallbackQuery):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.answer_photo(
+        await bot.send_photo(
             accessorires_photo=accessories.acessories_photo,
             caption=text.format(
                 accessories_id=accessories.accesories_id,
@@ -197,7 +197,7 @@ async def show_items(call: CallbackQuery):
 
 
 @dp.callback_query_handler(text_contains="malling")
-async def show_items(message: Message):
+async def show_items(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_malling()
     # Проходимся по товарам, пронумеровывая
@@ -215,7 +215,7 @@ async def show_items(message: Message):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await message.answer_photo(
+        await bot.send_photo(
             malling_photo=malling.malling_photo,
             caption=text.format(
                 malling_id=malling.malling_id,
@@ -247,7 +247,7 @@ async def show_items(call: CallbackQuery):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.answer_photo(
+        await bot.send_photo(
             pants_photo=pants.pants_photo,
             caption=text.format(
                 pants_id=pants.pants_id,
@@ -279,7 +279,7 @@ async def show_items(call: CallbackQuery):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.answer_photo(
+        await bot.send_photo(
             shoes_photo=shoes.shoes_photo,
             caption=text.format(
                 shoes_id=shoes.accesories_id,
@@ -312,7 +312,7 @@ async def show_items(call: CallbackQuery):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.answer_photo(
+        await bot.send_photo(
             other_photo=other.other_photo,
             caption=text.format(
                 other_id=other.other_id,
