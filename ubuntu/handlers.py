@@ -109,6 +109,7 @@ async def check_referrals(message: types.Message):
 
 @dp.callback_query_handler(text_contains="list_categories")
 async def categories(call: CallbackQuery):
+    chat_id = call.from_user.id
     categories_markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
@@ -117,14 +118,16 @@ async def categories(call: CallbackQuery):
             [
                 InlineKeyboardButton(text="Аксессуары", callback_data="accessories"),
                 InlineKeyboardButton(text="Верхняя одежда", callback_data="malling"),
-                InlineKeyboardButton(text="Брюки", callback_data="pants"),
+            [
+                InlineKeyboardButton(text="Брюки", callback_data="pants")],
                 InlineKeyboardButton(text="Обувь", callback_data="shoes"),
-                InlineKeyboardButton(text="Другое", calback_data="other"),
+                InlineKeyboardButton(text="Другое", calback_data="other")],
+            [
                 InlineKeyboardButton(text="Отмена", callback_data="cancel")
             ]
         ]
     )
-    await call.answer("Выберите товар из присутствующих категорий:", reply_markup=categories_markup)
+    await bot.send_message(chat_id, "Выберите товар из присутствующих категорий:", reply_markup=categories_markup)
 
 
 

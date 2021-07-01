@@ -514,7 +514,7 @@ async def enter_price(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"])
 async def mailing(call: CallbackQuery):
     await call.message.answer("Пришлите текст рассылки")
-    await Mailing.Mall.set()
+    await Mailing.Text.set()
 
 dp.message_handler(user_id=admin_id, state=Mailing.Text)
 async def mailing(message: types.Message, state: FSMContext):
