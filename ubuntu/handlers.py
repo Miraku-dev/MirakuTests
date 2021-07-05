@@ -13,7 +13,6 @@ import database
 import states
 from config import lp_token, admin_id
 from load_all import dp, bot
-from states import NewItem
 
 db = database.DBCommands()
 
