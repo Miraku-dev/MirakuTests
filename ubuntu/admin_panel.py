@@ -59,7 +59,7 @@ async def add_accessories(call: CallbackQuery):
     chat_id = call.from_user.id
     text = ("Введите название товара или нажмите:")
     button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
-    await bot.send_message(chat_id, text, reply_keyboard=button)
+    await bot.send_message(chat_id, text, reply_markup=button)
     await NewAccessories.Name.set()
 
 @dp.message_handler(user_id=admin_id, state=NewAccessories.Name)
