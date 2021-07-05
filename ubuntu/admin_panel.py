@@ -87,7 +87,7 @@ async def add_accessories_photo(message: types.Message, state: FSMContext):
     await message.answer_photo(
         accessories_photo=accessories_photo,
         caption=("Название: {accessories_name}"
-                  '\nПришлите мне цену товара или нажмите "Отмена"').format(name=accessories.accessories_name), reply_markup=button)
+                  '\nПришлите мне цену товара или нажмите "Отмена"').format(accessories_name=accessories.accessories_name), reply_markup=button)
 
     await NewItem.Price.set()
     await state.update_data(accessories=accessories)
