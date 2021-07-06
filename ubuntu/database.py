@@ -117,7 +117,7 @@ class Purchase(db.Model):
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)
-    amount = Column(Integer)  # Цена в копейках (потом делим на 100)
+    amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
     shipping_address = Column(JSON)

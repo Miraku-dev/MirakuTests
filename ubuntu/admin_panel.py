@@ -58,7 +58,8 @@ async def item_category(call: CallbackQuery):
 async def add_accessories(call: CallbackQuery):
     chat_id = call.from_user.id
     text = ("Введите название товара или нажмите:")
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     await bot.send_message(chat_id, text, reply_markup=button)
     await NewAccessories.Name.set()
 
@@ -67,7 +68,8 @@ async def enter_accessories_name(message: types.Message, state: FSMContext):
     accessories_name = message.text
     accessories = Accessories()
     accessories.accessories_name = accessories_name
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
 
     await message.answer("Название: {accessories_name}"
                            '\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"'.format(accessories_name=accessories_name), 
@@ -83,7 +85,8 @@ async def add_accessories_photo(message: types.Message, state: FSMContext):
     data = await state.get_data()
     accessories: Accessories = data.get("accessories")
     accessories.accessories_photo = accessories_photo
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     chat_id = message.from_user.id
     text = ("Название: {accessories_name}"
                   '\nПришлите мне цену товара или нажмите "Отмена"')
@@ -143,7 +146,8 @@ async def enter_accessories_price(call: types.CallbackQuery, state: FSMContext):
 async def add_hat(call: CallbackQuery):
     chat_id = call.from_user.id
     text = ("Введите название товара или нажмите:")
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     await bot.send_message(chat_id, text, reply_markup=button)
     await NewHats.Name.set()
 
@@ -153,7 +157,8 @@ async def enter_hat_name(message: types.Message, state: FSMContext):
     hat_name = message.text
     hats = Hats()
     hats.hat_name = hat_name
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
 
     await message.answer("Название: {hat_name}"
                            '\nПришлите фотографию товара (не документ) или нажмите "Отмена"'.format(hat_name=hat_name),
@@ -171,11 +176,12 @@ async def add_hat_photo(message: types.Message, state: FSMContext):
     data = await state.get_data()
     hats: Hats = data.get("hats")
     hats.hat_photo = hat_photo
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     chat_id = message.from_user.id
 
     await bot.send_photo(chat_id,
-        hat_photo=hat_photo,
+        hat_photo,
         caption=text.format(hat_name=hats.hat_name),
         reply_markup=button)
 
@@ -230,7 +236,8 @@ async def enter_hat_price(call: types.CallbackQuery, state: FSMContext):
 async def add_malling(call: CallbackQuery):
     chat_id = call.from_user.id
     text = ("Введите название товара или нажмите:")
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     await bot.send_message(chat_id, text, reply_markup=button)
     await NewMalling.Name.set()
 
@@ -240,7 +247,8 @@ async def enter_malling_name(message: types.Message, state: FSMContext):
     malling_name = message.text
     malling = Malling()
     malling.malling_name = malling_name
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
 
     await message.answer("Название: {malling_name}"
                            '\nПришлите фотографию товара (не документ) или нажмите "Отмена"'.format(malling_name=malling.malling_name),
@@ -262,7 +270,7 @@ async def add_malling_photo(message: types.Message, state: FSMContext):
                   '\nПришлите цену товара или нажмите "Отмена"')
 
     await bot.send_photo(chat_id,
-        malling_photo=malling_photo,
+        malling_photo,
         caption=text.format(malling=malling.malling_name))
 
     await NewMalling.Price.set()
@@ -316,7 +324,8 @@ async def enter_malling_price(call: types.CallbackQuery, state: FSMContext):
 async def add_pants_item(call: CallbackQuery):
     chat_id = call.from_user.id
     text = ("Введите название товара или нажмите:")
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     await bot.send_message(chat_id, text, reply_markup=button)
     await NewPants.Name.set()
 
@@ -325,7 +334,8 @@ async def enter_pants_name(message: types.Message, state: FSMContext):
     pants_name = message.text
     pants = Pants()
     pants.pants_name = pants_name
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
 
     await message.answer(("Название: {pants_name}"
                            '\nПришлите фотографию товара (не документ) или нажмите "Отмена"').format(pants_name=pants_name),
@@ -341,11 +351,12 @@ async def add_pants_photo(message: types.Message, state: FSMContext):
     data = await state.get_data()
     pants: Pants = data.get("pants")
     pants.pants_photo = pants_photo
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     chat_id = message.from_user.id
 
     await bot.send_photo(chat_id,
-        pants_photo=pants_photo,
+        pants_photo,
         caption=("Название: {pants_name}"
                   '\nПришлите мне цену товара или нажмите "Отмена"').format(pants_name=pants.pants_name),
                   reply_markup=button)
@@ -401,7 +412,8 @@ async def enter_pants_price(call: types.CallbackQuery, state: FSMContext):
 async def add_shoes(call: CallbackQuery):
     chat_id = call.from_user.id
     text = ("Введите название товара или нажмите:")
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     await bot.send_message(chat_id, text, reply_markup=button)
     await NewShoes.Name.set()
 
@@ -411,7 +423,8 @@ async def enter_shoes_name(message: types.Message, state: FSMContext):
     shoes_name = message.text
     shoes = Shoes()
     shoes.shoes_name = shoes_name
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
 
     await message.answer(("Название: {shoes_name}"
                            '\nПришлите фотографию товара (не документ) или нажмите "Отмена"').format(shoes_name=shoes_name),
@@ -427,15 +440,13 @@ async def add_shoes_photo(message: types.Message, state: FSMContext):
     data = await state.get_data()
     shoes: Shoes = data.get("shoes")
     shoes.shoes_photo = shoes_photo
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
     chat_id = message.from_user.id
     text = ("Название: {shoes_name}"
                   "\nПришлите мне цену товара.")
 
-    await bot.send_photo(
-        shoes_photo=shoes_photo,
-        caption=text.format(shoes_name=shoes.shoes_name), 
-        reply_markup=button)
+    await bot.send_photo(chat_id,
+        shoes_photo,
+        caption=text.format(shoes_name=shoes.shoes_name))
 
     await NewShoes.Price.set()
     await state.update_data(shoes=shoes)
@@ -488,7 +499,8 @@ async def enter_shoes_price(call: types.CallbackQuery, state: FSMContext):
 async def add_other(call: CallbackQuery):
     chat_id = call.from_user.id
     text = ("Введите название товара или нажмите:")
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     await bot.send_message(chat_id, text, reply_markup=button)
     await NewOther.Name.set()
 
@@ -498,7 +510,8 @@ async def enter_other_name(message: types.Message, state: FSMContext):
     other_name = message.text
     other = Other()
     other.other_name = other_name
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
 
     await message.answer(("Название: {other_name}"
                            '\nПришлите фотографию товара (не документ) или нажмите "Отмена"').format(other_name=other_name),
@@ -514,7 +527,8 @@ async def add_other_photo(message: types.Message, state: FSMContext):
     data = await state.get_data()
     other: Other = data.get("other")
     other.other_photo = other_photo
-    button = InlineKeyboardButton(text="Отмена", callback_data="cancel")
+    button = InlineKeyboardMarkup(
+    button1 = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
     chat_id = message.from_user.id
 
     await bot.send_photo(chat_id,

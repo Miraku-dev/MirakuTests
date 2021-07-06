@@ -158,7 +158,7 @@ async def show_accessories_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(accessories_id=accessories.accesories_id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(accessories_id=accessories.accessories_id))
                 ],
             ]
         )
@@ -167,14 +167,13 @@ async def show_accessories_items(call: CallbackQuery):
         await bot.send_photo(chat_id,
             accessorires_photo=accessories.acessories_photo,
             caption=text.format(
-                accessories_id=accessories.accesories_id,
-                accessories_name=accessories.accesories_name,
+                accessories_id=accessories.accessories_id,
+                accessories_name=accessories.accessories_name,
                 accessories_price=accessories.accesspries_price
             ),
             reply_markup=markup
         )
         await asyncio.sleep(0.3)
-
 
 
 @dp.callback_query_handler(text_contains="malling")
