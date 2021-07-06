@@ -72,7 +72,7 @@ async def register_user(message: types.Message):
 
     if message.from_user.id == admin_id:
         text += ("\n"
-                  "Чтобы увидеть админ-панель нажмите: /admin_panel")
+                  "Чтобы увидеть админ-панель нажмите:\n /admin_panel")
     await bot.send_message(chat_id, text, reply_markup=admin_markup)
 
 # Альтернативно можно использовать фильтр text_contains, он улавливает то, что указано в call.data
