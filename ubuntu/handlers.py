@@ -20,8 +20,7 @@ buy_item = CallbackData("buy", "item_id")
 
 @dp.callback_query_handler(text_contains="cancel")
 async def cancel(call: CallbackQuery, state: FSMContext):
-    await call.answer('Действие отменено.')
-    await state.reset_state()
+    await state.finish()
     chat_id = call.from_user.id
 
     markup = InlineKeyboardMarkup(
@@ -39,7 +38,7 @@ async def cancel(call: CallbackQuery, state: FSMContext):
     bot_username = (await bot.me).username
     bot_link = f"https://t.me/{bot_username}?start={id}"
 
-    text = ("Меню:\n")
+    text = ("Действие отменено.\n")
     if call.from_user.id == admin_id:
         text += ("Чтобы увидеть админ-панель нажмите:\n /admin_panel")
     await bot.send_message(chat_id, text, reply_markup=markup)
