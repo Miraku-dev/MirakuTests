@@ -697,7 +697,7 @@ async def mailing(message: types.Message, state: FSMContext):
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
-            [InlineKeyboardButton(text="Да, я уверен(а).", callback_data="ru")],
+            [InlineKeyboardButton(text="Да, я уверен(а).", callback_data="none")],
             [InlineKeyboardButton(text="Нет, вернуться к вводу данных", callback_data="mailing")],
             [InlineKeyboardButton(text="Отмена", callback_data="cancel")],
         ]
@@ -713,7 +713,7 @@ async def mailing_start(call: types.CallbackQuery, state: FSMContext):
     await state.reset_state()
     await call.message.edit_reply_markup()
 
-    users = await User.query.where(User.language == call.data).gino.all()
+    users = await User.query.gino.all()
     for user in users:
         try:
             await bot.send_message(chat_id=user.user_id,

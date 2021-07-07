@@ -18,7 +18,6 @@ class User(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     user_id = Column(BigInteger)
-    language = Column(String(2))
     full_name = Column(String(100))
     username = Column(String(50))
     referral = Column(Integer)
