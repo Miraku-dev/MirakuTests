@@ -19,3 +19,15 @@ magic_categories_markup = InlineKeyboardMarkup(
             ]
         ]
     )
+
+new_start_markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [   
+                InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
+                InlineKeyboardButton(text="Поддержка", callback_data="help")
+            ]
+       ]
+    )

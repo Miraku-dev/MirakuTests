@@ -11,7 +11,7 @@ from config import admin_id
 from load_all import dp, bot
 from states import(NewHats, Mailing, NewAccessories, NewMalling, NewOther, NewPants, NewShoes)
 from database import Accessories, User, Malling, Other, Pants, Shoes, Hats
-
+import buttons
 
 @dp.callback_query_handler(text_contains="cancel", state='*')
 async def cancel(call: CallbackQuery, state: FSMContext):
@@ -688,6 +688,7 @@ async def mailing(call: CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains=["mailing1"], state='*')
 async def mailing(call: CallbackQuery, state: FSMContext):
     await state.finish()
+    await call.message.edit_reply_markup()
     await call.message.answer("Пришлите текст рассылки")
     await Mailing.Text.set()
 
@@ -726,4 +727,4 @@ async def mailing_start(call: types.CallbackQuery, state: FSMContext):
             await sleep(0.3)
         except Exception:
             pass
-    await call.message.answer("Рассылка выполнена.")
+    await call.message.answer("Рассылка выполнена.", reply_markup=buttons.new_start_markup)
