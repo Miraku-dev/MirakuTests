@@ -686,8 +686,9 @@ async def mailing(call: CallbackQuery):
     await Mailing.Text.set()
 
 dp.message_handler(user_id=admin_id, state=Mailing.Text)
-async def mailing_abc(message: types.Message, state: FSMContext):
+async def mailing(message: types.Message, state: FSMContext):
     text = message.text
+    chat_id = message.from_user.id
     text1 = ("Текст:\n\n?"
                 "{text}"
              "\n Вы уверены?")
@@ -700,7 +701,7 @@ async def mailing_abc(message: types.Message, state: FSMContext):
             [InlineKeyboardButton(text="Отмена", callback_data="cancel")],
         ]
     )
-    await message.answer(text1.format(text=text), reply_markup=markup)
+    await bot.send_message(chat_id, text1.format(text=text), reply_markup=markup)
     await Mailing.Mall.set()
 
 
