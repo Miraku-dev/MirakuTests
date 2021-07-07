@@ -690,7 +690,6 @@ async def mailing_abc(message: types.Message, state: FSMContext):
     text = message.text
     chat_id = message.from_user.id
     await state.update_data(text=text)
-    text = ("Текст:\n {text}\n Уверены?")
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
@@ -698,7 +697,7 @@ async def mailing_abc(message: types.Message, state: FSMContext):
             [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
         ]
     )
-    await bot.send_message(chat_id, text.format(text=text), reply_markup=markup)
+    await message.answer(("Текст:\n {text}\n Вы уверены?").format(text=text), reply_markup=markup)
     await Mailing.Mall.set()
 
 
