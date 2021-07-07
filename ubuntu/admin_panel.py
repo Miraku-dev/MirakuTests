@@ -685,7 +685,7 @@ async def mailing(call: CallbackQuery):
     await call.message.answer("Пришлите текст рассылки")
     await Mailing.Text.set()
 
-dp.message_handler(user_id=admin_id, state=Mailing.Text)
+@dp.message_handler(user_id=admin_id, state=Mailing.Text)
 async def mailing(message: types.Message, state: FSMContext):
     text = message.text
     chat_id = message.from_user.id
