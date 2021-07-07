@@ -680,7 +680,7 @@ async def enter_other_price(call: types.CallbackQuery, state: FSMContext):
 
 
 # Фича для рассылки по юзерам (учитывая их язык)
-@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"])
+@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"], state='*')
 async def mailing(call: CallbackQuery, state: FSMContext):
     state.finish()
     await call.message.answer("Пришлите текст рассылки")

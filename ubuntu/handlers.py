@@ -74,7 +74,7 @@ async def register_user(message: types.Message):
 
     if message.from_user.id == admin_id:
         text += ("\n"
-                "Сейчас в базе: {count_users} человек.\n"
+                "Сейчас в базе: {count_users} человек(a).\n"
                   "Чтобы увидеть админ-панель нажмите:\n /admin_panel")
     await bot.send_message(chat_id, text.format(count_users=count_users), reply_markup=admin_markup)
 
