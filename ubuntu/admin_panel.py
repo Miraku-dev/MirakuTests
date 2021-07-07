@@ -688,27 +688,30 @@ async def mailing(call: CallbackQuery):
 dp.message_handler(user_id=admin_id, state=Mailing.Text)
 async def mailing_abc(message: types.Message, state: FSMContext):
     text = message.text
-    chat_id = message.from_user.id
+    text1 = ("Текст:\n\n?"
+                "{text}"
+             "\n Вы уверены?")
     await state.update_data(text=text)
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
-            [InlineKeyboardButton(text=("Да"), callback_data="confirm_mall")],
-            [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
+            [InlineKeyboardButton(text="Да, я уверен(а).", callback_data="ru")],
+            [InlineKeyboardButton(text="Нет, вернуться к вводу данных", callback_data="malling")],
+            [InlineKeyboardButton(text="Отмена", callback_data="cancel")],
         ]
     )
-    await message.answer(("Текст:\n {text}\n Вы уверены?").format(text=text), reply_markup=markup)
+    await message.answer(text1.format(text=text), reply_markup=markup)
     await Mailing.Mall.set()
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="confirm_mall", state=Mailing.Mall)
+@dp.callback_query_handler(user_id=admin_id, state=Mailing.Mall)
 async def mailing_start(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     text = data.get("text")
     await state.reset_state()
     await call.message.edit_reply_markup()
 
-    users = await User.query.where().gino.all()
+    users = await User.query.where(User.language == call.data).gino.all()
     for user in users:
         try:
             await bot.send_message(chat_id=user.user_id,
