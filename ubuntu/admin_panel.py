@@ -680,9 +680,14 @@ async def enter_other_price(call: types.CallbackQuery, state: FSMContext):
 
 
 # Фича для рассылки по юзерам (учитывая их язык)
-@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"], state='*')
+@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"])
 async def mailing(call: CallbackQuery, state: FSMContext):
-    state.finish()
+    await call.message.answer("Пришлите текст рассылки")
+    await Mailing.Text.set()
+
+@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing1"], state='*')
+async def mailing(call: CallbackQuery, state: FSMContext):
+    await state.finish()
     await call.message.answer("Пришлите текст рассылки")
     await Mailing.Text.set()
 
@@ -698,7 +703,7 @@ async def mailing(message: types.Message, state: FSMContext):
         inline_keyboard=
         [
             [InlineKeyboardButton(text="Да, я уверен(а).", callback_data="none")],
-            [InlineKeyboardButton(text="Нет, вернуться к вводу данных", callback_data="mailing")],
+            [InlineKeyboardButton(text="Нет, вернуться к вводу данных", callback_data="mailing1")],
             [InlineKeyboardButton(text="Отмена", callback_data="cancel")],
         ]
     )
