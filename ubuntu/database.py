@@ -109,13 +109,13 @@ class Other(db.Model):
 
 #-----------------------
 
-class Purchase(db.Model):
-    __tablename__ = 'purchases'
+class Purchase_hats(db.Model):
+    __tablename__ = 'purchases_hats'
     query: sql.Select
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    item_id = Column(Integer)
+    hat_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -125,7 +125,87 @@ class Purchase(db.Model):
     receiver = Column(String(100))
     successful = Column(Boolean, default=False)
 
+class Purchase_accessories(db.Model):
+    __tablename__ = 'purchases_accessories'
+    query: sql.Select
 
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    buyer = Column(BigInteger)
+    accessories_id = Column(Integer)
+    amount = Column(Integer)
+    quantity = Column(Integer)
+    purchase_time = Column(TIMESTAMP)
+    shipping_address = Column(JSON)
+    phone_number = Column(String(50))
+    email = Column(String(200))
+    receiver = Column(String(100))
+    successful = Column(Boolean, default=False)
+
+class Purchase_pants(db.Model):
+    __tablename__ = 'purchases_pants'
+    query: sql.Select
+
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    buyer = Column(BigInteger)
+    pants_id = Column(Integer)
+    amount = Column(Integer)
+    quantity = Column(Integer)
+    purchase_time = Column(TIMESTAMP)
+    shipping_address = Column(JSON)
+    phone_number = Column(String(50))
+    email = Column(String(200))
+    receiver = Column(String(100))
+    successful = Column(Boolean, default=False)
+
+class Purchase_shoes(db.Model):
+    __tablename__ = 'purchases_shoes'
+    query: sql.Select
+
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    buyer = Column(BigInteger)
+    shoes_id = Column(Integer)
+    amount = Column(Integer)
+    quantity = Column(Integer)
+    purchase_time = Column(TIMESTAMP)
+    shipping_address = Column(JSON)
+    phone_number = Column(String(50))
+    email = Column(String(200))
+    receiver = Column(String(100))
+    successful = Column(Boolean, default=False)
+
+class Purchase_malling(db.Model):
+    __tablename__ = 'purchases_malling'
+    query: sql.Select
+
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    buyer = Column(BigInteger)
+    malling_id = Column(Integer)
+    amount = Column(Integer)
+    quantity = Column(Integer)
+    purchase_time = Column(TIMESTAMP)
+    shipping_address = Column(JSON)
+    phone_number = Column(String(50))
+    email = Column(String(200))
+    receiver = Column(String(100))
+    successful = Column(Boolean, default=False)
+
+class Purchase_other(db.Model):
+    __tablename__ = 'purchases_other'
+    query: sql.Select
+
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    buyer = Column(BigInteger)
+    other_id = Column(Integer)
+    amount = Column(Integer)
+    quantity = Column(Integer)
+    purchase_time = Column(TIMESTAMP)
+    shipping_address = Column(JSON)
+    phone_number = Column(String(50))
+    email = Column(String(200))
+    receiver = Column(String(100))
+    successful = Column(Boolean, default=False)
+
+# ---------------------
 class DBCommands:
 
     async def get_user(self, user_id):

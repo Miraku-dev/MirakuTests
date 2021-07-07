@@ -727,4 +727,4 @@ async def mailing_start(call: types.CallbackQuery, state: FSMContext):
             await sleep(0.3)
         except Exception:
             pass
-    await call.message.answer("Рассылка выполнена.", reply_markup=buttons.new_start_markup)
+    await call.message.answer("Рассылка выполнена. \n Админ-панель: \n/admin_panel", reply_markup=buttons.new_start_markup)
