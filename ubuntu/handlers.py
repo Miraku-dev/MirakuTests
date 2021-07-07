@@ -18,7 +18,8 @@ db = database.DBCommands()
 
 buy_item = CallbackData("buy", "item_id")
 
-@dp.callback_query_handler(text_contains="cancel")
+
+@dp.callback_query_handler(text_contains="cancel", state='*')
 async def cancel(call: CallbackQuery, state: FSMContext):
     await state.finish()
     chat_id = call.from_user.id
@@ -42,7 +43,7 @@ async def cancel(call: CallbackQuery, state: FSMContext):
     if call.from_user.id == admin_id:
         text += ("Чтобы увидеть админ-панель нажмите:\n /admin_panel")
     await bot.send_message(chat_id, text, reply_markup=markup)
-
+    
 
 @dp.message_handler(CommandStart())
 async def register_user(message: types.Message):

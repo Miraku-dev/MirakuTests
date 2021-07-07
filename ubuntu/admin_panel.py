@@ -13,6 +13,32 @@ from states import(NewHats, Mailing, NewAccessories, NewMalling, NewOther, NewPa
 from database import Accessories, User, Malling, Other, Pants, Shoes, Hats
 
 
+@dp.callback_query_handler(text_contains="cancel", state='*')
+async def cancel(call: CallbackQuery, state: FSMContext):
+    await state.finish()
+    chat_id = call.from_user.id
+
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [
+                InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
+                InlineKeyboardButton(text="Поддержка", callback_data="help")
+            ]
+        ]
+    )
+
+    bot_username = (await bot.me).username
+    bot_link = f"https://t.me/{bot_username}?start={id}"
+
+    text = ("Действие отменено.\n")
+    if call.from_user.id == admin_id:
+        text += ("Чтобы увидеть админ-панель нажмите:\n /admin_panel")
+    await bot.send_message(chat_id, text, reply_markup=markup)
+
+
 @dp.message_handler(user_id=admin_id, commands=["admin_panel"])
 async def admin_panel(message: types.Message):
     admin_panel_markup = InlineKeyboardMarkup(
@@ -301,7 +327,7 @@ async def add_malling_photo(message: types.Message, state: FSMContext):
 
     await bot.send_photo(chat_id,
         malling_photo,
-        caption=text.format(malling=malling.malling_name))
+        caption=text.format(malling_name=malling.malling_name))
 
     await NewMalling.Price.set()
     await state.update_data(malling=malling)
