@@ -51,6 +51,7 @@ async def register_user(message: types.Message):
     referral = message.get_args()
     user = await db.add_new_user(referral=referral)
     id = user.id
+    count_users = await db.count_users()
 
     admin_markup = InlineKeyboardMarkup(
         inline_keyboard=
@@ -73,8 +74,9 @@ async def register_user(message: types.Message):
 
     if message.from_user.id == admin_id:
         text += ("\n"
+                "Сейчас в базе: {count_users} человек.\n"
                   "Чтобы увидеть админ-панель нажмите:\n /admin_panel")
-    await bot.send_message(chat_id, text, reply_markup=admin_markup)
+    await bot.send_message(chat_id, text.format(count_users=count_users), reply_markup=admin_markup)
 
 # Альтернативно можно использовать фильтр text_contains, он улавливает то, что указано в call.data
 @dp.callback_query_handler(text_contains="lang")
