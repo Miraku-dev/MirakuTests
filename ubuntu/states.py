@@ -1,7 +1,32 @@
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
-class Purchase(StatesGroup):
+class Purchase_hats(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_accessories(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_pants(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_shoes(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_malling(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_other(StatesGroup):
     EnterQuantity = State()
     Approval = State()
     Payment = State()
