@@ -23,22 +23,22 @@ async def buying_item(call: CallbackQuery, callback_data: dict, state: FSMContex
     await call.message.edit_reply_markup()
 
     # Достаем информацию о товаре из базы данных
-    hat_item = await database.Hats.get(hat_id)
-    if not hat_item:
+    item = await database.Hats.get(hat_id)
+    if not item:
         await call.message.answer("Такого товара не существует")
         return
 
-    text = ("Вы хотите купить товар \"<b>{hat_name}</b>\" по цене: <i>{hat_price:,}/шт.</i>\n"
-             "Введите количество или нажмите отмена").format(hat_name=hat_item.hat_name,
-                                                             hat_price=hat_item.hat_price)
+    text = ("Вы хотите купить товар \"<b>{name}</b>\" по цене: <i>{price:,}/шт.</i>\n"
+             "Введите количество или нажмите отмена").format(name=item.hat_name,
+                                                             price=item.hat_price)
     await call.message.answer(text)
     await states.Purchase_hats.EnterQuantity.set()
 
     # Сохраняем в ФСМ класс товара и покупки
     await state.update_data(
-        hat_item=hat_item,
-        purchase_hats=database.Purchase_hats(
-            hat_id=hat_id,
+        item=item,
+        purchase=database.Purchase_hats(
+            item_id=hat_id,
             purchase_time=datetime.datetime.now(),
             buyer=call.from_user.id
         )
@@ -51,10 +51,10 @@ async def enter_quantity(message: Message, state: FSMContext):
     # Получаем количество указанного товара
     quantity = int(message.text)
     async with state.proxy() as data:  # Работаем с данными из ФСМ
-        data["purchase_hats"].quantity = quantity
-        hat_item = data["hats"]
-        amount = hat_item.hat_price * quantity
-        data["purchase_hats"].amount = amount
+        data["purchase"].quantity = quantity
+        item = data["hat_item"]
+        amount = item.hat_price * quantity
+        data["purchase"].amount = amount
 
     # Создаем кнопки
     agree_button = InlineKeyboardButton(
@@ -80,12 +80,12 @@ async def enter_quantity(message: Message, state: FSMContext):
         ]
     )
     await message.answer(
-        ("Хорошо, вы хотите купить <i>{quantity}</i> {hat_name} по цене <b>{hat_price:,}/шт.</b>\n\n"
+        ("Хорошо, вы хотите купить <i>{quantity}</i> {name} по цене <b>{price:,}/шт.</b>\n\n"
           "Получится <b>{amount:,}</b>. Подтверждаете?").format(
             quantity=quantity,
-            hat_name=hat_item.hat_name,
+            name=item.hat_name,
             amount=amount,
-            hat_price=hat_item.hat_price,
+            price=item.hat_price
         ),
         reply_markup=markup)
     await states.Purchase_hats.Approval.set()
@@ -95,6 +95,14 @@ async def enter_quantity(message: Message, state: FSMContext):
 @dp.message_handler(state=states.Purchase_hats.EnterQuantity)
 async def not_quantity(message: Message):
     await message.answer("Неверное значение, введите число")
+
+
+# Если человек нажал на кнопку Отменить во время покупки - убираем все
+@dp.callback_query_handler(text_contains="cancel", state=states.Purchase_hats)
+async def approval(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()  # Убираем кнопки
+    await call.message.answer("Вы отменили эту покупку")
+    await state.reset_state()
 
 
 # Если человек нажал "ввести заново"
@@ -111,13 +119,13 @@ async def approval(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()  # Убираем кнопки
 
     data = await state.get_data()
-    purchase_hats: database.Purchase_hats = data.get("purchase_hats")
-    hat_item: database.Hats = data.get("hats")
+    purchase: database.Purchase_hats = data.get("purchase")
+    item: database.Hats = data.get("item")
     # Теперь можно внести данные о покупке в базу данных через .create()
-    await purchase_hats.create()
+    await purchase.create()
     await bot.send_message(chat_id=call.from_user.id,
                            text=("Хорошо. Оплатите <b>{amount:,}</b> по методу указанному ниже и нажмите "
-                                  "на кнопку ниже").format(amount=purchase_hats.amount))
+                                  "на кнопку ниже").format(amount=purchase.amount))
     ################
     # --Ниже выбрать нужные параметры--
     # Пример заполнения можно посмотреть тут https://surik00.gitbooks.io/aiogram-lessons/content/chapter4.html
@@ -131,13 +139,13 @@ async def approval(call: CallbackQuery, state: FSMContext):
     need_shipping_address = True
 
     await bot.send_invoice(chat_id=call.from_user.id,
-                           title=hat_item.hat_name,
-                           description=hat_item.hat_name,
-                           payload=str(purchase_hats.id),
-                           start_parameter=str(purchase_hats.id),
+                           title=item.hat_name,
+                           description=item.hat_name,
+                           payload=str(purchase.id),
+                           start_parameter=str(purchase.id),
                            currency=currency,
                            prices=[
-                               LabeledPrice(label=hat_item.hat_name, amount=purchase_hats.amount)
+                               LabeledPrice(label=item.hat_name, amount=purchase.amount)
                            ],
                            provider_token=lp_token,
                            need_name=need_name,
@@ -145,19 +153,19 @@ async def approval(call: CallbackQuery, state: FSMContext):
                            need_email=need_email,
                            need_shipping_address=need_shipping_address
                            )
-    await state.update_data(purchase_hats=purchase_hats)
-    await states.Purchase_hats.Payment.set()
+    await state.update_data(purchase=purchase)
+    await states.Purchase.Payment.set()
 
 
-@dp.pre_checkout_query_handler(state=states.Purchase_hats.Payment)
+@dp.pre_checkout_query_handler(state=states.Purchase.Payment)
 async def checkout(query: PreCheckoutQuery, state: FSMContext):
     await bot.answer_pre_checkout_query(query.id, True)
     data = await state.get_data()
-    purchase_hats: database.Purchase_hats = data.get("purchase_hats")
-    success = await check_payment(purchase_hats)
+    purchase: database.Purchase_hats = data.get("purchase")
+    success = await check_payment(purchase)
 
     if success:
-        await purchase_hats.update(
+        await purchase.update(
             successful=True,
             shipping_address=query.order_info.shipping_address.to_python()
             if query.order_info.shipping_address
@@ -172,7 +180,6 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
 
 
-async def check_payment(purchase_hats: database.Purchase_hats):
+async def check_payment(purchase: database.Purchase_hats):
     return True
-
 

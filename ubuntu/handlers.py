@@ -16,12 +16,12 @@ from load_all import dp, bot
 
 db = database.DBCommands()
 
-buy_hat = CallbackData("buy_hat", "hat_id")
-buy_accessories = CallbackData("buy_accessories", "accessories_id")
-buy_pants = CallbackData("buy_pants", "pants_id")
-buy_shoes = CallbackData("buy_shoes", "shoes_id")
-buy_other = CallbackData("buy_other", "other_id")
-buy_malling = CallbackData("buy_malling", "malling_id")
+buy_hat = CallbackData("buy", "hat_id")
+buy_accessories = CallbackData("buy", "accessories_id")
+buy_pants = CallbackData("buy", "pants_id")
+buy_shoes = CallbackData("buy", "shoes_id")
+buy_other = CallbackData("buy", "other_id")
+buy_malling = CallbackData("buy", "malling_id")
 
 
 @dp.callback_query_handler(text_contains="cancel", state='*')
@@ -204,7 +204,7 @@ async def show_accessories_items(call: CallbackQuery):
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await bot.send_photo(chat_id,
-            accessorires_photo=accessories.acessories_photo,
+            accessorires_photo=accessories.accessories_photo,
             caption=text.format(
                 accessories_id=accessories.accessories_id,
                 accessories_name=accessories.accessories_name,

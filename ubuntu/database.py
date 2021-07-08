@@ -27,7 +27,6 @@ class User(db.Model):
         return "<User(id='{}', fullname='{}', username='{}')>".format(
             self.id, self.full_name, self.username)
 
-############################
 
 class Hats(db.Model):
     __tablename__ = 'hats'
