@@ -51,10 +51,10 @@ async def enter_quantity(message: Message, state: FSMContext):
     # Получаем количество указанного товара
     quantity = int(message.text)
     async with state.proxy() as data:  # Работаем с данными из ФСМ
-        data["purchase_hats"].quantity = quantity
+        data["purchase"].quantity = quantity
         item = data["hats"]
         amount = item.hat_price * quantity
-        data["purchase_hats"].amount = amount
+        data["purchase"].amount = amount
 
     # Создаем кнопки
     agree_button = InlineKeyboardButton(
