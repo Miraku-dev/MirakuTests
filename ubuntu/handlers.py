@@ -208,7 +208,7 @@ async def show_accessories_items(call: CallbackQuery):
             caption=text.format(
                 accessories_id=accessories.accessories_id,
                 accessories_name=accessories.accessories_name,
-                accessories_price=accessories.accesspries_price
+                accessories_price=accessories.accessories_price
             ),
             reply_markup=markup
         )

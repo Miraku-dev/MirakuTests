@@ -188,7 +188,7 @@ async def check_payment(purchase_hats: database.Purchase_hats):
 
 
 @dp.callback_query_handler(buy_accessories.filter())
-async def buying_hat_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
+async def buying_accessories_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
     accessories_id = int(callback_data.get("accessories_id"))
     await call.message.edit_reply_markup()
@@ -203,7 +203,7 @@ async def buying_hat_item(call: CallbackQuery, callback_data: dict, state: FSMCo
              "Введите количество или нажмите отмена").format(accessories_name=accessories.accessories_name,
                                                              accessories_price=accessories.accessories_price)
     await call.message.answer(text)
-    await states.Purchase_hats.EnterQuantity.set()
+    await states.Purchase_accessories.EnterQuantity.set()
 
     # Сохраняем в ФСМ класс товара и покупки
     await state.update_data(
@@ -218,13 +218,13 @@ async def buying_hat_item(call: CallbackQuery, callback_data: dict, state: FSMCo
 
 # Принимаем в этот хендлер только цифры
 @dp.message_handler(regexp=r"^(\d+)$", state=states.Purchase_accessories.EnterQuantity)
-async def enter_quantity(message: Message, state: FSMContext):
+async def enter_accessories_quantity(message: Message, state: FSMContext):
     # Получаем количество указанного товара
     quantity = int(message.text)
     async with state.proxy() as data:  # Работаем с данными из ФСМ
         data["purchase_accessories"].quantity = quantity
         accessories = data["accessories"]
-        amount = accessories.hat_price * quantity
+        amount = accessories.accessories_price * quantity
         data["purchase_accessories"].amount = amount
 
     # Создаем кнопки
@@ -254,9 +254,9 @@ async def enter_quantity(message: Message, state: FSMContext):
         ("Хорошо, вы хотите купить <i>{quantity}</i> {accessories_name} по цене <b>{accessories_price:,}/шт.</b>\n\n"
           "Получится <b>{amount:,}</b>. Подтверждаете?").format(
             quantity=quantity,
-            accessories_name=accessories.hat_name,
+            accessories_name=accessories.accessories_name,
             amount=amount,
-            accessories_price=accessories.hat_price
+            accessories_price=accessories.accessories_price
         ),
         reply_markup=markup)
     await states.Purchase_accessories.Approval.set()
@@ -264,13 +264,13 @@ async def enter_quantity(message: Message, state: FSMContext):
 
 # То, что не является числом - не попало в предыдущий хендлер и попадает в этот
 @dp.message_handler(state=states.Purchase_accessories.EnterQuantity)
-async def not_quantity(message: Message):
+async def not_accessories_quantity(message: Message):
     await message.answer("Неверное значение, введите число")
 
 
 # Если человек нажал на кнопку Отменить во время покупки - убираем все
 @dp.callback_query_handler(text_contains="cancel", state=states.Purchase_accessories)
-async def approval(call: CallbackQuery, state: FSMContext):
+async def approval_accessories(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()  # Убираем кнопки
     await call.message.answer("Вы отменили эту покупку")
     await state.reset_state()
@@ -278,7 +278,7 @@ async def approval(call: CallbackQuery, state: FSMContext):
 
 # Если человек нажал "ввести заново"
 @dp.callback_query_handler(text_contains="change", state=states.Purchase_accessories.Approval)
-async def approval(call: CallbackQuery):
+async def approval_accessories(call: CallbackQuery):
     await call.message.edit_reply_markup()  # Убираем кнопки
     await call.message.answer("Введите количество товара заново.")
     await states.Purchase_accessories.EnterQuantity.set()
@@ -286,7 +286,7 @@ async def approval(call: CallbackQuery):
 
 # Если человек нажал "согласен"
 @dp.callback_query_handler(text_contains="agree", state=states.Purchase_accessories.Approval)
-async def approval(call: CallbackQuery, state: FSMContext):
+async def approval_accessories(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()  # Убираем кнопки
 
     data = await state.get_data()
@@ -329,11 +329,11 @@ async def approval(call: CallbackQuery, state: FSMContext):
 
 
 @dp.pre_checkout_query_handler(state=states.Purchase_accessories.Payment)
-async def checkout(query: PreCheckoutQuery, state: FSMContext):
+async def checkout_accessories(query: PreCheckoutQuery, state: FSMContext):
     await bot.answer_pre_checkout_query(query.id, True)
     data = await state.get_data()
     purchase_accessories: database.Purchase_accessories = data.get("purchase_accessories")
-    success = await check_payment(purchase_accessories)
+    success = await check_accessories_payment(purchase_accessories)
 
     if success:
         await purchase_accessories.update(
@@ -351,5 +351,173 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
 
 
-async def check_payment(purchase_accessories: database.Purchase_accessories):
+async def check_accessories_payment(purchase_accessories: database.Purchase_accessories):
+    return True
+
+
+
+@dp.callback_query_handler(buy_malling.filter())
+async def buying_malling_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
+    malling_id = int(callback_data.get("malling_id"))
+    await call.message.edit_reply_markup()
+
+    # Достаем информацию о товаре из базы данных
+    malling = await database.Malling.get(malling_id)
+    if not malling:
+        await call.message.answer("Такого товара не существует")
+        return
+
+    text = ("Вы хотите купить товар \"<b>{malling_name}</b>\" по цене: <i>{malling_price:,}/шт.</i>\n"
+             "Введите количество или нажмите отмена").format(malling_name=malling.malling_name,
+                                                             malling_price=malling.malling_price)
+    await call.message.answer(text)
+    await states.Purchase_malling.EnterQuantity.set()
+
+    # Сохраняем в ФСМ класс товара и покупки
+    await state.update_data(
+        malling=malling,
+        purchase_malling=database.Purchase_malling(
+            malling_id=malling_id,
+            purchase_time=datetime.datetime.now(),
+            buyer=call.from_user.id
+        )
+    )
+
+
+# Принимаем в этот хендлер только цифры
+@dp.message_handler(regexp=r"^(\d+)$", state=states.Purchase_malling.EnterQuantity)
+async def enter_malling_quantity(message: Message, state: FSMContext):
+    # Получаем количество указанного товара
+    quantity = int(message.text)
+    async with state.proxy() as data:  # Работаем с данными из ФСМ
+        data["purchase_malling"].quantity = quantity
+        malling = data["malling"]
+        amount = malling.malling_price * quantity
+        data["purchase_malling"].amount = amount
+
+    # Создаем кнопки
+    agree_button = InlineKeyboardButton(
+        text=("Согласен"),
+        callback_data="agree"
+    )
+    change_button = InlineKeyboardButton(
+        text=("Ввести количество заново"),
+        callback_data="change"
+    )
+    cancel_button = InlineKeyboardButton(
+        text=("Отменить покупку"),
+        callback_data="cancel"
+    )
+
+    # Создаем клавиатуру
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [agree_button],  # Первый ряд кнопок
+            [change_button],  # Второй ряд кнопок
+            [cancel_button]  # Третий ряд кнопок
+        ]
+    )
+    await message.answer(
+        ("Хорошо, вы хотите купить <i>{quantity}</i> {malling_name} по цене <b>{malling_price:,}/шт.</b>\n\n"
+          "Получится <b>{amount:,}</b>. Подтверждаете?").format(
+            quantity=quantity,
+            malling_name=malling.malling_name,
+            amount=amount,
+            malling_price=malling.malling_price
+        ),
+        reply_markup=markup)
+    await states.Purchase_malling.Approval.set()
+
+
+@dp.message_handler(state=states.Purchase_malling.EnterQuantity)
+async def not_quantity_malling(message: Message):
+    await message.answer("Неверное значение, введите число")
+
+
+# Если человек нажал на кнопку Отменить во время покупки - убираем все
+@dp.callback_query_handler(text_contains="cancel", state=states.Purchase_malling)
+async def approval_malling(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()  # Убираем кнопки
+    await call.message.answer("Вы отменили эту покупку")
+    await state.reset_state()
+
+
+# Если человек нажал "ввести заново"
+@dp.callback_query_handler(text_contains="change", state=states.Purchase_malling.Approval)
+async def approval_malling(call: CallbackQuery):
+    await call.message.edit_reply_markup()  # Убираем кнопки
+    await call.message.answer("Введите количество товара заново.")
+    await states.Purchase_malling.EnterQuantity.set()
+
+
+# Если человек нажал "согласен"
+@dp.callback_query_handler(text_contains="agree", state=states.Purchase_malling.Approval)
+async def approval_malling(call: CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()  # Убираем кнопки
+
+    data = await state.get_data()
+    purchase_malling: database.Purchase_malling = data.get("purchase_malling")
+    malling: database.Malling = data.get("malling")
+    # Теперь можно внести данные о покупке в базу данных через .create()
+    await purchase_malling.create()
+    await bot.send_message(chat_id=call.from_user.id,
+                           text=("Хорошо. Оплатите <b>{amount:,}</b> по методу указанному ниже и нажмите "
+                                  "на кнопку ниже").format(amount=purchase_malling.amount))
+    ################
+    # --Ниже выбрать нужные параметры--
+    # Пример заполнения можно посмотреть тут https://surik00.gitbooks.io/aiogram-lessons/content/chapter4.html
+    # Но прошу обратить внимание, те уроки по старой версии aiogram и давно не обновлялись, так что могут быть
+    # несостыковки.
+    ################
+    currency = "RUB"
+    need_name = True
+    need_phone_number = False
+    need_email = False
+    need_shipping_address = True
+
+    await bot.send_invoice(chat_id=call.from_user.id,
+                           title=malling.malling_name,
+                           description=malling.malling_name,
+                           payload=str(purchase_malling.id),
+                           start_parameter=str(purchase_malling.id),
+                           currency=currency,
+                           prices=[
+                               LabeledPrice(label=malling.malling_name, amount=purchase_malling.amount)
+                           ],
+                           provider_token=lp_token,
+                           need_name=need_name,
+                           need_phone_number=need_phone_number,
+                           need_email=need_email,
+                           need_shipping_address=need_shipping_address
+                           )
+    await state.update_data(purchase_malling=purchase_malling)
+    await states.Purchase_malling.Payment.set()
+
+
+@dp.pre_checkout_query_handler(state=states.Purchase_malling.Payment)
+async def checkout_malling(query: PreCheckoutQuery, state: FSMContext):
+    await bot.answer_pre_checkout_query(query.id, True)
+    data = await state.get_data()
+    purchase_malling: database.Purchase_malling = data.get("purchase_malling")
+    success = await check_malling_payment(purchase_malling)
+
+    if success:
+        await purchase_malling.update(
+            successful=True,
+            shipping_address=query.order_info.shipping_address.to_python()
+            if query.order_info.shipping_address
+            else None,
+            phone_number=query.order_info.phone_number,
+            receiver=query.order_info.name,
+            email=query.order_info.email
+        ).apply()
+        await state.reset_state()
+        await bot.send_message(query.from_user.id, ("Спасибо за покупку"))
+    else:
+        await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
+
+
+async def check_malling_payment(purchase_malling: database.Purchase_malling):
     return True
