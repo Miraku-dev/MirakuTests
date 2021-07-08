@@ -154,10 +154,10 @@ async def approval(call: CallbackQuery, state: FSMContext):
                            need_shipping_address=need_shipping_address
                            )
     await state.update_data(purchase=purchase)
-    await states.Purchase.Payment.set()
+    await states.Purchase_hats.Payment.set()
 
 
-@dp.pre_checkout_query_handler(state=states.Purchase.Payment)
+@dp.pre_checkout_query_handler(state=states.Purchase_hats.Payment)
 async def checkout(query: PreCheckoutQuery, state: FSMContext):
     await bot.answer_pre_checkout_query(query.id, True)
     data = await state.get_data()
