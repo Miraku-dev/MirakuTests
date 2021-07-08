@@ -201,10 +201,10 @@ async def show_accessories_items(call: CallbackQuery):
                 ],
             ]
         )
-
+        accessorires_photo=accessories.accessories_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await bot.send_photo(chat_id,
-            accessorires_photo=accessories.accessories_photo,
+            accessorires_photo,
             caption=text.format(
                 accessories_id=accessories.accessories_id,
                 accessories_name=accessories.accessories_name,
@@ -239,10 +239,10 @@ async def show_malling_items(call: CallbackQuery):
                 ],
             ]
         )
-
+        malling_photo=malling.malling_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await bot.send_photo(chat_id,
-            malling_photo=malling.malling_photo,
+            malling_photo,
             caption=text.format(
                 malling_id=malling.malling_id,
                 malling_name=malling.malling_name,
@@ -278,10 +278,10 @@ async def show_pants_items(call: CallbackQuery):
                 ],
             ]
         )
-
+        pants_photo=pants.pants_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await bot.send_photo(chat_id,
-            pants_photo=pants.pants_photo,
+            pants_photo,
             caption=text.format(
                 pants_id=pants.pants_id,
                 pants_name=pants.pants_name,
@@ -317,10 +317,10 @@ async def show_shoes_items(call: CallbackQuery):
                 ],
             ]
         )
-
+        shoes_photo=shoes.shoes_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await bot.send_photo(chat_id,
-            shoes_photo=shoes.shoes_photo,
+            shoes_photo,
             caption=text.format(
                 shoes_id=shoes.shoes_id,
                 shoes_name=shoes.shoes_name,
@@ -355,10 +355,10 @@ async def show_other_items(call: CallbackQuery):
                 ],
             ]
         )
-
+        other_photo=other.other_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await bot.send_photo(chat_id,
-            other_photo=other.other_photo,
+            other_photo,
             caption=text.format(
                 other_id=other.other_id,
                 other_name=other.other_name,
