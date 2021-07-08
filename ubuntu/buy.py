@@ -17,7 +17,7 @@ from handlers import buy_malling, buy_pants, buy_accessories, buy_hat, buy_other
 
 
 @dp.callback_query_handler(buy_hat.filter())
-async def buying_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
+async def buying_hat_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
     hat_id = int(callback_data.get("hat_id"))
     await call.message.edit_reply_markup()
@@ -51,10 +51,10 @@ async def enter_quantity(message: Message, state: FSMContext):
     # Получаем количество указанного товара
     quantity = int(message.text)
     async with state.proxy() as data:  # Работаем с данными из ФСМ
-        data["purchase"].quantity = quantity
-        item = data["hat_item"]
+        data["purchase_hats"].quantity = quantity
+        item = data["hats"]
         amount = item.hat_price * quantity
-        data["purchase"].amount = amount
+        data["purchase_hats"].amount = amount
 
     # Создаем кнопки
     agree_button = InlineKeyboardButton(
@@ -119,8 +119,8 @@ async def approval(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()  # Убираем кнопки
 
     data = await state.get_data()
-    purchase: database.Purchase_hats = data.get("purchase")
-    item: database.Hats = data.get("item")
+    purchase: database.Purchase_hats = data.get("purchase_hats")
+    item: database.Hats = data.get("hats")
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase.create()
     await bot.send_message(chat_id=call.from_user.id,
@@ -161,7 +161,7 @@ async def approval(call: CallbackQuery, state: FSMContext):
 async def checkout(query: PreCheckoutQuery, state: FSMContext):
     await bot.answer_pre_checkout_query(query.id, True)
     data = await state.get_data()
-    purchase: database.Purchase_hats = data.get("purchase")
+    purchase: database.Purchase_hats = data.get("purchase_hats")
     success = await check_payment(purchase)
 
     if success:
