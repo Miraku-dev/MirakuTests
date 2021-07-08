@@ -52,7 +52,7 @@ async def enter_quantity(message: Message, state: FSMContext):
     quantity = int(message.text)
     async with state.proxy() as data:  # Работаем с данными из ФСМ
         data["purchase_hats"].quantity = quantity
-        hat_item = data["hats"]
+        hat_item = data["hat_item"]
         amount = hat_item.hat_price * quantity
         data["purchase_hats"].amount = amount
 
@@ -174,5 +174,4 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
 
 async def check_payment(purchase_hats: database.Purchase_hats):
     return True
-
 
