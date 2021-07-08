@@ -52,7 +52,7 @@ async def enter_quantity(message: Message, state: FSMContext):
     quantity = int(message.text)
     async with state.proxy() as data:  # Работаем с данными из ФСМ
         data["purchase"].quantity = quantity
-        item = data["hats"]
+        item = data["item"]
         amount = item.hat_price * quantity
         data["purchase"].amount = amount
 
