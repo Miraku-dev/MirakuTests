@@ -158,7 +158,7 @@ async def show_hats_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_hat.new(hat_id=hats.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_hat.new(item_id=hats.id))
                 ],
             ]
         )
@@ -197,7 +197,7 @@ async def show_accessories_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_accessories.new(accessories_id=accessories.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_accessories.new(item_id=accessories.id))
                 ],
             ]
         )
@@ -235,7 +235,7 @@ async def show_malling_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_malling.new(malling_id=malling.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_malling.new(item_id=malling.id))
                 ],
             ]
         )
@@ -274,7 +274,7 @@ async def show_pants_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_pants.new(pants_id=pants.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_pants.new(item_id=pants.id))
                 ],
             ]
         )
@@ -313,7 +313,7 @@ async def show_shoes_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_shoes.new(shoes_id=shoes.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_shoes.new(item_id=shoes.id))
                 ],
             ]
         )
@@ -351,7 +351,7 @@ async def show_other_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_other.new(other_id=other.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_other.new(item_id=other.id))
                 ],
             ]
         )
