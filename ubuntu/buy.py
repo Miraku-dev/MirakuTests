@@ -120,7 +120,7 @@ async def approval(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     purchase_hats: database.Purchase_hats = data.get("purchase_hats")
-    hats: database.Item = data.get("item")
+    hats: database.Item = data.get("hats")
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase_hats.create()
     await bot.send_message(chat_id=call.from_user.id,
@@ -290,7 +290,7 @@ async def approval_accessories(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     purchase_accessories: database.Purchase_accessories = data.get("purchase_accessories")
-    accessories: database.Item = data.get("item")
+    accessories: database.Item = data.get("accessories")
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase_accessories.create()
     await bot.send_message(chat_id=call.from_user.id,
@@ -458,7 +458,7 @@ async def approval_malling(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     purchase_malling: database.Purchase_malling = data.get("purchase_malling")
-    malling: database.Item = data.get("item")
+    malling: database.Item = data.get("malling")
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase_malling.create()
     await bot.send_message(chat_id=call.from_user.id,
@@ -626,7 +626,7 @@ async def approval_pants(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     purchase_pants: database.Purchase_pants = data.get("purchase_pants")
-    pants: database.Item = data.get("item")
+    pants: database.Item = data.get("pants")
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase_pants.create()
     await bot.send_message(chat_id=call.from_user.id,
@@ -793,7 +793,7 @@ async def approval_shoes(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     purchase_shoes: database.Purchase_shoes = data.get("purchase_shoes")
-    shoes: database.Item = data.get("item")
+    shoes: database.Item = data.get("shoes")
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase_shoes.create()
     await bot.send_message(chat_id=call.from_user.id,
@@ -961,7 +961,7 @@ async def approval_other(call: CallbackQuery, state: FSMContext):
 
     data = await state.get_data()
     purchase_other: database.Purchase_other = data.get("purchase_other")
-    other: database.Item = data.get("item")
+    other: database.Item = data.get("other")
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase_other.create()
     await bot.send_message(chat_id=call.from_user.id,
