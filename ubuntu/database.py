@@ -75,7 +75,7 @@ class Purchase_hats(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    hat_id = Column(Integer)
+    item_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -91,7 +91,7 @@ class Purchase_accessories(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    accessories_id = Column(Integer)
+    item_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -107,7 +107,7 @@ class Purchase_pants(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    pants_id = Column(Integer)
+    item_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -123,7 +123,7 @@ class Purchase_shoes(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    shoes_id = Column(Integer)
+    item_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -139,7 +139,7 @@ class Purchase_malling(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    malling_id = Column(Integer)
+    item_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -155,7 +155,7 @@ class Purchase_other(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    other_id = Column(Integer)
+    item_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)

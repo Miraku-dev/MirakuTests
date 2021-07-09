@@ -19,11 +19,11 @@ from handlers import buy_malling, buy_pants, buy_accessories, buy_hat, buy_other
 @dp.callback_query_handler(buy_hat.filter())
 async def buying_hat_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
-    hat_id = int(callback_data.get("hat_id"))
+    item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
 
     # Достаем информацию о товаре из базы данных
-    hats = await database.Item.get(hat_id)
+    hats = await database.Item.get(item_id)
     if not hats:
         await call.message.answer("Такого товара не существует")
         return
@@ -38,7 +38,7 @@ async def buying_hat_item(call: CallbackQuery, callback_data: dict, state: FSMCo
     await state.update_data(
         hats=hats,
         purchase_hats=database.Purchase_hats(
-            hat_id=hat_id,
+            item_id=item_id,
             purchase_time=datetime.datetime.now(),
             buyer=call.from_user.id
         )
@@ -189,11 +189,11 @@ async def check_payment(purchase_hats: database.Purchase_hats):
 @dp.callback_query_handler(buy_accessories.filter())
 async def buying_accessories_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
-    accessories_id = int(callback_data.get("accessories_id"))
+    item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
 
     # Достаем информацию о товаре из базы данных
-    accessories = await database.Item.get(accessories_id)
+    accessories = await database.Item.get(item_id)
     if not accessories:
         await call.message.answer("Такого товара не существует")
         return
@@ -208,7 +208,7 @@ async def buying_accessories_item(call: CallbackQuery, callback_data: dict, stat
     await state.update_data(
         accessories=accessories,
         purchase_accessoriesf=database.Purchase_accessories(
-            accessories_id=accessories_id,
+            item_id=item_id,
             purchase_time=datetime.datetime.now(),
             buyer=call.from_user.id
         )
@@ -358,11 +358,11 @@ async def check_accessories_payment(purchase_accessories: database.Purchase_acce
 @dp.callback_query_handler(buy_malling.filter())
 async def buying_malling_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
-    malling_id = int(callback_data.get("malling_id"))
+    item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
 
     # Достаем информацию о товаре из базы данных
-    malling = await database.Item.get(malling_id)
+    malling = await database.Item.get(item_id)
     if not malling:
         await call.message.answer("Такого товара не существует")
         return
@@ -377,7 +377,7 @@ async def buying_malling_item(call: CallbackQuery, callback_data: dict, state: F
     await state.update_data(
         malling=malling,
         purchase_malling=database.Purchase_malling(
-            malling_id=malling_id,
+            item_id=item_id,
             purchase_time=datetime.datetime.now(),
             buyer=call.from_user.id
         )
@@ -526,11 +526,11 @@ async def check_malling_payment(purchase_malling: database.Purchase_malling):
 @dp.callback_query_handler(buy_pants.filter())
 async def buying_pants_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
-    pants_id = int(callback_data.get("pants_id"))
+    item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
 
     # Достаем информацию о товаре из базы данных
-    pants = await database.Item.get(pants_id)
+    pants = await database.Item.get(item_id)
     if not pants:
         await call.message.answer("Такого товара не существует")
         return
@@ -545,7 +545,7 @@ async def buying_pants_item(call: CallbackQuery, callback_data: dict, state: FSM
     await state.update_data(
         pants=pants,
         purchase_pants=database.Purchase_pants(
-            pants_id=pants_id,
+            item_id=item_id,
             purchase_time=datetime.datetime.now(),
             buyer=call.from_user.id
         )
@@ -693,11 +693,11 @@ async def check_pants_payment(purchase_pants: database.Purchase_pants):
 @dp.callback_query_handler(buy_shoes.filter())
 async def buying_shoes_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
-    shoes_id = int(callback_data.get("shoes_id"))
+    item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
 
     # Достаем информацию о товаре из базы данных
-    shoes = await database.Item.get(shoes_id)
+    shoes = await database.Item.get(item_id)
     if not shoes:
         await call.message.answer("Такого товара не существует")
         return
@@ -712,7 +712,7 @@ async def buying_shoes_item(call: CallbackQuery, callback_data: dict, state: FSM
     await state.update_data(
         shoes=shoes,
         purchase_shoes=database.Purchase_shoes(
-            shoes_id=shoes_id,
+            item_id=item_id,
             purchase_time=datetime.datetime.now(),
             buyer=call.from_user.id
         )
@@ -861,11 +861,11 @@ async def check_shoes_payment(purchase_shoes: database.Purchase_shoes):
 @dp.callback_query_handler(buy_other.filter())
 async def buying_other_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
-    other_id = int(callback_data.get("other_id"))
+    item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
 
     # Достаем информацию о товаре из базы данных
-    other = await database.Item.get(other_id)
+    other = await database.Item.get(item_id)
     if not other:
         await call.message.answer("Такого товара не существует")
         return
@@ -880,7 +880,7 @@ async def buying_other_item(call: CallbackQuery, callback_data: dict, state: FSM
     await state.update_data(
         other=other,
         purchase_other=database.Purchase_other(
-            other_id=other_id,
+            item_id=item_id,
             purchase_time=datetime.datetime.now(),
             buyer=call.from_user.id
         )

@@ -16,12 +16,12 @@ from load_all import dp, bot
 
 db = database.DBCommands()
 
-buy_hat = CallbackData("buy", "hat_id")
-buy_accessories = CallbackData("buy", "accessories_id")
-buy_pants = CallbackData("buy", "pants_id")
-buy_shoes = CallbackData("buy", "shoes_id")
-buy_other = CallbackData("buy", "other_id")
-buy_malling = CallbackData("buy", "malling_id")
+buy_hat = CallbackData("buy", "item_id")
+buy_accessories = CallbackData("buy", "item_id")
+buy_pants = CallbackData("buy", "item_id")
+buy_shoes = CallbackData("buy", "item_id")
+buy_other = CallbackData("buy", "item_id")
+buy_malling = CallbackData("buy", "item_id")
 
 
 @dp.callback_query_handler(text_contains="cancel", state='*')
@@ -158,7 +158,7 @@ async def show_hats_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_hat.new(hat_id=hats.hat_id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_hat.new(hat_id=hats.id))
                 ],
             ]
         )
@@ -167,7 +167,7 @@ async def show_hats_items(call: CallbackQuery):
         await bot.send_photo(chat_id,
             hat_photo,
             caption=text.format(
-                hats_id=hats.hat_id,
+                hats_id=hats.id,
                 hats_name=hats.hat_name,
                 hats_price=hats.hat_price
             ),
@@ -197,7 +197,7 @@ async def show_accessories_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_accessories.new(accessories_id=accessories.accessories_id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_accessories.new(accessories_id=accessories.id))
                 ],
             ]
         )
@@ -206,7 +206,7 @@ async def show_accessories_items(call: CallbackQuery):
         await bot.send_photo(chat_id,
             accessorires_photo,
             caption=text.format(
-                accessories_id=accessories.accessories_id,
+                accessories_id=accessories.id,
                 accessories_name=accessories.accessories_name,
                 accessories_price=accessories.accessories_price
             ),
@@ -235,7 +235,7 @@ async def show_malling_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_malling.new(malling_id=malling.malling_id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_malling.new(malling_id=malling.id))
                 ],
             ]
         )
@@ -244,7 +244,7 @@ async def show_malling_items(call: CallbackQuery):
         await bot.send_photo(chat_id,
             malling_photo,
             caption=text.format(
-                malling_id=malling.malling_id,
+                malling_id=malling.id,
                 malling_name=malling.malling_name,
                 malling_price=malling.malling_price
             ),
@@ -274,7 +274,7 @@ async def show_pants_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_pants.new(pants_id=pants.pants_id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_pants.new(pants_id=pants.id))
                 ],
             ]
         )
@@ -283,7 +283,7 @@ async def show_pants_items(call: CallbackQuery):
         await bot.send_photo(chat_id,
             pants_photo,
             caption=text.format(
-                pants_id=pants.pants_id,
+                pants_id=pants.id,
                 pants_name=pants.pants_name,
                 pants_price=pants.pants_price
             ),
@@ -313,7 +313,7 @@ async def show_shoes_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_shoes.new(shoes_id=shoes.shoes_id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_shoes.new(shoes_id=shoes.id))
                 ],
             ]
         )
@@ -322,7 +322,7 @@ async def show_shoes_items(call: CallbackQuery):
         await bot.send_photo(chat_id,
             shoes_photo,
             caption=text.format(
-                shoes_id=shoes.shoes_id,
+                shoes_id=shoes.id,
                 shoes_name=shoes.shoes_name,
                 shoes_price=shoes.shoes_price
             ),
@@ -351,7 +351,7 @@ async def show_other_items(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_other.new(other_id=other.other_id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_other.new(other_id=other.id))
                 ],
             ]
         )
@@ -360,7 +360,7 @@ async def show_other_items(call: CallbackQuery):
         await bot.send_photo(chat_id,
             other_photo,
             caption=text.format(
-                other_id=other.other_id,
+                other_id=other.id,
                 other_name=other.other_name,
                 other_price=other.other_price
             ),
