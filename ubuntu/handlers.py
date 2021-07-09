@@ -53,7 +53,7 @@ async def cancel(call: CallbackQuery, state: FSMContext):
 
 @dp.message_handler(commands=["menu"], state='*')
 async def cancel(message: Message, state: FSMContext):
-    await message.message.edit_reply_markup()
+    await message.edit_reply_markup()
     await state.finish()
     chat_id = message.from_user.id
 
@@ -72,7 +72,7 @@ async def cancel(message: Message, state: FSMContext):
     bot_username = (await bot.me).username
     bot_link = f"https://t.me/{bot_username}?start={id}"
 
-    text = ("Действие отменено.\n")
+    text = ("Что вы хотите увидеть?.\n")
     if message.from_user.id == admin_id:
         text += ("Чтобы увидеть админ-панель нажмите:\n /admin_panel")
     await bot.send_message(chat_id, text, reply_markup=markup)
@@ -142,7 +142,7 @@ async def categories_list(call: CallbackQuery):
 async def show_hats_items(call: CallbackQuery):
     await call.message.edit_reply_markup()
     # Достаем товары из базы данных
-    all_items = await db.show_hats()
+    all_items = await db.show_item()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, hats in enumerate(all_items):
@@ -151,7 +151,7 @@ async def show_hats_items(call: CallbackQuery):
 
         if call.from_user.id == admin_id:
             text += ("\n"
-                  "id: hat_\t{hats_id}")
+                  "id: \t{hats_id}")
         
         markup = InlineKeyboardMarkup(
             inline_keyboard=
@@ -181,7 +181,7 @@ async def show_hats_items(call: CallbackQuery):
 async def show_accessories_items(call: CallbackQuery):
     await call.message.edit_reply_markup()
     # Достаем товары из базы данных
-    all_items = await db.show_accessories()
+    all_items = await db.show_item()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, accessories in enumerate(all_items):
@@ -190,7 +190,7 @@ async def show_accessories_items(call: CallbackQuery):
 
         if call.from_user.id == admin_id:
             text += ("\n"
-                "id: access_\t{accessories_id}\n")
+                "id: \t{accessories_id}\n")
 
         markup = InlineKeyboardMarkup(
             inline_keyboard=
@@ -219,7 +219,7 @@ async def show_accessories_items(call: CallbackQuery):
 async def show_malling_items(call: CallbackQuery):
     await call.message.edit_reply_markup()
     # Достаем товары из базы данных
-    all_items = await db.show_malling()
+    all_items = await db.show_item()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, malling in enumerate(all_items):
@@ -228,7 +228,7 @@ async def show_malling_items(call: CallbackQuery):
 
         if call.from_user.id == admin_id:
             text += ("\n"
-                  "id: mall_\t{malling_id}")
+                  "id: \t{malling_id}")
             
         markup = InlineKeyboardMarkup(
             inline_keyboard=
@@ -258,7 +258,7 @@ async def show_malling_items(call: CallbackQuery):
 async def show_pants_items(call: CallbackQuery):
     await call.message.edit_reply_markup()
     # Достаем товары из базы данных
-    all_items = await db.show_pants()
+    all_items = await db.show_item()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, pants in enumerate(all_items):
@@ -267,7 +267,7 @@ async def show_pants_items(call: CallbackQuery):
 
         if call.from_user.id == admin_id:
             text += ("\n"
-                  "id: pants_\t{pants_id}")
+                  "id: \t{pants_id}")
         
         markup = InlineKeyboardMarkup(
             inline_keyboard=
@@ -297,7 +297,7 @@ async def show_pants_items(call: CallbackQuery):
 async def show_shoes_items(call: CallbackQuery):
     await call.message.edit_reply_markup()
     # Достаем товары из базы данных
-    all_items = await db.show_shoes()
+    all_items = await db.show_item()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, shoes in enumerate(all_items):
@@ -306,7 +306,7 @@ async def show_shoes_items(call: CallbackQuery):
 
         if call.from_user.id == admin_id:
             text += ("\n"
-                  "id: shoes_\t{shoes_id}")
+                  "id: \t{shoes_id}")
         
         markup = InlineKeyboardMarkup(
             inline_keyboard=
@@ -335,7 +335,7 @@ async def show_shoes_items(call: CallbackQuery):
 async def show_other_items(call: CallbackQuery):
     await call.message.edit_reply_markup()
     # Достаем товары из базы данных
-    all_items = await db.show_other()
+    all_items = await db.show_item()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, other in enumerate(all_items):
@@ -344,7 +344,7 @@ async def show_other_items(call: CallbackQuery):
 
         if call.from_user.id == admin_id:
             text += ("\n"
-                  "id: other_\t{other_id}")
+                  "id: \t{other_id}")
         
         markup = InlineKeyboardMarkup(
             inline_keyboard=
