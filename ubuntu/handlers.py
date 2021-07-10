@@ -164,8 +164,8 @@ async def show_hats_items(call: CallbackQuery):
         )
         hat_photo=item.hat_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(chat_id,
-            hat_photo,
+        await call.message.answer_photo(
+            photo=hat_photo,
             caption=text.format(
                 id=item.id,
                 hat_name=item.hat_name,
@@ -203,8 +203,8 @@ async def show_accessories_items(call: CallbackQuery):
         )
         accessorires_photo=item.accessories_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(chat_id,
-            accessorires_photo,
+        await call.message.answer_photo(chat_id,
+            photo=accessorires_photo,
             caption=text.format(
                 id=item.id,
                 accessories_name=item.accessories_name,
