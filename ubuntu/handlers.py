@@ -145,31 +145,31 @@ async def show_hats_items(call: CallbackQuery):
     all_items = await db.show_item()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
-    for num, hats in enumerate(all_items):
-        text = ("\t<b>{hats_name}</b>\n"
-                 "<b>Цена:</b> \t{hats_price:,}\n")
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{hat_name}</b>\n"
+                 "<b>Цена:</b> \t{hat_price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
-                  "id: \t{hats_id}")
+                  "id: \t{id}")
         
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_hat.new(item_id=hats.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_hat.new(item_id=item.id))
                 ],
             ]
         )
-        hat_photo=hats.hat_photo
+        hat_photo=item.hat_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await bot.send_photo(chat_id,
             hat_photo,
             caption=text.format(
-                hats_id=hats.id,
-                hats_name=hats.hat_name,
-                hats_price=hats.hat_price
+                id=item.id,
+                hat_name=item.hat_name,
+                hat_price=item.hat_price
             ),
             reply_markup=markup
         )
