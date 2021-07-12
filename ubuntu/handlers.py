@@ -320,7 +320,7 @@ async def show_shoes_items(call: CallbackQuery):
         shoes_photo=item.shoes_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
-            shoes_photo,
+            photo=shoes_photo,
             caption=text.format(
                 id=item.id,
                 shoes_name=item.shoes_name,
