@@ -142,7 +142,7 @@ async def categories_list(call: CallbackQuery):
 async def show_hats_items(call: CallbackQuery):
     await call.message.edit_reply_markup()
     # Достаем товары из базы данных
-    all_items = await db.show_item()
+    all_items = await db.show_items()
     chat_id = call.from_user.id
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
