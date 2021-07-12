@@ -29,43 +29,43 @@ class User(db.Model):
 
 
 class Item(db.Model):
-    __tablename__ = 'item'
+    __tablename__ = 'items'
     query: sql.Select
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     hat_name = Column(String(50))
     hat_photo = Column(String(250))
-    hat_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    hat_price = Column(Integer)
     accessories_name = Column(String(50))
     accessories_photo = Column(String(250))
-    accessories_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    accessories_price = Column(Integer)
     malling_name = Column(String(50))
     malling_photo = Column(String(250))
-    malling_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    malling_price = Column(Integer)
     pants_name = Column(String(50))
     pants_photo = Column(String(250))
-    pants_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    pants_price = Column(Integer)
     shoes_name = Column(String(50))
     shoes_photo = Column(String(250))
-    shoes_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    shoes_price = Column(Integer)
     other_name = Column(String(50))
     other_photo = Column(String(250))
     other_price = Column(Integer)
 
 
     def __repr__(self):
-        return ("<Item(id='{}', hat_name='{}', hat_price='{}',"
-            "accessories_name='{}', accessories_price='{}',"
-            "malling_name='{}', malling_price='{}',"
-            "pants_name='{}', pants_price='{}',"
-            "shoes_name='{}', shoes_price='{}',"
-            "other_name='{}', other_price='{}')>").format(
+        return ("<Item(id='{}', hat_name='{}', hat_price='{}')>"
+            "<Item(accessories_name='{}', accessories_price='{}')>"
+            "<Item(malling_name='{}', malling_price='{}')>"
+            "<Item(pants_name='{}', pants_price='{}')>"
+            "<Item(shoes_name='{}', shoes_price='{}')>"
+            "<Item(other_name='{}', other_price='{}')>".format(
             self.id, self.hat_name, self.hat_price,
             self.accessories_name, self.accessories_price,
             self.malling_name, self.malling_price,
             self.pants_name, self.pants_price,
             self.shoes_name, self.shoes_price,
-            self.other_name, self.other_price)
+            self.other_name, self.other_price))
         
 #-----------------------
 
@@ -208,7 +208,7 @@ class DBCommands:
             for num, referral in enumerate(referrals)
         ])
 
-    async def show_item(self):
+    async def show_items(self):
         item = await Item.query.gino.all()
 
         return item
