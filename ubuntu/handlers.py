@@ -203,7 +203,7 @@ async def show_accessories_items(call: CallbackQuery):
         )
         accessorires_photo=item.accessories_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(chat_id,
+        await call.message.answer_photo(
             photo=accessorires_photo,
             caption=text.format(
                 id=item.id,
@@ -241,8 +241,8 @@ async def show_malling_items(call: CallbackQuery):
         )
         malling_photo=item.malling_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(chat_id,
-            malling_photo,
+        await call.message.answer_photo(
+            photo=malling_photo,
             caption=text.format(
                 id=item.id,
                 malling_name=item.malling_name,
@@ -280,8 +280,8 @@ async def show_pants_items(call: CallbackQuery):
         )
         pants_photo=item.pants_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(chat_id,
-            pants_photo,
+        await call.message.answer_photo(chat_id,
+            photo=pants_photo,
             caption=text.format(
                 id=item.id,
                 pants_name=item.pants_name,
@@ -319,7 +319,7 @@ async def show_shoes_items(call: CallbackQuery):
         )
         shoes_photo=item.shoes_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(chat_id,
+        await call.message.answer_photo(
             shoes_photo,
             caption=text.format(
                 id=item.id,
@@ -357,8 +357,8 @@ async def show_other_items(call: CallbackQuery):
         )
         other_photo=item.other_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(chat_id,
-            other_photo,
+        await call.message.answer_photo(
+            photo=other_photo,
             caption=text.format(
                 id=item.id,
                 other_name=item.other_name,
