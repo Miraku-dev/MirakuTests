@@ -164,7 +164,7 @@ async def show_hats_items(call: CallbackQuery):
         )
         hat_photo=item.hat_photo
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await bot.send_photo(
+        await call.message.answer_photo(
             photo=hat_photo,
             caption=text.format(
                 id=item.id,

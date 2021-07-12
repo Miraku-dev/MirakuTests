@@ -54,12 +54,12 @@ class Item(db.Model):
 
 
     def __repr__(self):
-        return ("<Item(id='{}', hat_name='{}', hat_price='{}')>"
+        return (("<Item(id='{}', hat_name='{}', hat_price='{}')>"
             "<Item(accessories_name='{}', accessories_price='{}')>"
             "<Item(malling_name='{}', malling_price='{}')>"
             "<Item(pants_name='{}', pants_price='{}')>"
             "<Item(shoes_name='{}', shoes_price='{}')>"
-            "<Item(other_name='{}', other_price='{}')>".format(
+            "<Item(other_name='{}', other_price='{}')>").format(
             self.id, self.hat_name, self.hat_price,
             self.accessories_name, self.accessories_price,
             self.malling_name, self.malling_price,
