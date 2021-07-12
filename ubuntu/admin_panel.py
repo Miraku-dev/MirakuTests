@@ -10,7 +10,7 @@ from sqlalchemy.sql.expression import text
 from config import admin_id
 from load_all import dp, bot
 from states import(NewHats, Mailing, NewAccessories, NewMalling, NewOther, NewPants, NewShoes)
-from database import Item, User
+from database import Accessories, User, Malling, Other, Pants, Shoes, Hats
 import buttons
 
 @dp.callback_query_handler(text_contains="cancel", state='*')
@@ -96,7 +96,7 @@ async def add_accessories(call: CallbackQuery):
 @dp.message_handler(user_id=admin_id, state=NewAccessories.Name)
 async def enter_accessories_name(message: types.Message, state: FSMContext):
     accessories_name = message.text
-    accessories = Item()
+    accessories = Accessories()
     accessories.accessories_name = accessories_name
     button = InlineKeyboardMarkup(
         inline_keyboard=
@@ -118,7 +118,7 @@ async def enter_accessories_name(message: types.Message, state: FSMContext):
 async def add_accessories_photo(message: types.Message, state: FSMContext):
     accessories_photo = message.photo[-1].file_id
     data = await state.get_data()
-    accessories: Item = data.get("accessories")
+    accessories: Accessories = data.get("accessories")
     accessories.accessories_photo = accessories_photo
     button = InlineKeyboardMarkup(
         inline_keyboard=
@@ -141,7 +141,7 @@ async def add_accessories_photo(message: types.Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewAccessories.Price)
 async def enter_accessories_price(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    accessories: Item = data.get("accessories")
+    accessories: Accessories = data.get("accessories")
     try:
         accessories_price = int(message.text)
     except ValueError:
@@ -175,7 +175,7 @@ async def enter_accessories_price(call: types.CallbackQuery):
 async def enter_accessories_price(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     data = await state.get_data()
-    accessories: Item = data.get("accessories")
+    accessories: Accessories = data.get("accessories")
     await accessories.create()
     await call.message.answer("Товар успешно создан.")
     await state.reset_state()
@@ -198,7 +198,7 @@ async def add_hat(call: CallbackQuery):
 @dp.message_handler(user_id=admin_id, state=NewHats.Name)
 async def enter_hat_name(message: types.Message, state: FSMContext):
     hat_name = message.text
-    hats = Item()
+    hats = Hats()
     hats.hat_name = hat_name
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -221,7 +221,7 @@ async def add_hat_photo(message: types.Message, state: FSMContext):
     text = ("Название: {hat_name}" 
             '\nПришлите мне цену товара или нажмите "Отмена"')
     data = await state.get_data()
-    hats: Item = data.get("hats")
+    hats: Hats = data.get("hats")
     hats.hat_photo = hat_photo
     button = InlineKeyboardMarkup(
     button = InlineKeyboardButton(text="Отмена", callback_data="cancel"))
@@ -239,7 +239,7 @@ async def add_hat_photo(message: types.Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewHats.Price)
 async def enter_hat_price(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    hats: Item = data.get("hats")
+    hats: Hats = data.get("hats")
     try:
         hat_price = int(message.text)
     except ValueError:
@@ -273,7 +273,7 @@ async def enter_hat_price(call: types.CallbackQuery):
 async def enter_hat_price(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     data = await state.get_data()
-    hats: Item = data.get("hats")
+    hats: Hats = data.get("hats")
     await hats.create()
     await call.message.answer("Товар успешно создан.")
     await state.reset_state()
@@ -297,7 +297,7 @@ async def add_malling(call: CallbackQuery):
 @dp.message_handler(user_id=admin_id, state=NewMalling.Name)
 async def enter_malling_name(message: types.Message, state: FSMContext):
     malling_name = message.text
-    malling = Item()
+    malling = Malling()
     malling.malling_name = malling_name
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -318,7 +318,7 @@ async def enter_malling_name(message: types.Message, state: FSMContext):
 async def add_malling_photo(message: types.Message, state: FSMContext):
     malling_photo = message.photo[-1].file_id
     data = await state.get_data()
-    malling: Item = data.get("malling")
+    malling: Malling = data.get("malling")
     malling.malling_photo = malling_photo
     chat_id = message.from_user.id
 
@@ -336,7 +336,7 @@ async def add_malling_photo(message: types.Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewMalling.Price)
 async def enter_malling_price(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    malling: Item = data.get("malling")
+    malling: Malling = data.get("malling")
     try:
         malling_price = int(message.text)
     except ValueError:
@@ -370,7 +370,7 @@ async def enter_malling_price(call: types.CallbackQuery):
 async def enter_malling_price(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     data = await state.get_data()
-    malling: Item = data.get("malling")
+    malling: Malling = data.get("malling")
     await malling.create()
     await call.message.answer("Товар успешно создан.")
     await state.reset_state()
@@ -393,7 +393,7 @@ async def add_pants_item(call: CallbackQuery):
 @dp.message_handler(user_id=admin_id, state=NewPants.Name)
 async def enter_pants_name(message: types.Message, state: FSMContext):
     pants_name = message.text
-    pants = Item()
+    pants = Pants()
     pants.pants_name = pants_name
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -414,7 +414,7 @@ async def enter_pants_name(message: types.Message, state: FSMContext):
 async def add_pants_photo(message: types.Message, state: FSMContext):
     pants_photo = message.photo[-1].file_id
     data = await state.get_data()
-    pants: Item = data.get("pants")
+    pants: Pants = data.get("pants")
     pants.pants_photo = pants_photo
     text = ("Название: {pants_name}"
                   '\nПришлите мне цену товара или нажмите "Отмена"')
@@ -438,7 +438,7 @@ async def add_pants_photo(message: types.Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewPants.Price)
 async def enter_pants_price(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    pants: Item = data.get("pants")
+    pants: Pants = data.get("pants")
     try:
         pants_price = int(message.text)
     except ValueError:
@@ -472,7 +472,7 @@ async def enter_pants_price(call: types.CallbackQuery):
 async def enter_pants_price(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     data = await state.get_data()
-    pants: Item = data.get("pants")
+    pants: Pants = data.get("pants")
     await pants.create()
     await call.message.answer("Товар успешно создан.")
     await state.reset_state()
@@ -496,7 +496,7 @@ async def add_shoes(call: CallbackQuery):
 @dp.message_handler(user_id=admin_id, state=NewShoes.Name)
 async def enter_shoes_name(message: types.Message, state: FSMContext):
     shoes_name = message.text
-    shoes = Item()
+    shoes = Shoes()
     shoes.shoes_name = shoes_name
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -518,7 +518,7 @@ async def enter_shoes_name(message: types.Message, state: FSMContext):
 async def add_shoes_photo(message: types.Message, state: FSMContext):
     shoes_photo = message.photo[-1].file_id
     data = await state.get_data()
-    shoes: Item = data.get("shoes")
+    shoes: Shoes = data.get("shoes")
     shoes.shoes_photo = shoes_photo
     chat_id = message.from_user.id
     text = ("Название: {shoes_name}"
@@ -535,7 +535,7 @@ async def add_shoes_photo(message: types.Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewShoes.Price)
 async def enter_shoes_price(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    shoes: Item = data.get("shoes")
+    shoes: Shoes = data.get("shoes")
     try:
         shoes_price = int(message.text)
     except ValueError:
@@ -569,7 +569,7 @@ async def enter_shoes_price(call: types.CallbackQuery):
 async def enter_shoes_price(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     data = await state.get_data()
-    shoes: Item = data.get("shoes")
+    shoes: Shoes = data.get("shoes")
     await shoes.create()
     await call.message.answer("Товар успешно создан.")
     await state.reset_state()
@@ -593,7 +593,7 @@ async def add_other(call: CallbackQuery):
 @dp.message_handler(user_id=admin_id, state=NewOther.Name)
 async def enter_other_name(message: types.Message, state: FSMContext):
     other_name = message.text
-    other = Item()
+    other = Other()
     other.other_name = other_name
     button = InlineKeyboardMarkup(
         inline_keyboard=
@@ -614,7 +614,7 @@ async def enter_other_name(message: types.Message, state: FSMContext):
 async def add_other_photo(message: types.Message, state: FSMContext):
     other_photo = message.photo[-1].file_id
     data = await state.get_data()
-    other: Item = data.get("other")
+    other: Other = data.get("other")
     text = ("Название: {other_name}"
                   '\nПришлите цену товара или нажмите "Отмена"')
     other.other_photo = other_photo
@@ -638,7 +638,7 @@ async def add_other_photo(message: types.Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewOther.Price)
 async def enter_other_price(message: types.Message, state: FSMContext):
     data = await state.get_data()
-    other: Item = data.get("other")
+    other: Other = data.get("other")
     try:
         other_price = int(message.text)
     except ValueError:
@@ -672,7 +672,7 @@ async def enter_other_price(call: types.CallbackQuery):
 async def enter_other_price(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     data = await state.get_data()
-    other: Item = data.get("other")
+    other: Other = data.get("other")
     await other.create()
     await call.message.answer("Товар успешно создан.")
     await state.reset_state()

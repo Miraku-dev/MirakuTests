@@ -29,43 +29,48 @@ class User(db.Model):
 
 
 class Item(db.Model):
-    __tablename__ = 'items'
+    __tablename__ = 'item'
     query: sql.Select
 
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    hat_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     hat_name = Column(String(50))
     hat_photo = Column(String(250))
-    hat_price = Column(Integer)
+    hat_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    accessories_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     accessories_name = Column(String(50))
     accessories_photo = Column(String(250))
-    accessories_price = Column(Integer)
+    accessories_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    malling_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     malling_name = Column(String(50))
     malling_photo = Column(String(250))
-    malling_price = Column(Integer)
+    malling_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    pants_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     pants_name = Column(String(50))
     pants_photo = Column(String(250))
-    pants_price = Column(Integer)
+    pants_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    shoes_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     shoes_name = Column(String(50))
     shoes_photo = Column(String(250))
-    shoes_price = Column(Integer)
+    shoes_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    other_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     other_name = Column(String(50))
     other_photo = Column(String(250))
     other_price = Column(Integer)
 
 
     def __repr__(self):
-        return ((("<Item(id='{}', hat_name='{}', hat_price='{}')>").format(
-            self.id, self.hat_name, self.hat_price))
-            (("<Item(accessories_name='{}', accessories_price='{}')>").format(
-            self.accessories_name, self.accessories_price))
-            (("<Item(malling_name='{}', malling_price='{}')>").format(
-            self.malling_name, self.malling_price))
-            (("<Item(pants_name='{}', pants_price='{}')>").format(
-            self.pants_name, self.pants_price))
-            (("<Item(shoes_name='{}', shoes_price='{}')>").format(
-            self.shoes_name, self.shoes_price))
-            (("<Item(other_name='{}', other_price='{}')>").format(
-            self.other_name, self.other_price)))
+        return ("<Item(hat_id='{}', hat_name='{}', hat_price='{}',"
+            "accessories_id='{}', accessories_name='{}', accessories_price='{}',"
+            "malling_id='{}', malling_name='{}', malling_price='{}',"
+            "pants_id='{}', pants_name='{}', pants_price='{}',"
+            "shoes_id='{}', shoes_name='{}', shoes_price='{}',"
+            "other_id='{}', other_name='{}', other_price='{}')>").format(
+            self.hat_id, self.hat_name, self.hat_price,
+            self.accessories_id, self.accessories_name, self.accessories_price,
+            self.malling_id, self.malling_name, self.malling_price,
+            self.pants_id, self.pants_name, self.pants_price,
+            self.shoes_id, self.shoes_name, self.shoes_price,
+            self.other_id, self.other_name, self.other_price)
         
 #-----------------------
 
@@ -75,7 +80,7 @@ class Purchase_hats(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    item_id = Column(Integer)
+    hat_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -91,7 +96,7 @@ class Purchase_accessories(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    item_id = Column(Integer)
+    accessories_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -107,7 +112,7 @@ class Purchase_pants(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    item_id = Column(Integer)
+    pants_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -123,7 +128,7 @@ class Purchase_shoes(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    item_id = Column(Integer)
+    shoes_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -139,7 +144,7 @@ class Purchase_malling(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    item_id = Column(Integer)
+    malling_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -155,7 +160,7 @@ class Purchase_other(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
-    item_id = Column(Integer)
+    other_id = Column(Integer)
     amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
@@ -208,7 +213,7 @@ class DBCommands:
             for num, referral in enumerate(referrals)
         ])
 
-    async def show_items(self):
+    async def show_item(self):
         item = await Item.query.gino.all()
 
         return item
@@ -219,5 +224,4 @@ async def create_db():
 
     # Create tables
     db.gino: GinoSchemaVisitor
-    await db.gino.drop_all()
     await db.gino.create_all()
