@@ -54,18 +54,18 @@ class Item(db.Model):
 
 
     def __repr__(self):
-        return (("<Item(id='{}', hat_name='{}', hat_price='{}')>"
-            "<Item(accessories_name='{}', accessories_price='{}')>"
-            "<Item(malling_name='{}', malling_price='{}')>"
-            "<Item(pants_name='{}', pants_price='{}')>"
-            "<Item(shoes_name='{}', shoes_price='{}')>"
-            "<Item(other_name='{}', other_price='{}')>").format(
-            self.id, self.hat_name, self.hat_price,
-            self.accessories_name, self.accessories_price,
-            self.malling_name, self.malling_price,
-            self.pants_name, self.pants_price,
-            self.shoes_name, self.shoes_price,
-            self.other_name, self.other_price))
+        return ((("<Item(id='{}', hat_name='{}', hat_price='{}')>").format(
+            self.id, self.hat_name, self.hat_price))
+            (("<Item(accessories_name='{}', accessories_price='{}')>").format(
+            self.accessories_name, self.accessories_price))
+            (("<Item(malling_name='{}', malling_price='{}')>").format(
+            self.malling_name, self.malling_price))
+            (("<Item(pants_name='{}', pants_price='{}')>").format(
+            self.pants_name, self.pants_price))
+            (("<Item(shoes_name='{}', shoes_price='{}')>").format(
+            self.shoes_name, self.shoes_price))
+            (("<Item(other_name='{}', other_price='{}')>").format(
+            self.other_name, self.other_price)))
         
 #-----------------------
 
