@@ -28,50 +28,84 @@ class User(db.Model):
             self.id, self.full_name, self.username)
 
 
-class Item(db.Model):
-    __tablename__ = 'item'
+class Hats(db.Model):
+    __tablename__ = 'hats'
     query: sql.Select
 
     hat_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     hat_name = Column(String(50))
     hat_photo = Column(String(250))
     hat_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+
+    def __repr__(self):
+        return "<Hats(hat_id='{}', hat_name='{}', hat_price='{}')>".format(
+            self.hat_id, self.hat_name, self.hat_price)
+
+class Accessories(db.Model):
+    __tablename__ = 'accessories'
+    query: sql.Select
+
     accessories_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     accessories_name = Column(String(50))
     accessories_photo = Column(String(250))
     accessories_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+
+    def __repr__(self):
+        return "<Accessories(accessories_id='{}', accessories_name='{}', accessories_price='{}')>".format(
+            self.accessories_id, self.accessories_name, self.accessories_price)
+
+class Malling(db.Model):
+    __tablename__ = 'malling'
+    query: sql.Select
+
     malling_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     malling_name = Column(String(50))
     malling_photo = Column(String(250))
     malling_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+
+    def __repr__(self):
+        return "<Malling(id='{}', name='{}', price='{}')>".format(
+            self.malling_id, self.malling_name, self.malling_price)
+
+class Pants(db.Model):
+    __tablename__ = 'pants'
+    query: sql.Select
+
     pants_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     pants_name = Column(String(50))
     pants_photo = Column(String(250))
     pants_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+
+    def __repr__(self):
+        return "<Pants(pants_id='{}', pants_name='{}', pants_price='{}')>".format(
+            self.pants_id, self.pants_name, self.pants_price)
+
+class Shoes(db.Model):
+    __tablename__ = 'shoes'
+    query: sql.Select
+
     shoes_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     shoes_name = Column(String(50))
     shoes_photo = Column(String(250))
     shoes_price = Column(Integer)  # Цена в копейках (потом делим на 100)
+
+    def __repr__(self):
+        return "<Shoes(shoes_id='{}', shoes_name='{}', shoes_price='{}')>".format(
+            self.shoes_id, self.shoes_name, self.shoes_price)
+
+class Other(db.Model):
+    __tablename__ = 'other'
+    query: sql.Select
+
     other_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     other_name = Column(String(50))
     other_photo = Column(String(250))
     other_price = Column(Integer)
 
-
     def __repr__(self):
-        return ("<Item(hat_id='{}', hat_name='{}', hat_price='{}',"
-            "accessories_id='{}', accessories_name='{}', accessories_price='{}',"
-            "malling_id='{}', malling_name='{}', malling_price='{}',"
-            "pants_id='{}', pants_name='{}', pants_price='{}',"
-            "shoes_id='{}', shoes_name='{}', shoes_price='{}',"
-            "other_id='{}', other_name='{}', other_price='{}')>").format(
-            self.hat_id, self.hat_name, self.hat_price,
-            self.accessories_id, self.accessories_name, self.accessories_price,
-            self.malling_id, self.malling_name, self.malling_price,
-            self.pants_id, self.pants_name, self.pants_price,
-            self.shoes_id, self.shoes_name, self.shoes_price,
+        return "<Other(other_id='{}', other_name='{}', other_price='{}')>".format(
             self.other_id, self.other_name, self.other_price)
-        
+
 #-----------------------
 
 class Purchase_hats(db.Model):
@@ -213,10 +247,35 @@ class DBCommands:
             for num, referral in enumerate(referrals)
         ])
 
-    async def show_item(self):
-        item = await Item.query.gino.all()
+    async def show_accessories(self):
+        accessories = await Accessories.query.gino.all()
 
-        return item
+        return accessories
+
+    async def show_hats(self):
+        hats = await Hats.query.gino.all()
+
+        return hats
+
+    async def show_malling(self):
+        malling = await Malling.query.gino.all()
+
+        return malling
+
+    async def show_pants(self):
+        pants = await Pants.query.gino.all()
+
+        return pants
+
+    async def show_shoes(self):
+        shoes = await Shoes.query.gino.all()
+
+        return shoes
+
+    async def show_other(self):
+        other = await Other.query.gino.all()
+
+        return other
     
 
 async def create_db():
