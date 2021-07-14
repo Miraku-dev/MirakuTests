@@ -37,10 +37,11 @@ class Item(db.Model):
     name = Column(String(50))
     photo = Column(String(250))
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    category = Column(String(25))
 
     def __repr__(self):
-        return "<Item(id='{}', name='{}', price='{}')>".format(
-            self.id, self.name, self.price)
+        return "<Item(id='{}', name='{}', price='{}', category='{}')>".format(
+            self.id, self.name, self.price, self.category)
 
 
 class Purchase(db.Model):
@@ -102,8 +103,33 @@ class DBCommands:
             for num, referral in enumerate(referrals)
         ])
 
-    async def show_items(self):
-        items = await Item.query.gino.all()
+    async def show_hats(self):
+        items = await Item.query.where(Item.category == "add_hat")
+
+        return items
+
+    async def show_accessories(self):
+        items = await Item.query.gino.all(Item.category == "add_accessories")
+
+        return items
+    
+    async def show_malling(self):
+        items = await Item.query.gino.all(Item.category == "add_malling")
+
+        return items
+
+    async def show_pants(self):
+        items = await Item.query.gino.all(Item.category == "add_pants")
+
+        return items
+
+    async def show_shoes(self):
+        items = await Item.query.gino.all(Item.category == "add_shoes")
+
+        return items
+
+    async def show_other(self):
+        items = await Item.query.gino.all(Item.category == "add_other")
 
         return items
 

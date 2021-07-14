@@ -12,6 +12,7 @@ import database
 import states
 from config import lp_token, admin_id
 from load_all import dp, bot
+import buttons
 
 db = database.DBCommands()
 
@@ -54,34 +55,28 @@ async def register_user(message: types.Message):
     await bot.send_message(chat_id, text.format(count_users=count_users), reply_markup=admin_markup)
 
 
-# Альтернативно можно использовать фильтр text_contains, он улавливает то, что указано в call.data
-@dp.callback_query_handler(text_contains="lang")
-async def change_language(call: CallbackQuery):
+@dp.callback_query_handler(text_contains="list_categories")
+async def categories_list(call: CallbackQuery):
     await call.message.edit_reply_markup()
-    # Достаем последние 2 символа (например ru)
-    lang = call.data[-2:]
-    await db.set_language(lang)
-
-    # После того, как мы поменяли язык, в этой функции все еще указан старый, поэтому передаем locale=lang
-    await call.message.answer("Ваш язык был изменен", locale=lang)
-
-
-@dp.message_handler(commands=["referrals"])
-async def check_referrals(message: types.Message):
-    referrals = await db.check_referrals()
-    text = ("Ваши рефералы:\n{referrals}").format(referrals=referrals)
-    await message.answer(text)
+    chat_id = call.from_user.id
+    text = "Выберите товар из присутствующих категорий:"
+    
+    await bot.send_message(chat_id, text, reply_markup=buttons.magic_categories_markup)
 
 
 # Показываем список доступных товаров
-@dp.message_handler(commands=["items"])
-async def show_items(message: Message):
+@dp.callback_query_handler(text_contains="hats")
+async def show_hats(call: CallbackQuery):
     # Достаем товары из базы данных
-    all_items = await db.show_items()
+    all_items = await db.show_hats()
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
-        text = ("<b>Товар</b> \t№{id}: <u>{name}</u>\n"
+        text = ("\t<b>{name}</b>\n"
                  "<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -93,7 +88,7 @@ async def show_items(message: Message):
         )
 
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await message.answer_photo(
+        await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
                 id=item.id,
@@ -105,6 +100,190 @@ async def show_items(message: Message):
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
 
+
+# Показываем список доступных товаров
+@dp.callback_query_handler(text_contains="accessories")
+async def show_hats(call: CallbackQuery):
+    # Достаем товары из базы данных
+    all_items = await db.show_accessories()
+    # Проходимся по товарам, пронумеровывая
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n"
+                 "<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                ],
+            ]
+        )
+
+        # Отправляем фотку товара с подписью и кнопкой "купить"
+        await call.message.answer_photo(
+            photo=item.photo,
+            caption=text.format(
+                id=item.id,
+                name=item.name,
+                price=item.price / 100
+            ),
+            reply_markup=markup
+        )
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
+
+
+# Показываем список доступных товаров
+@dp.callback_query_handler(text_contains="malling")
+async def show_hats(call: CallbackQuery):
+    # Достаем товары из базы данных
+    all_items = await db.show_malling()
+    # Проходимся по товарам, пронумеровывая
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n"
+                 "<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                ],
+            ]
+        )
+
+        # Отправляем фотку товара с подписью и кнопкой "купить"
+        await call.message.answer_photo(
+            photo=item.photo,
+            caption=text.format(
+                id=item.id,
+                name=item.name,
+                price=item.price / 100
+            ),
+            reply_markup=markup
+        )
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
+
+
+# Показываем список доступных товаров
+@dp.callback_query_handler(text_contains="pants")
+async def show_hats(call: CallbackQuery):
+    # Достаем товары из базы данных
+    all_items = await db.show_pants()
+    # Проходимся по товарам, пронумеровывая
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n"
+                 "<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                ],
+            ]
+        )
+
+        # Отправляем фотку товара с подписью и кнопкой "купить"
+        await call.message.answer_photo(
+            photo=item.photo,
+            caption=text.format(
+                id=item.id,
+                name=item.name,
+                price=item.price / 100
+            ),
+            reply_markup=markup
+        )
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
+
+
+# Показываем список доступных товаров
+@dp.callback_query_handler(text_contains="shoes")
+async def show_hats(call: CallbackQuery):
+    # Достаем товары из базы данных
+    all_items = await db.show_shoes()
+    # Проходимся по товарам, пронумеровывая
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n"
+                 "<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                ],
+            ]
+        )
+
+        # Отправляем фотку товара с подписью и кнопкой "купить"
+        await call.message.answer_photo(
+            photo=item.photo,
+            caption=text.format(
+                id=item.id,
+                name=item.name,
+                price=item.price / 100
+            ),
+            reply_markup=markup
+        )
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
+
+
+# Показываем список доступных товаров
+@dp.callback_query_handler(text_contains="other")
+async def show_hats(call: CallbackQuery):
+    # Достаем товары из базы данных
+    all_items = await db.show_other()
+    # Проходимся по товарам, пронумеровывая
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n"
+                 "<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                ],
+            ]
+        )
+
+        # Отправляем фотку товара с подписью и кнопкой "купить"
+        await call.message.answer_photo(
+            photo=item.photo,
+            caption=text.format(
+                id=item.id,
+                name=item.name,
+                price=item.price / 100
+            ),
+            reply_markup=markup
+        )
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
 
 # Для фильтрования по коллбекам можно использовать buy_item.filter()
 @dp.callback_query_handler(buy_item.filter())

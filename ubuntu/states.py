@@ -1,6 +1,9 @@
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
+available_answers_data = ['add_accessories', 'add_hat', 'add_malling', 'add_pants', 'add_shoes', 'add_other']
+
+
 class Purchase(StatesGroup):
     EnterQuantity = State()
     Approval = State()
@@ -8,6 +11,7 @@ class Purchase(StatesGroup):
 
 
 class NewItem(StatesGroup):
+    Start = State()
     Name = State()
     Photo = State()
     Price = State()
@@ -16,7 +20,7 @@ class NewItem(StatesGroup):
 
 class Mailing(StatesGroup):
     Text = State()
-    Language = State()
+    Mall = State()
 
 class DeleteItem(StatesGroup):
     Get_id = State()
