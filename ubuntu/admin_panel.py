@@ -10,10 +10,31 @@ from states import NewItem, Mailing, DeleteItem
 from database import Item, User
 
 
-@dp.message_handler(user_id=admin_id, commands=["cancel"], state=NewItem)
-async def cancel(message: types.Message, state: FSMContext):
-    await message.answer("Вы отменили создание товара")
-    await state.reset_state()
+@dp.callback_query_handler(user_id=admin_id, text_contains="cancel", state='*')
+async def cancel(call: types.CallbackQuery, state: FSMContext):
+    await call.message.edit_reply_markup()
+    await state.finish()
+    chat_id = call.from_user.id
+
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [
+                InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
+                InlineKeyboardButton(text="Поддержка", callback_data="help")
+            ]
+        ]
+    )
+
+    bot_username = (await bot.me).username
+    bot_link = f"https://t.me/{bot_username}?start={id}"
+
+    text = ("Действие отменено.\n")
+    if call.from_user.id == admin_id:
+        text += ("Чтобы увидеть админ-панель нажмите:\n /admin_panel")
+    await bot.send_message(chat_id, text, reply_markup=markup)
 
 
 @dp.message_handler(user_id=admin_id, commands=["add_item"])

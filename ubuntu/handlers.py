@@ -28,36 +28,30 @@ async def register_user(message: types.Message):
     id = user.id
     count_users = await db.count_users()
 
-    # Отдадим пользователю клавиатуру с выбором языков
-    languages_markup = InlineKeyboardMarkup(
+    admin_markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
             [
-                InlineKeyboardButton(text="Русский", callback_data="lang_ru")],
-            [
-                InlineKeyboardButton(text="English", callback_data="lang_en"),
-                InlineKeyboardButton(text="Україньска", callback_data="lang_uk"),
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [   
+                InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
+                InlineKeyboardButton(text="Поддержка", callback_data="help")
             ]
-        ]
+       ]
     )
 
     bot_username = (await bot.me).username
     bot_link = f"https://t.me/{bot_username}?start={id}"
 
-
-    text = ("Приветствую вас!!\n"
-             "Сейчас в базе {count_users} человек!\n"
+    text = ("Привет!\n"
              "\n"
-             "Ваша реферальная ссылка: {bot_link}\n"
-             "Проверить рефералов можно по команде: /referrals\n"
-             "Просмотреть товары: /items").format(
-        count_users=count_users,
-        bot_link=bot_link
-    )
+             "Что вы хотите увидеть?")
+
     if message.from_user.id == admin_id:
         text += ("\n"
-                  "Добавить новый товар: /add_item")
-    await bot.send_message(chat_id, text, reply_markup=languages_markup)
+                "Сейчас в базе: {count_users} человек(a).\n"
+                  "Чтобы увидеть админ-панель нажмите:\n /admin_panel")
+    await bot.send_message(chat_id, text.format(count_users=count_users), reply_markup=admin_markup)
 
 
 # Альтернативно можно использовать фильтр text_contains, он улавливает то, что указано в call.data
