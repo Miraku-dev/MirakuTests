@@ -87,7 +87,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Выберите ответ, используя кнопки выше.")
         return
     if call.message.text == "add_hat":
-        await item.category = call.message.text.lower()
+        item.category = call.message.text.lower()
         await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
@@ -100,7 +100,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Выберите ответ, используя кнопки выше.")
         return
     if call.message.text == "add_accessories":
-        await item.category = call.message.text.lower()
+        item.category = call.message.text.lower()
         await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
@@ -113,7 +113,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Выберите ответ, используя кнопки выше.")
         return
     if call.message.text == "add_pants":
-        await item.category = call.message.text.lower()
+        item.category = call.message.text.lower()
         await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
@@ -126,7 +126,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Выберите ответ, используя кнопки выше.")
         return
     if call.message.text == "add_shoes":
-        await item.category = call.message.text.lower()
+        item.category = call.message.text.lower()
         await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
@@ -139,7 +139,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Выберите ответ, используя кнопки выше.")
         return
     if call.message.text == "add_malling":
-        await item.category = call.message.text.lower()
+        item.category = call.message.text.lower()
         await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
@@ -152,7 +152,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Выберите ответ, используя кнопки выше.")
         return
     if call.message.text == "add_other":
-        await item.category = call.message.text.lower()
+        item.category = call.message.text.lower()
         await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
