@@ -196,7 +196,7 @@ async def enter_name(message: types.Message, state: FSMContext):
 
 
     await message.answer("Название: {name}"
-                           '\n Пришлите описание товара, если хотите чтобы оно оставалось пустым, нажмите на кнопку "Без описания"'.format(name=name), 
+                           '\nПришлите описание товара, если хотите чтобы оно оставалось пустым, нажмите на кнопку "Без описания"'.format(name=name), 
                            reply_markup=button)
 
     await NewItem.Descriotion.set()
@@ -301,7 +301,18 @@ async def enter_price(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     item: Item = data.get("item")
     await item.create()
-    await call.message.answer(("Товар успешно создан."))
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [
+                InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
+                InlineKeyboardButton(text="Поддержка", callback_data="help")
+            ]
+        ]
+    )
+    await call.message.answer("Товар успешно создан.\nАдмин-панель: /admin_panel", reply_markup=markup)
     await state.reset_state()
 
 
@@ -377,9 +388,9 @@ async def get_id(message: types.Message, state: FSMContext):
         text = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("\n{description}")
+            text += ("{description}\n")
         
-        text += ("<b>Цена:</b> \t{price:,}\n")
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if message.from_user.id == admin_id:
             text += ("\n"
@@ -414,6 +425,18 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     id = data.get("id")
     await Item.delete.where(Item.id == id).gino.status()
-    await call.message.answer("Товар удалён.")
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [
+                InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
+                InlineKeyboardButton(text="Поддержка", callback_data="help")
+            ]
+        ]
+    )
+    await call.message.answer("Товар удалён.\nАдмин-панель: /admin_panel", reply_markup=markup)
+    
     await state.finish()
 

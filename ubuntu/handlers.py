@@ -6,6 +6,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
                            CallbackQuery, LabeledPrice, PreCheckoutQuery)
+from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
 
 import database
@@ -53,6 +54,18 @@ async def register_user(message: types.Message):
                 "Сейчас в базе: {count_users} человек(a).\n"
                   "Чтобы увидеть админ-панель нажмите:\n /admin_panel")
     await bot.send_message(chat_id, text.format(count_users=count_users), reply_markup=admin_markup)
+
+
+@dp.callback_query_handler(text_contains="storage")
+async def storage(call: CallbackQuery):
+    await call.message.answer("По этой кнопке мы можем сделать переход на сайт вашего магазина или его страницу в соцсетях.",
+    show_alert=True)
+
+
+@dp.callback_query_handler(text_contains="help")
+async def help(call: CallbackQuery):
+    await call.message.answer("По этой кнопке мы можем сделать переход на поддержку вашего магазина в telegram или любой другой социальной сети.",
+    show_alert=True)
 
 
 @dp.callback_query_handler(text_contains="list_categories")
@@ -469,6 +482,12 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     data = await state.get_data()
     purchase: database.Purchase = data.get("purchase")
     success = await check_payment(purchase)
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Меню"), callback_data="cancel")],
+            ]
+    )
 
     if success:
         await purchase.update(
@@ -481,14 +500,20 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             email=query.order_info.email
         ).apply()
         await state.reset_state()
-        await bot.send_message(query.from_user.id, ("Спасибо за покупку"))
+        await bot.send_message(query.from_user.id, ("Спасибо за покупку"), reply_markup=button)
     else:
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
 
 
-@dp.message_handler()
+@dp.message_handler(text_contains=ContentType.ANY)
 async def other_echo(message: Message):
-    await message.answer(message.text)
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Меню"), callback_data="cancel")],
+            ]
+    )
+    await message.answer("Не знаю как на это ответить. Если запутались, нажмите кнопку.", reply_markup=button)
 
 
 async def check_payment(purchase: database.Purchase):
