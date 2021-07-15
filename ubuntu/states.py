@@ -1,16 +1,74 @@
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
-available_answers_data = ['add_accessories', 'add_hat', 'add_malling', 'add_pants', 'add_shoes', 'add_other']
+class Purchase_hats(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
 
+class Purchase_accessories(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
 
-class Purchase(StatesGroup):
+class Purchase_pants(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_shoes(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_malling(StatesGroup):
+    EnterQuantity = State()
+    Approval = State()
+    Payment = State()
+
+class Purchase_other(StatesGroup):
     EnterQuantity = State()
     Approval = State()
     Payment = State()
 
 
-class NewItem(StatesGroup):
+class NewHats(StatesGroup):
+    Categories= State()
+    Name = State()
+    Photo = State()
+    Price = State()
+    Confirm = State()
+
+class NewAccessories(StatesGroup):
+    Categories= State()
+    Name = State()
+    Photo = State()
+    Price = State()
+    Confirm = State()
+
+class NewPants(StatesGroup):
+    Categories= State()
+    Name = State()
+    Photo = State()
+    Price = State()
+    Confirm = State()
+
+class NewShoes(StatesGroup):
+    Categories= State()
+    Name = State()
+    Photo = State()
+    Price = State()
+    Confirm = State()
+
+class NewOther(StatesGroup):
+    Categories= State()
+    Name = State()
+    Photo = State()
+    Price = State()
+    Confirm = State()
+
+class NewMalling(StatesGroup):
+    Categories= State()
     Name = State()
     Photo = State()
     Price = State()
@@ -20,7 +78,3 @@ class NewItem(StatesGroup):
 class Mailing(StatesGroup):
     Text = State()
     Mall = State()
-
-class DeleteItem(StatesGroup):
-    Get_id = State()
-    Delete = State()
