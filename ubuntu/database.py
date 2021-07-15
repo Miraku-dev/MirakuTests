@@ -18,6 +18,7 @@ class User(db.Model):
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     user_id = Column(BigInteger)
+    language = Column(String(2))
     full_name = Column(String(100))
     username = Column(String(50))
     referral = Column(Integer)
@@ -33,50 +34,24 @@ class Item(db.Model):
     query: sql.Select
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-    hat_name = Column(String(50))
-    hat_photo = Column(String(250))
-    hat_price = Column(Integer)
-    accessories_name = Column(String(50))
-    accessories_photo = Column(String(250))
-    accessories_price = Column(Integer)
-    malling_name = Column(String(50))
-    malling_photo = Column(String(250))
-    malling_price = Column(Integer)
-    pants_name = Column(String(50))
-    pants_photo = Column(String(250))
-    pants_price = Column(Integer)
-    shoes_name = Column(String(50))
-    shoes_photo = Column(String(250))
-    shoes_price = Column(Integer)
-    other_name = Column(String(50))
-    other_photo = Column(String(250))
-    other_price = Column(Integer)
-
+    name = Column(String(50))
+    photo = Column(String(250))
+    price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    category = Column(String(25))
 
     def __repr__(self):
-        return ((("<Item(id='{}', hat_name='{}', hat_price='{}')>").format(
-            self.id, self.hat_name, self.hat_price))
-            (("<Item(accessories_name='{}', accessories_price='{}')>").format(
-            self.accessories_name, self.accessories_price))
-            (("<Item(malling_name='{}', malling_price='{}')>").format(
-            self.malling_name, self.malling_price))
-            (("<Item(pants_name='{}', pants_price='{}')>").format(
-            self.pants_name, self.pants_price))
-            (("<Item(shoes_name='{}', shoes_price='{}')>").format(
-            self.shoes_name, self.shoes_price))
-            (("<Item(other_name='{}', other_price='{}')>").format(
-            self.other_name, self.other_price)))
-        
-#-----------------------
+        return "<Item(id='{}', name='{}', price='{}', category='{}')>".format(
+            self.id, self.name, self.price, self.category)
 
-class Purchase_hats(db.Model):
-    __tablename__ = 'purchases_hats'
+
+class Purchase(db.Model):
+    __tablename__ = 'purchases'
     query: sql.Select
 
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)
-    amount = Column(Integer)
+    amount = Column(Integer)  # Цена в копейках (потом делим на 100)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
     shipping_address = Column(JSON)
@@ -85,87 +60,7 @@ class Purchase_hats(db.Model):
     receiver = Column(String(100))
     successful = Column(Boolean, default=False)
 
-class Purchase_accessories(db.Model):
-    __tablename__ = 'purchases_accessories'
-    query: sql.Select
 
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-    buyer = Column(BigInteger)
-    item_id = Column(Integer)
-    amount = Column(Integer)
-    quantity = Column(Integer)
-    purchase_time = Column(TIMESTAMP)
-    shipping_address = Column(JSON)
-    phone_number = Column(String(50))
-    email = Column(String(200))
-    receiver = Column(String(100))
-    successful = Column(Boolean, default=False)
-
-class Purchase_pants(db.Model):
-    __tablename__ = 'purchases_pants'
-    query: sql.Select
-
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-    buyer = Column(BigInteger)
-    item_id = Column(Integer)
-    amount = Column(Integer)
-    quantity = Column(Integer)
-    purchase_time = Column(TIMESTAMP)
-    shipping_address = Column(JSON)
-    phone_number = Column(String(50))
-    email = Column(String(200))
-    receiver = Column(String(100))
-    successful = Column(Boolean, default=False)
-
-class Purchase_shoes(db.Model):
-    __tablename__ = 'purchases_shoes'
-    query: sql.Select
-
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-    buyer = Column(BigInteger)
-    item_id = Column(Integer)
-    amount = Column(Integer)
-    quantity = Column(Integer)
-    purchase_time = Column(TIMESTAMP)
-    shipping_address = Column(JSON)
-    phone_number = Column(String(50))
-    email = Column(String(200))
-    receiver = Column(String(100))
-    successful = Column(Boolean, default=False)
-
-class Purchase_malling(db.Model):
-    __tablename__ = 'purchases_malling'
-    query: sql.Select
-
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-    buyer = Column(BigInteger)
-    item_id = Column(Integer)
-    amount = Column(Integer)
-    quantity = Column(Integer)
-    purchase_time = Column(TIMESTAMP)
-    shipping_address = Column(JSON)
-    phone_number = Column(String(50))
-    email = Column(String(200))
-    receiver = Column(String(100))
-    successful = Column(Boolean, default=False)
-
-class Purchase_other(db.Model):
-    __tablename__ = 'purchases_other'
-    query: sql.Select
-
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
-    buyer = Column(BigInteger)
-    item_id = Column(Integer)
-    amount = Column(Integer)
-    quantity = Column(Integer)
-    purchase_time = Column(TIMESTAMP)
-    shipping_address = Column(JSON)
-    phone_number = Column(String(50))
-    email = Column(String(200))
-    receiver = Column(String(100))
-    successful = Column(Boolean, default=False)
-
-# ---------------------
 class DBCommands:
 
     async def get_user(self, user_id):
@@ -208,11 +103,36 @@ class DBCommands:
             for num, referral in enumerate(referrals)
         ])
 
-    async def show_items(self):
-        item = await Item.query.gino.all()
+    async def show_hats(self):
+        items = await Item.query.where(Item.category == "add_hat")
 
-        return item
+        return items
+
+    async def show_accessories(self):
+        items = await Item.query.gino.all(Item.category == "add_accessories")
+
+        return items
     
+    async def show_malling(self):
+        items = await Item.query.gino.all(Item.category == "add_malling")
+
+        return items
+
+    async def show_pants(self):
+        items = await Item.query.gino.all(Item.category == "add_pants")
+
+        return items
+
+    async def show_shoes(self):
+        items = await Item.query.gino.all(Item.category == "add_shoes")
+
+        return items
+
+    async def show_other(self):
+        items = await Item.query.gino.all(Item.category == "add_other")
+
+        return items
+
 
 async def create_db():
     await db.set_bind(f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}')
