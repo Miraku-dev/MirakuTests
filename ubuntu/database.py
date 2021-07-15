@@ -35,13 +35,14 @@ class Item(db.Model):
 
     id = Column(Integer, Sequence('item_seq'), primary_key=True)
     name = Column(String(50))
+    description = Column(String(500))
     photo = Column(String(250))
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
 
     def __repr__(self):
-        return "<Item(id='{}', name='{}', price='{}', category='{}')>".format(
-            self.id, self.name, self.price, self.category)
+        return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}')>".format(
+            self.id, self.name, self.description, self.price, self.category)
 
 
 class Purchase(db.Model):

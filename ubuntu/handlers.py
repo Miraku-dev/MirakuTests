@@ -71,12 +71,17 @@ async def show_hats(call: CallbackQuery):
     all_items = await db.show_hats()
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n"
-                 "<b>Цена:</b> \t{price:,}\n")
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("\n{description}")
+        
+        text += ("<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
+        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -93,6 +98,7 @@ async def show_hats(call: CallbackQuery):
             caption=text.format(
                 id=item.id,
                 name=item.name,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
@@ -108,12 +114,17 @@ async def show_accessories(call: CallbackQuery):
     all_items = await db.show_accessories()
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n"
-                 "<b>Цена:</b> \t{price:,}\n")
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("\n{description}")
+        
+        text += ("<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
+        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -130,6 +141,7 @@ async def show_accessories(call: CallbackQuery):
             caption=text.format(
                 id=item.id,
                 name=item.name,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
@@ -145,12 +157,17 @@ async def show_malling(call: CallbackQuery):
     all_items = await db.show_malling()
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n"
-                 "<b>Цена:</b> \t{price:,}\n")
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("\n{description}")
+        
+        text += ("<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
+        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -167,6 +184,7 @@ async def show_malling(call: CallbackQuery):
             caption=text.format(
                 id=item.id,
                 name=item.name,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
@@ -182,12 +200,17 @@ async def show_pants(call: CallbackQuery):
     all_items = await db.show_pants()
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n"
-                 "<b>Цена:</b> \t{price:,}\n")
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("\n{description}")
+        
+        text += ("<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
+        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -204,6 +227,7 @@ async def show_pants(call: CallbackQuery):
             caption=text.format(
                 id=item.id,
                 name=item.name,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
@@ -219,12 +243,17 @@ async def show_shoes(call: CallbackQuery):
     all_items = await db.show_shoes()
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n"
-                 "<b>Цена:</b> \t{price:,}\n")
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("\n{description}")
+        
+        text += ("<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
+        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -241,6 +270,7 @@ async def show_shoes(call: CallbackQuery):
             caption=text.format(
                 id=item.id,
                 name=item.name,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
@@ -256,12 +286,17 @@ async def show_other(call: CallbackQuery):
     all_items = await db.show_other()
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n"
-                 "<b>Цена:</b> \t{price:,}\n")
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("\n{description}")
+        
+        text += ("<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
+        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -278,6 +313,7 @@ async def show_other(call: CallbackQuery):
             caption=text.format(
                 id=item.id,
                 name=item.name,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup

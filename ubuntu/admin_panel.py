@@ -3,6 +3,9 @@ from asyncio import sleep
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types.callback_query import CallbackQuery
+from aiogram.types.message import ContentType, Message
+from aiogram.utils import callback_data
 
 from config import admin_id
 from load_all import dp, bot
@@ -185,15 +188,54 @@ async def enter_name(message: types.Message, state: FSMContext):
     button = InlineKeyboardMarkup(
         inline_keyboard=
             [
-                [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
+                [
+                InlineKeyboardButton(text=("Отмена"), callback_data="cancel"),
+                InlineKeyboardButton(text=("Без описания"), callback_data="none")],
             ]
     )
 
 
     await message.answer("Название: {name}"
-                           '\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"'.format(name=name), 
+                           '\n Пришлите описание товара, если хотите чтобы оно оставалось пустым, нажмите на кнопку "Без описания"'.format(name=name), 
                            reply_markup=button)
 
+    await NewItem.Descriotion.set()
+    await state.update_data(item=item)
+
+@dp.message_handler(user_id=admin_id, text_contains="none", state=NewItem.Descriotion)
+async def enter_description(message: Message, state: FSMContext):
+    data = await state.get_data()
+    item: Item = data.get("item")
+    none = "none"
+    item.description = none
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
+            ]
+    )
+    await message.answer('\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"', reply_markup=button)
+    await NewItem.Photo.set()
+    await state.update_data(item=item)  
+  
+
+@dp.message_handler(user_id=admin_id, state=NewItem.Descriotion)
+async def enter_description(message: Message, state: FSMContext):
+    description = message.text
+    data = await state.get_data()
+    item: Item = data.get("item")
+    item.description = description
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
+            ]
+    )
+
+    await message.answer("Описание: {description}"
+                            '\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"'.format(description=description),
+                            reply_markup=button)
+            
     await NewItem.Photo.set()
     await state.update_data(item=item)
 
@@ -332,10 +374,19 @@ async def get_id(message: types.Message, state: FSMContext):
     await state.update_data(id=id)
     all_items = await Item.query.where(Item.id == id).gino.all()
     for num, item in enumerate(all_items):
-        text = ("<b>Товар</b> \t№{id}: <u>{name}</u>\n"
-                 "<b>Цена:</b> \t{price:,}\n"
-                 "\n"
-                 "Вы уверены что хотите удалить данный товар?")
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("\n{description}")
+        
+        text += ("<b>Цена:</b> \t{price:,}\n")
+
+        if message.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}\n")
+
+        text += "\n Вы уверены что хотите удалить данный товар?"
+        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -357,11 +408,11 @@ async def get_id(message: types.Message, state: FSMContext):
         )
     await DeleteItem.Delete.set()
 
-@dp.message_handler(user_id=admin_id, state=DeleteItem.Delete)
-async def delete_item(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(user_id=admin_id, text_contains="delete", state=DeleteItem.Delete)
+async def delete_item(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     id = data.get("id")
     await Item.delete.where(Item.id == id).gino.status()
-    await message.answer("Товар удалён.")
+    await call.message.answer("Товар удалён.")
     await state.finish()
 

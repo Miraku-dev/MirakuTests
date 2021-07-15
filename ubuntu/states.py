@@ -15,6 +15,7 @@ class NewItem(StatesGroup):
     Name = State()
     Photo = State()
     Price = State()
+    Descriotion = State()
     Confirm = State()
 
 
