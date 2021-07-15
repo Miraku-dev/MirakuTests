@@ -83,7 +83,8 @@ async def item_category(call: types.CallbackQuery):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    item.category =  "add_hat"
+    category = "add_hat"
+    item.category =  category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
             [
@@ -98,14 +99,15 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_accessories", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    item.category = "add_accessories"
+    category = "add_accessories"
+    item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
             [
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer("Введите название товара или нажмите /cancel", reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -113,7 +115,8 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_pants", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    item.category = "add_pants"
+    category = "add_pants"
+    item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
             [
@@ -128,14 +131,15 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_shoes", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    item.category = "add_shoes"
+    category = "add_shoes"
+    item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
             [
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer("Введите название товара или нажмите /cancel", reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -143,14 +147,15 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_malling", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    item.category = "add_malling"
+    category = "add_malling"
+    item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
             [
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer("Введите название товара или нажмите /cancel", reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -158,14 +163,15 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_other", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    item.category = "add_other"
+    category = "add_other"
+    item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
             [
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer("Введите название товара или нажмите /cancel", reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 

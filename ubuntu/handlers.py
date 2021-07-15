@@ -103,7 +103,7 @@ async def show_hats(call: CallbackQuery):
 
 # Показываем список доступных товаров
 @dp.callback_query_handler(text_contains="accessories")
-async def show_hats(call: CallbackQuery):
+async def show_accessories(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_accessories()
     # Проходимся по товарам, пронумеровывая
@@ -140,7 +140,7 @@ async def show_hats(call: CallbackQuery):
 
 # Показываем список доступных товаров
 @dp.callback_query_handler(text_contains="malling")
-async def show_hats(call: CallbackQuery):
+async def show_malling(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_malling()
     # Проходимся по товарам, пронумеровывая
@@ -177,7 +177,7 @@ async def show_hats(call: CallbackQuery):
 
 # Показываем список доступных товаров
 @dp.callback_query_handler(text_contains="pants")
-async def show_hats(call: CallbackQuery):
+async def show_pants(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_pants()
     # Проходимся по товарам, пронумеровывая
@@ -214,7 +214,7 @@ async def show_hats(call: CallbackQuery):
 
 # Показываем список доступных товаров
 @dp.callback_query_handler(text_contains="shoes")
-async def show_hats(call: CallbackQuery):
+async def show_shoes(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_shoes()
     # Проходимся по товарам, пронумеровывая
@@ -251,7 +251,7 @@ async def show_hats(call: CallbackQuery):
 
 # Показываем список доступных товаров
 @dp.callback_query_handler(text_contains="other")
-async def show_hats(call: CallbackQuery):
+async def show_other(call: CallbackQuery):
     # Достаем товары из базы данных
     all_items = await db.show_other()
     # Проходимся по товарам, пронумеровывая

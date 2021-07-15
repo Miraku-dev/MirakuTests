@@ -104,32 +104,38 @@ class DBCommands:
         ])
 
     async def show_hats(self):
-        items = await Item.query.where(Item.category == "add_hat")
+        category = "add_hat"
+        items = await Item.query.where(Item.category == category)
 
         return items
 
     async def show_accessories(self):
-        items = await Item.query.gino.all(Item.category == "add_accessories")
+        category = "add_accessories"
+        items = await Item.query.where(Item.category == category)
 
         return items
     
     async def show_malling(self):
-        items = await Item.query.gino.all(Item.category == "add_malling")
+        category = "add_malling"
+        items = await Item.query.where(Item.category == category)
 
         return items
 
     async def show_pants(self):
-        items = await Item.query.gino.all(Item.category == "add_pants")
+        category = "add_pants"
+        items = await Item.query.where(Item.category == category)
 
         return items
 
     async def show_shoes(self):
-        items = await Item.query.gino.all(Item.category == "add_shoes")
+        category = "add_other"
+        items = await Item.query.where(Item.category == category)
 
         return items
 
     async def show_other(self):
-        items = await Item.query.gino.all(Item.category == "add_other")
+        category = "add_other"
+        items = await Item.query.where(Item.category == category)
 
         return items
 
