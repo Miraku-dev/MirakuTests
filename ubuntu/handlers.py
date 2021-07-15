@@ -58,13 +58,15 @@ async def register_user(message: types.Message):
 
 @dp.callback_query_handler(text_contains="storage")
 async def storage(call: CallbackQuery):
-    await call.message.answer("По этой кнопке мы можем сделать переход на сайт вашего магазина или его страницу в соцсетях.",
+    await bot.answer_callback_query(call.from_user.id,
+        "По этой кнопке мы можем сделать переход на сайт вашего магазина или его страницу в соцсетях.",
     show_alert=True)
 
 
 @dp.callback_query_handler(text_contains="help")
 async def help(call: CallbackQuery):
-    await call.message.answer("По этой кнопке мы можем сделать переход на поддержку вашего магазина в telegram или любой другой социальной сети.",
+    await bot.answer_callback_query(call.from_user.id,
+        "По этой кнопке мы можем сделать переход на поддержку вашего магазина в telegram или любой другой социальной сети.",
     show_alert=True)
 
 
@@ -505,7 +507,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
 
 
-@dp.message_handler(text_contains=ContentType.ANY)
+@dp.message_handler(content_types=ContentType.ANY)
 async def other_echo(message: Message):
     button = InlineKeyboardMarkup(
         inline_keyboard=

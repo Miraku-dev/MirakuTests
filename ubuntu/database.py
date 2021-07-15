@@ -129,7 +129,7 @@ class DBCommands:
         return items
 
     async def show_shoes(self):
-        category = "add_other"
+        category = "add_shoes"
         items = await Item.query.where(Item.category == category).gino.all()
 
         return items
