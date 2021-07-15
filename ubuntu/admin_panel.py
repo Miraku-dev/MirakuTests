@@ -91,7 +91,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer("Введите название товара или нажмите /cancel", reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -330,7 +330,7 @@ async def get_id(message: types.Message, state: FSMContext):
         await message.answer("Такого товара не существует")
         return
     await state.update_data(id=id)
-    all_items = await Item.query.where(Item.id == id)
+    all_items = await Item.query.where(Item.id == id).gino.all()
     for num, item in enumerate(all_items):
         text = ("<b>Товар</b> \t№{id}: <u>{name}</u>\n"
                  "<b>Цена:</b> \t{price:,}\n"
