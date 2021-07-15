@@ -11,7 +11,6 @@ class Purchase(StatesGroup):
 
 
 class NewItem(StatesGroup):
-    Start = State()
     Name = State()
     Photo = State()
     Price = State()

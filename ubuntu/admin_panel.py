@@ -77,18 +77,13 @@ async def item_category(call: types.CallbackQuery):
     text = (
             "Выберите в какую категорию вы хотите добавить товар:")
     await bot.send_message(chat_id, text, reply_markup=categories_markup)
-    await NewItem.Start.set()
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Start)
+@dp.callback_query_handler(user_id=admin_id, text_contains="add_hat")
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    if call.message.text.lower() not in available_answers_data:
-        await call.message.answer("Выберите ответ, используя кнопки выше.")
-        return
-    if call.message.text == "add_hat":
-        item.category = call.message.text.lower()
-        await call.message.answer("Введите название товара или нажмите /cancel")
+    item.category =  "add_hat"
+    await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -96,12 +91,8 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_accessories", state=NewItem.Start)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    if call.message.text.lower() not in available_answers_data:
-        await call.message.answer("Выберите ответ, используя кнопки выше.")
-        return
-    if call.message.text == "add_accessories":
-        item.category = call.message.text.lower()
-        await call.message.answer("Введите название товара или нажмите /cancel")
+    item.category = "add_accessories"
+    await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -109,12 +100,8 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_pants", state=NewItem.Start)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    if call.message.text.lower() not in available_answers_data:
-        await call.message.answer("Выберите ответ, используя кнопки выше.")
-        return
-    if call.message.text == "add_pants":
-        item.category = call.message.text.lower()
-        await call.message.answer("Введите название товара или нажмите /cancel")
+    item.category = "add_pants"
+    await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -122,12 +109,8 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_shoes", state=NewItem.Start)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    if call.message.text.lower() not in available_answers_data:
-        await call.message.answer("Выберите ответ, используя кнопки выше.")
-        return
-    if call.message.text == "add_shoes":
-        item.category = call.message.text.lower()
-        await call.message.answer("Введите название товара или нажмите /cancel")
+    item.category = "add_shoes"
+    await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -135,12 +118,8 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_malling", state=NewItem.Start)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    if call.message.text.lower() not in available_answers_data:
-        await call.message.answer("Выберите ответ, используя кнопки выше.")
-        return
-    if call.message.text == "add_malling":
-        item.category = call.message.text.lower()
-        await call.message.answer("Введите название товара или нажмите /cancel")
+    item.category = call.message.text.lower()
+    await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -148,12 +127,8 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_other", state=NewItem.Start)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    if call.message.text.lower() not in available_answers_data:
-        await call.message.answer("Выберите ответ, используя кнопки выше.")
-        return
-    if call.message.text == "add_other":
-        item.category = call.message.text.lower()
-        await call.message.answer("Введите название товара или нажмите /cancel")
+    item.category = call.message.text.lower()
+    await call.message.answer("Введите название товара или нажмите /cancel")
     await NewItem.Name.set()
     await state.update_data(item=item)
 
