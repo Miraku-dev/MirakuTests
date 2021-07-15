@@ -33,7 +33,7 @@ class Item(db.Model):
     __tablename__ = 'items'
     query: sql.Select
 
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence('item_seq'), primary_key=True)
     name = Column(String(50))
     photo = Column(String(250))
     price = Column(Integer)  # Цена в копейках (потом делим на 100)

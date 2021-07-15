@@ -363,4 +363,5 @@ async def delete_item(message: types.Message, state: FSMContext):
     id = data.get("id")
     await Item.delete.where(Item.id == id).gino.status()
     await message.answer("Товар удалён.")
+    await state.finish()
 
