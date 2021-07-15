@@ -75,8 +75,9 @@ async def item_category(call: types.CallbackQuery):
         ]
     )
     text = (
-            "Выберите в какую категорию вы хотите добавить товар:")
+            'Выберите в какую категорию вы хотите добавить товар, или нажмите "Отмена"')
     await bot.send_message(chat_id, text, reply_markup=categories_markup)
+    await NewItem.Category.set()
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Category)
