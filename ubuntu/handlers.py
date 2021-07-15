@@ -74,9 +74,9 @@ async def show_hats(call: CallbackQuery):
         text = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("\n{description}")
+            text += ("{description}\n")
         
-        text += ("<b>Цена:</b> \t{price:,}\n")
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
@@ -117,9 +117,9 @@ async def show_accessories(call: CallbackQuery):
         text = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("\n{description}")
+            text += ("{description}\n")
         
-        text += ("<b>Цена:</b> \t{price:,}\n")
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
@@ -160,9 +160,9 @@ async def show_malling(call: CallbackQuery):
         text = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("\n{description}")
+            text += ("{description}\n")
         
-        text += ("<b>Цена:</b> \t{price:,}\n")
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
@@ -203,9 +203,9 @@ async def show_pants(call: CallbackQuery):
         text = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("\n{description}")
+            text += ("{description}\n")
         
-        text += ("<b>Цена:</b> \t{price:,}\n")
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
@@ -246,9 +246,9 @@ async def show_shoes(call: CallbackQuery):
         text = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("\n{description}")
+            text += ("{description}\n")
         
-        text += ("<b>Цена:</b> \t{price:,}\n")
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"
@@ -289,9 +289,9 @@ async def show_other(call: CallbackQuery):
         text = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("\n{description}")
+            text += ("{description}\n")
         
-        text += ("<b>Цена:</b> \t{price:,}\n")
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if call.from_user.id == admin_id:
             text += ("\n"

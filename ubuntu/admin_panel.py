@@ -202,8 +202,8 @@ async def enter_name(message: types.Message, state: FSMContext):
     await NewItem.Descriotion.set()
     await state.update_data(item=item)
 
-@dp.message_handler(user_id=admin_id, text_contains="none", state=NewItem.Descriotion)
-async def enter_description(message: Message, state: FSMContext):
+@dp.callback_query_handler(user_id=admin_id, text_contains="none", state=NewItem.Descriotion)
+async def enter_description(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     item: Item = data.get("item")
     none = "none"
@@ -214,9 +214,9 @@ async def enter_description(message: Message, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await message.answer('\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"', reply_markup=button)
+    await call.message.answer('\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"', reply_markup=button)
     await NewItem.Photo.set()
-    await state.update_data(item=item)  
+    await state.update_data(item=item)
   
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Descriotion)
@@ -402,6 +402,7 @@ async def get_id(message: types.Message, state: FSMContext):
             caption=text.format(
                 id=item.id,
                 name=item.name,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
