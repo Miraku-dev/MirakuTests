@@ -26,3 +26,7 @@ class Mailing(StatesGroup):
 class DeleteItem(StatesGroup):
     Get_id = State()
     Delete = State()
+
+class DeleteOrder(StatesGroup):
+    Get_order_id = State()
+    Delete_order = State()

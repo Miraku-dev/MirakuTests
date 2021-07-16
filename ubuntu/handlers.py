@@ -442,11 +442,17 @@ async def approval(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     purchase: database.Purchase = data.get("purchase")
     item: database.Item = data.get("item")
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Меню"), callback_data="cancel")],
+            ]
+    )
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase.create()
     await bot.send_message(chat_id=call.from_user.id,
                            text=("Хорошо. Оплатите <b>{amount:,}</b> по методу указанному ниже и нажмите "
-                                  "на кнопку ниже").format(amount=purchase.amount))
+                                  "на кнопку ниже").format(amount=purchase.amount), reply_markup=button)
     ################
     # --Ниже выбрать нужные параметры--
     # Пример заполнения можно посмотреть тут https://surik00.gitbooks.io/aiogram-lessons/content/chapter4.html
@@ -455,7 +461,7 @@ async def approval(call: CallbackQuery, state: FSMContext):
     ################
     currency = "RUB"
     need_name = True
-    need_phone_number = False
+    need_phone_number = True
     need_email = False
     need_shipping_address = True
 
@@ -504,7 +510,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
         await state.reset_state()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку"), reply_markup=button)
     else:
-        await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
+        await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."), reply_markup=button)
 
 
 @dp.message_handler(content_types=ContentType.ANY)

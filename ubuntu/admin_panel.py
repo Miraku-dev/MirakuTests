@@ -2,16 +2,18 @@ from asyncio import sleep
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, shipping_address
 from aiogram.types.callback_query import CallbackQuery
 from aiogram.types.message import ContentType, Message
 from aiogram.utils import callback_data
 
 from config import admin_id
 from load_all import dp, bot
-from states import NewItem, Mailing, DeleteItem, available_answers_data
-from database import Item, User
+from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
+from database import Item, Purchase, User, DBCommands
 import buttons
+
+db = DBCommands()
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="cancel", state='*')
@@ -47,7 +49,8 @@ async def admin_panel(message: types.Message):
         inline_keyboard=
         [
             [
-                InlineKeyboardButton(text="Сделать рассылку", callback_data="mailing")],
+                InlineKeyboardButton(text="Сделать рассылку", callback_data="mailing"),
+                InlineKeyboardButton(text="Список заказов", callback_data="order_list")],
             [
                 InlineKeyboardButton(text="Добавить товар", callback_data="add_item"),
                 InlineKeyboardButton(text="Удалить товар", callback_data="delete_item"),
@@ -81,6 +84,45 @@ async def item_category(call: types.CallbackQuery):
             'Выберите в какую категорию вы хотите добавить товар, или нажмите "Отмена"')
     await bot.send_message(chat_id, text, reply_markup=categories_markup)
     await NewItem.Category.set()
+
+
+@dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
+async def order_list(call: CallbackQuery, state: FSMContext):
+    all_order = await db.show_order()
+    for num, order in enumerate(all_order):
+        text = ("Покупатель: {buyer}\n"
+                    "id данных в списке: {order_id}\n"
+                    "id товара: {item_id}\n"
+                    "Цена товара: {amount}\n"
+                    "Количество купленного товара: {quanity}\n"
+                    "Время покупки: {purchase_time}\n"
+                    "Адрес: {shipping_address}\n"
+                    "Номер телефона покупателя: {phone_number}\n"
+                    "Имя покупателя: {receiver}\n")
+
+    markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text="Удалить информацию", callback_data="delete_order")
+                ],
+            ]
+        )
+    
+    await call.message.answer(
+            text1=text.format(
+                item_id=order.item_id,
+                buyer=order.buyer,
+                phone_number=order.phone_number,
+                amount=order.amount,
+                quanity=order.quanity,
+                purchase_time=order.purchase_time,
+                receiver=order.receiver,
+                shipping_address=order.shipping_address
+            ),
+            reply_markup=markup
+        )
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Category)
@@ -425,8 +467,8 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     id = data.get("id")
     await Item.delete.where(Item.id == id).gino.status()
-    await Item.query(Item.id).where(Item.id < id).gino.scalar()
-    assert Item.id == Item.id[-1:]+Item.id[:-1]
+    await Item.query.where(Item.id < id).gino.all()
+    await Item.update(Item.id == Item.id[-1:]+Item.id[:-1]).apply()
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
@@ -442,3 +484,81 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
     
     await state.finish()
 
+
+@dp.callback_query_handler(user_id=admin_id, text_contains="delete_order")
+async def delete_order(call: CallbackQuery, state: FSMContext):
+    await call.message.answer("Введите id данных в списке")
+    await DeleteOrder.Get_order_id.set()
+    
+
+@dp.message_handler(user_id=admin_id, state=DeleteOrder.Get_order_id)
+async def get_order_id(message: types.Message, state: FSMContext):
+    try:
+        order_id = int(message.text)
+    except ValueError:
+        await message.answer("Неверное значение, введите число")
+        return
+    order = await Purchase.get(order_id)
+    if not order:
+        await message.answer("Такого товара не существует")
+        return
+    await state.update_data(order_id=order_id)
+    all_order = await db.show_order()
+    for num, order in enumerate(all_order):
+        text = ("Покупатель: {buyer}\n"
+                    "id данных в списке: {order_id}\n"
+                    "id товара: {item_id}\n"
+                    "Цена товара: {amount}\n"
+                    "Количество купленного товара: {quanity}\n"
+                    "Время покупки: {purchase_time}\n"
+                    "Адрес: {shipping_address}\n"
+                    "Номер телефона покупателя: {phone_number}\n"
+                    "Имя покупателя: {receiver}\n"
+                    "\nВы уверены, что хотите удалить эти данные без возможности возврата?")
+
+    markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    InlineKeyboardButton(text='Да', callback_data="delete_confirm"),
+                    InlineKeyboardButton(text='Нет', callback_data="cancel")
+                ],
+            ]
+        )
+
+    await message.answer(
+            text1=text.format(
+                item_id=order.item_id,
+                buyer=order.buyer,
+                phone_number=order.phone_number,
+                amount=order.amount,
+                quanity=order.quanity,
+                purchase_time=order.purchase_time,
+                receiver=order.receiver,
+                shipping_address=order.shipping_address
+            ),
+            reply_markup=markup
+        )
+
+
+@dp.callback_query_handler(user_id=admin_id, text_contains="delete_confirm", state=DeleteOrder.Delete_order)
+async def delete_item(call: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    order_id = data.get("order_id")
+    await Purchase.delete.where(Purchase.order_id == order_id).gino.status()
+    await Purchase.query.where(Purchase.order_id < order_id).gino.all()
+    await Purchase.update(Purchase.order_id == Purchase.order_id[-1:]+Purchase.order_id[:-1]).apply()
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
+        [
+            [
+                InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
+            [
+                InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
+                InlineKeyboardButton(text="Поддержка", callback_data="help")
+            ]
+        ]
+    )
+    await call.message.answer("Товар удалён.\nАдмин-панель: /admin_panel", reply_markup=markup)
+    
+    await state.finish()

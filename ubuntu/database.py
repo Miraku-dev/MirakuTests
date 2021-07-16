@@ -49,6 +49,7 @@ class Purchase(db.Model):
     __tablename__ = 'purchases'
     query: sql.Select
 
+    order_id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)
@@ -61,6 +62,10 @@ class Purchase(db.Model):
     receiver = Column(String(100))
     successful = Column(Boolean, default=False)
 
+    def __pepr__(self):
+        return "<Purchase(order_id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}')>".format(
+            self.order_id, self.buyer, self.item_id, self.order_id, self.quantity, self.amount, self.shipping_address,
+            self.phone_number, self.receiver, self.purchase_time, self.email)
 
 class DBCommands:
 
@@ -139,6 +144,10 @@ class DBCommands:
         items = await Item.query.where(Item.category == category).gino.all()
 
         return items
+
+    async def show_order(self):
+        order = await Purchase.query.gino.all()
+
 
 
 async def create_db():
