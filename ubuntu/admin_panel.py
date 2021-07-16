@@ -37,7 +37,7 @@ async def cancel(call: types.CallbackQuery, state: FSMContext):
     bot_username = (await bot.me).username
     bot_link = f"https://t.me/{bot_username}?start={id}"
 
-    text = ("Действие отменено.\n")
+    text = ("Выберите действие.\n")
     if call.from_user.id == admin_id:
         text += ("Чтобы увидеть админ-панель нажмите:\n /admin_panel")
     await bot.send_message(chat_id, text, reply_markup=markup)
@@ -110,8 +110,8 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             ]
         )
     
-    await call.message.answer(
-            text1=text.format(
+    await bot.send_message(call.from_user.id,
+            text.format(
                 order_id=order.order_id,
                 item_id=order.item_id,
                 buyer=order.buyer,
