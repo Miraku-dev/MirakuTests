@@ -94,7 +94,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "id данных в списке: {order_id}\n"
                     "id товара: {item_id}\n"
                     "Цена товара: {amount}\n"
-                    "Количество купленного товара: {quanity}\n"
+                    "Количество купленного товара: {quantity}\n"
                     "Время покупки: {purchase_time}\n"
                     "Адрес: {shipping_address}\n"
                     "Номер телефона покупателя: {phone_number}\n"
@@ -116,7 +116,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                 buyer=order.buyer,
                 phone_number=order.phone_number,
                 amount=order.amount,
-                quanity=order.quanity,
+                quantity=order.quantity,
                 purchase_time=order.purchase_time,
                 receiver=order.receiver,
                 shipping_address=order.shipping_address
@@ -470,8 +470,7 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
 
     item_id = await Item.query.where(Item.id < id).gino.scalar()
 
-    item_id1=(item_id[-1:]+item_id[:-1])
-    await Item.update(item_id == item_id1).apply()
+    await Item.update(item_id == item_id[-1:]+item_id[:-1]).apply()
 
     markup = InlineKeyboardMarkup(
         inline_keyboard=
@@ -513,7 +512,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
                     "id данных в списке: {order_id}\n"
                     "id товара: {item_id}\n"
                     "Цена товара: {amount}\n"
-                    "Количество купленного товара: {quanity}\n"
+                    "Количество купленного товара: {quantity}\n"
                     "Время покупки: {purchase_time}\n"
                     "Адрес: {shipping_address}\n"
                     "Номер телефона покупателя: {phone_number}\n"
@@ -536,7 +535,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
                 buyer=order.buyer,
                 phone_number=order.phone_number,
                 amount=order.amount,
-                quanity=order.quanity,
+                quantity=order.quantity,
                 purchase_time=order.purchase_time,
                 receiver=order.receiver,
                 shipping_address=order.shipping_address
