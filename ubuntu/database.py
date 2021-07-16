@@ -148,6 +148,8 @@ class DBCommands:
     async def show_order(self):
         order = await Purchase.query.gino.all()
 
+        return order
+
 
 
 async def create_db():
