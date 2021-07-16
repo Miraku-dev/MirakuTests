@@ -112,6 +112,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await call.message.answer(
             text1=text.format(
+                order_id=order.order_id,
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
@@ -468,10 +469,6 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
     id = data.get("id")
     await Item.delete.where(Item.id == id).gino.status()
 
-    item_id = await Item.query.where(Item.id < id).gino.scalar()
-
-    await Item.update(item_id == item_id[-1:]+item_id[:-1]).apply()
-
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
@@ -549,8 +546,6 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     order_id = data.get("order_id")
     await Purchase.delete.where(Purchase.order_id == order_id).gino.status()
-    await Purchase.query.where(Purchase.order_id < order_id).gino.all()
-    await Purchase.update(Purchase.order_id == Purchase.order_id[-1:]+Purchase.order_id[:-1]).apply()
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
