@@ -512,7 +512,7 @@ async def other_echo(message: Message):
     button = InlineKeyboardMarkup(
         inline_keyboard=
             [
-                [InlineKeyboardButton(text=("Меню"), callback_data="cancel")],
+                [InlineKeyboardButton(text="Меню", callback_data="cancel")],
             ]
     )
     await message.answer("Не знаю как на это ответить. Если запутались, нажмите кнопку.", reply_markup=button)
