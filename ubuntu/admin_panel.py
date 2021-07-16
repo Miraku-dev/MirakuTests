@@ -116,7 +116,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
-                amount=order.amount,
+                amount=order.amount / 100,
                 quantity=order.quantity,
                 purchase_time=order.purchase_time,
                 receiver=order.receiver,
@@ -528,6 +528,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
 
     await message.answer(
             text1=text.format(
+                order_id=order.order_id,
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
