@@ -468,7 +468,8 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
     id = data.get("id")
     await Item.delete.where(Item.id == id).gino.status()
     await Item.query.where(Item.id < id).gino.all()
-    await Item.update(Item.id == Item.id[-1:]+Item.id[:-1]).apply()
+    item_id=(Item.id[-1:]+Item.id[:-1])
+    await Item.update(Item.id == item_id).apply()
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
