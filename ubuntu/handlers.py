@@ -484,12 +484,6 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     data = await state.get_data()
     purchase: database.Purchase = data.get("purchase")
     success = await check_payment(purchase)
-    button = InlineKeyboardMarkup(
-        inline_keyboard=
-            [
-                [InlineKeyboardButton(text=("Меню"), callback_data="cancel")],
-            ]
-    )
 
     if success:
         await purchase.update(
@@ -504,7 +498,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
         await state.reset_state()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку"), reply_markup=button)
     else:
-        await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."), reply_markup=button)
+        await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
 
 
 @dp.message_handler(content_types=ContentType.INVOICE)
