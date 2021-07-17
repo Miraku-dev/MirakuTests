@@ -97,7 +97,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Цена товара: {amount}\n"
                     "Количество купленного товара: {quantity}\n"
                     "Время покупки: {purchase_time}\n"
-                    "Адрес: {shipping_address}\n"
+                    "Адрес:\n {shipping_address}\n"
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
@@ -112,6 +112,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
     shipping_address = re.sub(r"city", "Город", str(shipping_address))
     shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
+    shipping_address = re.sub(r",", ",\n", str(shipping_address))
 
 
     markup = InlineKeyboardMarkup(
