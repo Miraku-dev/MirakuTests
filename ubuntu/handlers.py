@@ -484,11 +484,12 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     data = await state.get_data()
     purchase: database.Purchase = data.get("purchase")
     success = await check_payment(purchase)
+    shipping_address1=query.order_info.shipping_address.to_python()
 
     if success:
         await purchase.update(
             successful=True,
-            shipping_address=query.order_info.shipping_address.to_python()
+            shipping_address = re.sub(r"{}", "", str(shipping_address1))
             if query.order_info.shipping_address
             else None,
             phone_number=query.order_info.phone_number,
