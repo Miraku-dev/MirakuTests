@@ -103,7 +103,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
 
     shipping_address1 = order.shipping_address
 
-    shipping_address = re.sub(r'{}', '', str(shipping_address1))
+    shipping_address = re.sub(r"{}", "", str(shipping_address1))
 
     markup = InlineKeyboardMarkup(
             inline_keyboard=

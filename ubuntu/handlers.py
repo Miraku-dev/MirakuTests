@@ -496,7 +496,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             email=query.order_info.email
         ).apply()
         await state.reset_state()
-        await bot.send_message(query.from_user.id, ("Спасибо за покупку"), reply_markup=button)
+        await bot.send_message(query.from_user.id, ("Спасибо за покупку"))
     else:
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
 
