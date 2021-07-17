@@ -106,7 +106,6 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     shipping_address = re.sub(r"{", "", str(shipping_address))
     shipping_address = re.sub(r"}", "", str(shipping_address))
     shipping_address = re.sub(r"'", "", str(shipping_address))
-    shipping_address = re.sub(r":", ":\n", str(shipping_address))
     shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
     shipping_address = re.sub(r"state", "Область", str(shipping_address))
     shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
