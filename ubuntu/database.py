@@ -64,7 +64,7 @@ class Purchase(db.Model):
 
     def __pepr__(self):
         return "<Purchase(order_id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}')>".format(
-            self.order_id, self.buyer, self.item_id, self.order_id, self.quantity, self.amount, self.shipping_address,
+            self.order_id, self.buyer, self.item_id, self.quantity, self.amount, self.shipping_address,
             self.phone_number, self.receiver, self.purchase_time, self.email)
 
 class DBCommands:
