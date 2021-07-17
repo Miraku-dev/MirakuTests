@@ -513,7 +513,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
         return
     order = await Purchase.get(order_id)
     if not order:
-        await message.answer("Такого товара не существует")
+        await message.answer("Таких данных нет в базе данных")
         return
     await state.update_data(order_id=order_id)
     all_order = await db.show_order()
