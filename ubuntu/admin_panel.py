@@ -12,6 +12,7 @@ from load_all import dp, bot
 from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
 from database import Item, Purchase, User, DBCommands
 import buttons
+import re
 
 db = DBCommands()
 
@@ -100,6 +101,10 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
+    shipping_address = order.shipping_address
+
+    shipping_address = (re.sub(r"[{}]"), "", shipping_address)
+
     markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -120,7 +125,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                 quantity=order.quantity,
                 purchase_time=order.purchase_time,
                 receiver=order.receiver,
-                shipping_address=order.shipping_address
+                shipping_address=shipping_address
             ),
             reply_markup=markup
         )
