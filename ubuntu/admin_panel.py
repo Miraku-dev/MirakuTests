@@ -92,7 +92,6 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await db.show_order()
     for num, order in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
-                    "id данных в списке: {order_id}\n"
                     "id товара: {item_id}\n"
                     "Цена товара: {amount}\n"
                     "Количество купленного товара: {quantity}\n"
@@ -127,7 +126,6 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await bot.send_message(call.from_user.id,
             text.format(
-                order_id=order.order_id,
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
@@ -502,7 +500,7 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete_order")
 async def delete_order(call: CallbackQuery, state: FSMContext):
-    await call.message.answer("Введите id данных в списке")
+    await call.message.answer("Введите id покупаемого товара")
     await DeleteOrder.Get_order_id.set()
     
 
