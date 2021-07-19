@@ -49,7 +49,7 @@ class Purchase(db.Model):
     __tablename__ = 'purchases'
     query: sql.Select
 
-    order_id = Column(Integer, Sequence('order_seq'), primary_key=True)
+    order_id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)

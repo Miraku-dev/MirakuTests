@@ -556,7 +556,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete_confirm", state=DeleteOrder.Delete_order)
-async def delete_item(call: CallbackQuery, state: FSMContext):
+async def delete_order_confirm(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     order_id = data.get("order_id")
     await Purchase.delete.where(Purchase.order_id == order_id).gino.status()

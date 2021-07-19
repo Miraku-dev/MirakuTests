@@ -500,18 +500,6 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
-        await states.Purchase.Finish.set()
-
-
-@dp.message_handler(content_types=ContentType.ANY, state=states.Purchase.Finish)
-async def echo(message: Message):
-    button = InlineKeyboardMarkup(
-        inline_keyboard=
-            [
-                [InlineKeyboardButton(text="Меню", callback_data="cancel")],
-            ]
-    )
-    await message.answer("По этой кнопке вы можете посмотреть у нас что-нибудь ещё.", reply_markup=button)
 
 
 @dp.message_handler(content_types=ContentType.ANY)
