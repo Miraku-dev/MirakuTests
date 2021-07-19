@@ -62,9 +62,9 @@ class Purchase(db.Model):
     successful = Column(Boolean, default=False)
 
     def __pepr__(self):
-        return "<Purchase(order_id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}')>".format(
+        return "<Purchase(id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}')>".format(
             self.buyer, self.item_id, self.quantity, self.amount, self.shipping_address,
-            self.phone_number, self.receiver, self.purchase_time, self.email, self.order_id)
+            self.phone_number, self.receiver, self.purchase_time, self.email, self.id)
 
 class DBCommands:
 
@@ -110,37 +110,37 @@ class DBCommands:
 
     async def show_hats(self):
         category = "add_hat"
-        items = await Item.query.where(Item.category == category).limit(2).offset(80)
+        items = await Item.query.where(Item.category == category).gino.all()
 
         return items
 
     async def show_accessories(self):
         category = "add_accessories"
-        items = await Item.query.where(Item.category == category).limit(2).offset(80)
+        items = await Item.query.where(Item.category == category).gino.all()
 
         return items
     
     async def show_malling(self):
         category = "add_malling"
-        items = await Item.query.where(Item.category == category).limit(2).offset(80)
+        items = await Item.query.where(Item.category == category).gino.all()
 
         return items
 
     async def show_pants(self):
         category = "add_pants"
-        items = await Item.query.where(Item.category == category).limit(2).offset(80)
+        items = await Item.query.where(Item.category == category).gino.all()
 
         return items
 
     async def show_shoes(self):
         category = "add_shoes"
-        items = await Item.query.where(Item.category == category).limit(2).offset(80)
+        items = await Item.query.where(Item.category == category).gino.all()
 
         return items
 
     async def show_other(self):
         category = "add_other"
-        items = await Item.query.where(Item.category == category).limit(2).offset(80)
+        items = await Item.query.where(Item.category == category).gino.all()
 
         return items
 

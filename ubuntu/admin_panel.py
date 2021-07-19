@@ -516,6 +516,21 @@ async def get_order_id(message: types.Message, state: FSMContext):
     if not purchase:
         await message.answer("Таких данных нет в базе данных")
         return
+
+    text = "\n Вы уверены что хотите удалить данный товар?"
+        
+    markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    InlineKeyboardButton(text='Да', callback_data="delete_confirm"),
+                    InlineKeyboardButton(text='Нет', callback_data="cancel")
+                ]
+            ]
+    )
+    
+    await message.answer(text, reply_markup=markup)
+    await DeleteOrder.Delete_order.set()
     
 
 
