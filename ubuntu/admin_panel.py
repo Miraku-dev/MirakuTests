@@ -100,9 +100,6 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
-    shipping_address = order.shipping_address
-
-
     markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -123,7 +120,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                 quantity=order.quantity,
                 purchase_time=order.purchase_time,
                 receiver=order.receiver,
-                shipping_address=shipping_address
+                shipping_address=order.shipping_address
             ),
             reply_markup=markup
         )
