@@ -1,4 +1,5 @@
 from asyncio import sleep
+import asyncio
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -101,17 +102,6 @@ async def order_list(call: CallbackQuery, state: FSMContext):
 
     shipping_address = order.shipping_address
 
-    shipping_address = re.sub(r"{", "", str(shipping_address))
-    shipping_address = re.sub(r"}", "", str(shipping_address))
-    shipping_address = re.sub(r"'", "", str(shipping_address))
-    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
-    shipping_address = re.sub(r"state", "Область", str(shipping_address))
-    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"city", "Город", str(shipping_address))
-    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
-    shipping_address = re.sub(r",", ",\n", str(shipping_address))
-
 
     markup = InlineKeyboardMarkup(
             inline_keyboard=
@@ -137,7 +127,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup
         )
-    await sleep(0.3)
+    await asyncio.sleep(0.4)
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
