@@ -487,7 +487,6 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     success = await check_payment(purchase)
 
     if success:
-        await purchase.create()
         await purchase.update(
             successful=True,
             shipping_address=query.order_info.shipping_address.to_python()
@@ -496,7 +495,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             phone_number=query.order_info.phone_number,
             receiver=query.order_info.name,
             email=query.order_info.email
-        ).apply()
+        ).create()
         await state.reset_state()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:
