@@ -92,6 +92,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await db.show_order()
     for num, order in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
+                    "id данных в списке: {id}"
                     "id товара: {item_id}\n"
                     "Цена товара: {amount}\n"
                     "Количество купленного товара: {quantity}\n"
@@ -515,44 +516,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
     if not purchase:
         await message.answer("Таких данных нет в базе данных")
         return
-    await state.update_data(id=id)
-    all_order = await Purchase.query.where(Purchase.id == id).gino.all()
-    for num, purchase in enumerate(all_order):
-        text = ("Покупатель: {buyer}\n"
-                "id данных в списке: {id}\n"
-                "id товара: {item_id}\n"
-                "Цена товара: {amount}\n"
-                "Количество купленного товара: {quantity}\n"
-                "Время покупки: {purchase_time}\n"    
-                "Адрес: {shipping_address}\n"
-                "Номер телефона покупателя: {phone_number}\n"
-                "Имя покупателя: {receiver}\n"
-                "\nВы уверены, что хотите удалить эти данные без возможности возврата?")
-
-    markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    InlineKeyboardButton(text='Да', callback_data="delete_confirm"),
-                    InlineKeyboardButton(text='Нет', callback_data="cancel")
-                ],
-            ]
-        )
-
-    await message.answer(
-            text.format(
-                id=purchase.id,
-                item_id=purchase.item_id,
-                buyer=purchase.buyer,
-                phone_number=purchase.phone_number,
-                amount=purchase.amount,
-                quantity=purchase.quantity,
-                purchase_time=purchase.purchase_time,
-                receiver=purchase.receiver,
-                shipping_address=purchase.shipping_address
-            ),
-            reply_markup=markup
-        )
+    
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete_confirm", state=DeleteOrder.Delete_order)
