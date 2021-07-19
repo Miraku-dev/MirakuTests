@@ -58,9 +58,10 @@ async def register_user(message: types.Message):
 
 @dp.callback_query_handler(text_contains="storage")
 async def storage(call: CallbackQuery):
+    text = "По этой кнопке мы можем сделать переход на сайт вашего магазина или его страницу в соцсетях."
     await bot.answer_callback_query(call.from_user.id,
-        "По этой кнопке мы можем сделать переход на сайт вашего магазина или его страницу в соцсетях.",
-    show_alert=True)
+        text,
+        show_alert=True)
 
 
 @dp.callback_query_handler(text_contains="help")
@@ -496,14 +497,21 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             email=query.order_info.email
         ).apply()
         await state.reset_state()
-        await bot.send_message(query.from_user.id, ("Спасибо за покупку"))
+        await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
+        await states.Purchase.Finish.set()
 
 
-@dp.message_handler(content_types=ContentType.INVOICE)
+@dp.message_handler(content_types=ContentType.ANY, state=states.Purchase.Finish)
 async def echo(message: Message):
-    await bot.send_message(message.from_user.id, message.text)
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text="Меню", callback_data="cancel")],
+            ]
+    )
+    await message.answer("По этой кнопке вы можете посмотреть у нас что-нибудь ещё.", reply_markup=button)
 
 
 @dp.message_handler(content_types=ContentType.ANY)

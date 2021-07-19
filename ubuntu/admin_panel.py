@@ -511,23 +511,23 @@ async def get_order_id(message: types.Message, state: FSMContext):
     except ValueError:
         await message.answer("Неверное значение, введите число")
         return
-    order = await Purchase.get(order_id)
-    if not order:
+    purchase = await Purchase.get(order_id)
+    if not purchase:
         await message.answer("Таких данных нет в базе данных")
         return
     await state.update_data(order_id=order_id)
-    all_order = await db.show_order()
+    all_order = await Purchase.query.where(Purchase.order_id == order_id).gino.all()
     for num, order in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
-                    "id данных в списке: {order_id}\n"
-                    "id товара: {item_id}\n"
-                    "Цена товара: {amount}\n"
-                    "Количество купленного товара: {quantity}\n"
-                    "Время покупки: {purchase_time}\n"
-                    "Адрес: {shipping_address}\n"
-                    "Номер телефона покупателя: {phone_number}\n"
-                    "Имя покупателя: {receiver}\n"
-                    "\nВы уверены, что хотите удалить эти данные без возможности возврата?")
+                "id данных в списке: {order_id}\n"
+                "id товара: {item_id}\n"
+                "Цена товара: {amount}\n"
+                "Количество купленного товара: {quantity}\n"
+                "Время покупки: {purchase_time}\n"    
+                "Адрес: {shipping_address}\n"
+                "Номер телефона покупателя: {phone_number}\n"
+                "Имя покупателя: {receiver}\n"
+                "\nВы уверены, что хотите удалить эти данные без возможности возврата?")
 
     markup = InlineKeyboardMarkup(
             inline_keyboard=
