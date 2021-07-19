@@ -486,18 +486,18 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     data = await state.get_data()
     purchase: database.Purchase = data.get("purchase")
     success = await check_payment(purchase)
-    
+
     shipping_address=query.order_info.shipping_address.to_python()
-    shipping_address = re.sub(r"{", "", str(shipping_address)),
-    shipping_address = re.sub(r"}", "", str(shipping_address)),
-    shipping_address = re.sub(r"'", "", str(shipping_address)),
-    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address)),
-    shipping_address = re.sub(r"state", "Область", str(shipping_address)),
-    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address)),
-    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address)),
+    shipping_address = re.sub(r"{", "", str(shipping_address))
+    shipping_address = re.sub(r"}", "", str(shipping_address))
+    shipping_address = re.sub(r"'", "", str(shipping_address))
+    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
+    shipping_address = re.sub(r"state", "Область", str(shipping_address))
+    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
     shipping_address = re.sub(r"city", "Город", str(shipping_address)),
-    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address)),
-    shipping_address = re.sub(r",", ",\n", str(shipping_address)),
+    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
+    shipping_address = re.sub(r",", ",\n", str(shipping_address))
 
     if success:
         await purchase.update(
