@@ -127,6 +127,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await bot.send_message(call.from_user.id,
             text.format(
+                id=order.id,
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
@@ -501,7 +502,7 @@ async def delete_item(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete_order")
 async def delete_order(call: CallbackQuery, state: FSMContext):
-    await call.message.answer("Введите id покупаемого товара")
+    await call.message.answer("Введите id данных в списке товара")
     await DeleteOrder.Get_order_id.set()
     
 
@@ -517,7 +518,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
         await message.answer("Таких данных нет в базе данных")
         return
 
-    text = "\n Вы уверены что хотите удалить данный товар?"
+    text = "Вы уверены что хотите удалить данные без возможности возврата?"
         
     markup = InlineKeyboardMarkup(
             inline_keyboard=
