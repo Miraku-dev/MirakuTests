@@ -517,7 +517,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
         return
     await state.update_data(order_id=order_id)
     all_order = await Purchase.query.where(Purchase.order_id == order_id).gino.all()
-    for num, order in enumerate(all_order):
+    for num, purchase in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
                 "id данных в списке: {order_id}\n"
                 "id товара: {item_id}\n"
@@ -541,15 +541,15 @@ async def get_order_id(message: types.Message, state: FSMContext):
 
     await message.answer(
             text1=text.format(
-                order_id=order.order_id,
-                item_id=order.item_id,
-                buyer=order.buyer,
-                phone_number=order.phone_number,
-                amount=order.amount,
-                quantity=order.quantity,
-                purchase_time=order.purchase_time,
-                receiver=order.receiver,
-                shipping_address=order.shipping_address
+                order_id=purchase.order_id,
+                item_id=purchase.item_id,
+                buyer=purchase.buyer,
+                phone_number=purchase.phone_number,
+                amount=purchase.amount,
+                quantity=purchase.quantity,
+                purchase_time=purchase.purchase_time,
+                receiver=purchase.receiver,
+                shipping_address=purchase.shipping_address
             ),
             reply_markup=markup
         )
