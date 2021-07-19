@@ -487,7 +487,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     success = await check_payment(purchase)
 
     if success:
-        await purchase.update(
+        await purchase.create(
             successful=True,
             shipping_address=query.order_info.shipping_address.to_python()
             if query.order_info.shipping_address
