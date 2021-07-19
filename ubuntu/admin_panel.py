@@ -540,7 +540,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
         )
 
     await message.answer(
-            text1=text.format(
+            text.format(
                 id=purchase.id,
                 item_id=purchase.item_id,
                 buyer=purchase.buyer,
