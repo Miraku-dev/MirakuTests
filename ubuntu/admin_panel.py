@@ -507,19 +507,19 @@ async def delete_order(call: CallbackQuery, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=DeleteOrder.Get_order_id)
 async def get_order_id(message: types.Message, state: FSMContext):
     try:
-        order_id = int(message.text)
+        id = int(message.text)
     except ValueError:
         await message.answer("Неверное значение, введите число")
         return
-    purchase = await Purchase.get(order_id)
+    purchase = await Purchase.get(id)
     if not purchase:
         await message.answer("Таких данных нет в базе данных")
         return
-    await state.update_data(order_id=order_id)
-    all_order = await Purchase.query.where(Purchase.order_id == order_id).gino.all()
+    await state.update_data(id=id)
+    all_order = await Purchase.query.where(Purchase.id == id).gino.all()
     for num, purchase in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
-                "id данных в списке: {order_id}\n"
+                "id данных в списке: {id}\n"
                 "id товара: {item_id}\n"
                 "Цена товара: {amount}\n"
                 "Количество купленного товара: {quantity}\n"
@@ -541,7 +541,7 @@ async def get_order_id(message: types.Message, state: FSMContext):
 
     await message.answer(
             text1=text.format(
-                order_id=purchase.order_id,
+                id=purchase.id,
                 item_id=purchase.item_id,
                 buyer=purchase.buyer,
                 phone_number=purchase.phone_number,
@@ -558,8 +558,8 @@ async def get_order_id(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete_confirm", state=DeleteOrder.Delete_order)
 async def delete_order_confirm(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
-    order_id = data.get("order_id")
-    await Purchase.delete.where(Purchase.order_id == order_id).gino.status()
+    id = data.get("id")
+    await Purchase.delete.where(Purchase.id == id).gino.status()
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [

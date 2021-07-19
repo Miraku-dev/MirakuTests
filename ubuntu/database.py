@@ -49,10 +49,9 @@ class Purchase(db.Model):
     __tablename__ = 'purchases'
     query: sql.Select
 
-    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)
-    order_id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
     amount = Column(Integer)  # Цена в копейках (потом делим на 100)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
