@@ -1,11 +1,9 @@
 from asyncio import sleep
-
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, shipping_address
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types.callback_query import CallbackQuery
 from aiogram.types.message import ContentType, Message
-from aiogram.utils import callback_data
 
 from config import admin_id
 from load_all import dp, bot
@@ -139,7 +137,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup
         )
-
+    await sleep(0.3)
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
