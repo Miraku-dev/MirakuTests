@@ -92,7 +92,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await db.show_order()
     for num, order in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
-                    "id данных в списке: {id}"
+                    "id данных в списке: {id}\n"
                     "id товара: {item_id}\n"
                     "Цена товара: {amount}\n"
                     "Количество купленного товара: {quantity}\n"
@@ -125,7 +125,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             ]
         )
     
-    await bot.send_message(call.from_user.id,
+    await call.message.answer(
             text.format(
                 id=order.id,
                 item_id=order.item_id,
@@ -513,11 +513,12 @@ async def get_order_id(message: types.Message, state: FSMContext):
     except ValueError:
         await message.answer("Неверное значение, введите число")
         return
+    
     purchase = await Purchase.get(id)
     if not purchase:
         await message.answer("Таких данных нет в базе данных")
         return
-
+    await state.update_data(id=id)
     text = "Вы уверены что хотите удалить данные без возможности возврата?"
         
     markup = InlineKeyboardMarkup(
