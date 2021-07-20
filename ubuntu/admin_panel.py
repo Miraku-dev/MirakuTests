@@ -232,7 +232,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
             ]
     )
     await call.message.answer("Введите название товара или нажмите:"
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в <b ></ b>'
+        '\nЧтобы сделать текст <b>жирным</b>, поместите его в <b></b>'
         '\n(Между символами "/", ">" и "b" не должно быть пробелов)',
         reply_markup=button)
     await NewItem.Name.set()
@@ -257,7 +257,7 @@ async def enter_name(message: types.Message, state: FSMContext):
 
     await message.answer("Название: {name}"
         '\nПришлите описание товара, если хотите чтобы оно оставалось пустым, нажмите на кнопку "Без описания"'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в <b ></ b>'
+        '\nЧтобы сделать текст <b>жирным</b>, поместите его в \\<b></b>'
         '\n(Между символами "/", ">" и "b" не должно быть пробелов)'.format(name=name), 
                 reply_markup=button)
 
