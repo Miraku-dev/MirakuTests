@@ -22,6 +22,7 @@ class NewItem(StatesGroup):
 
 class Mailing(StatesGroup):
     Text = State()
+    Photo = State()
     Mall = State()
 
 class DeleteItem(StatesGroup):

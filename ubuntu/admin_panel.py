@@ -2,7 +2,7 @@ from asyncio import sleep
 import asyncio
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, shipping_address
 from aiogram.types.callback_query import CallbackQuery
 from aiogram.types.message import ContentType, Message
 
@@ -100,6 +100,20 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
+    shipping_address = order.shipping_address
+
+    shipping_address = re.sub(r"{", "", str(shipping_address))
+    shipping_address = re.sub(r"}", "", str(shipping_address))
+    shipping_address = re.sub(r"'", "", str(shipping_address))
+    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
+    shipping_address = re.sub(r"state", "Область", str(shipping_address))
+    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"city", "Город", str(shipping_address))
+    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
+    shipping_address = re.sub(r",", ",\n", str(shipping_address))
+
+
     markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -120,11 +134,11 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                 quantity=order.quantity,
                 purchase_time=order.purchase_time,
                 receiver=order.receiver,
-                shipping_address=order.shipping_address
+                shipping_address=shipping_address
             ),
             reply_markup=markup
         )
-    await asyncio.sleep(0.4)
+    await sleep(0.3)
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
@@ -377,36 +391,84 @@ async def mailing(message: types.Message, state: FSMContext):
     chat_id = message.from_user.id
     text1 = ("Текст:\n"
                 '"{text}"'
-             "\n Вы уверены?")
+            '\n Пришлите фотографию рассылки если нужно или нажмите "Отмена"\n'
+            'Если рассылка состоит только из текста, нажмите "Без фотографии"')
     await state.update_data(text=text)
     markup = InlineKeyboardMarkup(
         inline_keyboard=
         [
-            [InlineKeyboardButton(text="Да, я уверен(а).", callback_data="none")],
-            [InlineKeyboardButton(text="Нет, вернуться к вводу данных", callback_data="mailing1")],
-            [InlineKeyboardButton(text="Отмена", callback_data="cancel")],
+            [
+            InlineKeyboardButton(text="Без фотографии", callback_data="none"),
+            InlineKeyboardButton(text="Отмена", callback_data="cancel")],
         ]
     )
     await bot.send_message(chat_id, text1.format(text=text), reply_markup=markup)
+    await Mailing.Photo.set()
+
+
+@dp.callback_query_handler(user_id=admin_id, state=Mailing.Photo)
+async def none_photo(call: CallbackQuery, state: FSMContext):
+    photo = "none"
+    data = await state.get_data()
+    text = data.get("text")
+    await state.update_data(photo=photo)
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text="Да, уверен(a).", callback_data="start")],
+                [InlineKeyboardButton(text="Отмена", callback_data="cancel")],
+        ]
+    )
+
+    await call.message.answer(
+        ("{text}\n"
+                  'Вы уверены, что хотите выполнить рассылку?'.format(text=text)), reply_markup=button)
     await Mailing.Mall.set()
 
 
-@dp.callback_query_handler(user_id=admin_id, state=Mailing.Mall)
+@dp.message_handler(user_id=admin_id, content_types=ContentType.PHOTO, state=Mailing.Photo)
+async def mailing_photo(message: Message, state: FSMContext):
+    data = await state.get_data()
+    photo = message.photo[-1].file_id
+    text = data.get("text")
+
+    await state.update_data(photo=photo)
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text="Да, уверен(a).", callback_data="start")],
+                [InlineKeyboardButton(text="Отмена", callback_data="cancel")],
+        ]
+    )
+
+    await message.answer_photo(
+        photo=photo,
+        caption=("{text}\n"
+                  'Вы уверены, что хотите выполнить рассылку?').format(text=text), reply_markup=button)
+    
+    await Mailing.Mall.set()
+
+
+@dp.callback_query_handler(user_id=admin_id, text_contains="start", state=Mailing.Mall)
 async def mailing_start(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     text = data.get("text")
+    photo = data.get("photo")
     await state.reset_state()
     await call.message.edit_reply_markup()
+    user_id = call.from_user.id
 
-    users = await User.query.gino.all()
-    for user in users:
-        try:
-            await bot.send_message(chat_id=user.user_id,
-                                   text=text)
-            await sleep(0.3)
-        except Exception:
-            pass
-    await call.message.answer("Рассылка выполнена. \n Админ-панель: \n/admin_panel", reply_markup=buttons.new_start_markup)
+    if photo != "none":
+        await bot.send_photo(chat_id=user_id,
+                                    photo=photo,
+                                caption=text)
+        await sleep(0.3)
+    if photo == "none":
+        await bot.send_message(chat_id=user_id,
+                                text=text)
+        await sleep(0.3)
+    await state.finish()
+    await call.message.answer("Рассылка выполнена.\nАдмин-панель:\n/admin_panel", reply_markup=buttons.new_start_markup)
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete_item")
