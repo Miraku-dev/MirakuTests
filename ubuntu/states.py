@@ -32,3 +32,7 @@ class DeleteItem(StatesGroup):
 class DeleteOrder(StatesGroup):
     Get_order_id = State()
     Delete_order = State()
+
+class List_item(StatesGroup):
+    Item = State()
+    Next = State()

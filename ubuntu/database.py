@@ -110,37 +110,37 @@ class DBCommands:
 
     async def show_hats(self):
         category = "add_hat"
-        items = await Item.query.where(Item.category == category).limit(1).gino.all()
+        items = await Item.query.where(Item.category == Item.category).limit(1).gino.all()
 
         return items
 
     async def show_accessories(self):
         category = "add_accessories"
-        items = await Item.query.where(Item.category == category).gino.all()
+        items = await Item.query.where(Item.category == category).limit(5).gino.all()
 
         return items
     
     async def show_malling(self):
         category = "add_malling"
-        items = await Item.query.where(Item.category == category).gino.all()
+        items = await Item.query.where(Item.category == category).limit(5).gino.all()
 
         return items
 
     async def show_pants(self):
         category = "add_pants"
-        items = await Item.query.where(Item.category == category).gino.all()
+        items = await Item.query.where(Item.category == category).limit(5).gino.all()
 
         return items
 
     async def show_shoes(self):
         category = "add_shoes"
-        items = await Item.query.where(Item.category == category).gino.all()
+        items = await Item.query.where(Item.category == category).limit(5).gino.all()
 
         return items
 
     async def show_other(self):
         category = "add_other"
-        items = await Item.query.where(Item.category == category).gino.all()
+        items = await Item.query.where(Item.category == category).limit(5).gino.all()
 
         return items
 

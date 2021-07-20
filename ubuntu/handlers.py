@@ -72,19 +72,22 @@ async def help(call: CallbackQuery):
 
 
 @dp.callback_query_handler(text_contains="list_categories")
-async def categories_list(call: CallbackQuery):
+async def categories_list(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     chat_id = call.from_user.id
     text = "Выберите товар из присутствующих категорий:"
     
     await bot.send_message(chat_id, text, reply_markup=buttons.magic_categories_markup)
+    await states.List_item.Item.set()
 
 
 # Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="hats")
-async def show_hats(call: CallbackQuery):
+@dp.callback_query_handler(text_contains="hats", state=states.List_item.Item)
+async def show_hats(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
     all_items = await db.show_hats()
+    category = "add_hat"
+    await state.update_data(category=category)
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
         text = ("\t<b>{name}</b>\n")
@@ -103,7 +106,8 @@ async def show_hats(call: CallbackQuery):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id)),
+                    InlineKeyboardButton(text="Далее", callback_data="next")
                 ],
             ]
         )
@@ -121,6 +125,7 @@ async def show_hats(call: CallbackQuery):
         )
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await states.List_item.Next.set()
 
 
 # Показываем список доступных товаров
@@ -336,6 +341,52 @@ async def show_other(call: CallbackQuery):
         )
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+
+
+@dp.callback_query_handler(text_contains="next", state=states.List_item.Next)
+async def show_hats(call: CallbackQuery, state: FSMContext):
+    # Достаем товары из базы данных
+    await call.message.delete()
+    data = await state.get_data()
+    category = data.get("text")
+    all_items = await database.Item.query.where(database.Item.category == category).limit(+1).gino.all()
+    # Проходимся по товарам, пронумеровывая
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("{description}\n")
+        
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                ],
+            ]
+        )
+
+        # Отправляем фотку товара с подписью и кнопкой "купить"
+        await call.message.answer_photo(
+            photo=item.photo,
+            caption=text.format(
+                id=item.id,
+                name=item.name,
+                description=item.description,
+                price=item.price / 100
+            ),
+            reply_markup=markup
+        )
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
+        await state.finish()
 
 # Для фильтрования по коллбекам можно использовать buy_item.filter()
 @dp.callback_query_handler(buy_item.filter())
