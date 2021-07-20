@@ -151,9 +151,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer('Введите название товара или нажмите:'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в < b >"ваш текст"< / b > '
-        '\n(Между символами "/", ">", "<" и "b" не должно быть пробелов)', reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -169,9 +167,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer('Введите название товара или нажмите:'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в < b >"ваш текст"< / b > '
-        '\n(Между символами "/", ">", "<" и "b" не должно быть пробелов)', reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -187,9 +183,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer('Введите название товара или нажмите:'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в < b >"ваш текст"< / b > '
-        '\n(Между символами "/", ">", "<" и "b" не должно быть пробелов)', reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -205,9 +199,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer('Введите название товара или нажмите:'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в < b >"ваш текст"< / b > '
-        '\n(Между символами "/", ">", "<" и "b" не должно быть пробелов)', reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -223,9 +215,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer('Введите название товара или нажмите:'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в < b >"ваш текст"< / b > '
-        '\n(Между символами "/", ">", "<" и "b" не должно быть пробелов)', reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -241,10 +231,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer('Введите название товара или нажмите:'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в < b >"ваш текст"< / b > '
-        '\n(Между символами "/", ">", "<" и "b" не должно быть пробелов)',
-        reply_markup=button)
+    await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
 
@@ -266,10 +253,8 @@ async def enter_name(message: types.Message, state: FSMContext):
 
 
     await message.answer("Название: {name}"
-        '\nПришлите описание товара, если хотите чтобы оно оставалось пустым, нажмите на кнопку "Без описания"'
-        '\nЧтобы сделать текст <b>жирным</b>, поместите его в < b >"ваш текст"< / b > '
-        '\n(Между символами "/", ">", "<" и "b" не должно быть пробелов)'.format(name=name), 
-                reply_markup=button)
+                           '\nПришлите описание товара, если хотите чтобы оно оставалось пустым, нажмите на кнопку "Без описания"'.format(name=name), 
+                           reply_markup=button)
 
     await NewItem.Descriotion.set()
     await state.update_data(item=item)
@@ -390,16 +375,14 @@ async def enter_price(call: types.CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"])
 async def mailing(call: types.CallbackQuery, state: FSMContext):
-    await call.message.answer("Пришлите текст рассылки."
-    '\nЧтобы сделать текст <b>жирным</b>, поместите его в <b></ b> (Без между "/" и "b" не должно быть пробелов)')
+    await call.message.answer("Пришлите текст рассылки.")
     await Mailing.Text.set()
 
 @dp.callback_query_handler(user_id=admin_id, text_contains=["mailing1"], state='*')
 async def mailing(call: types.CallbackQuery, state: FSMContext):
     await state.finish()
     await call.message.edit_reply_markup()
-    await call.message.answer("Пришлите текст рассылки"
-    '\nЧтобы сделать текст <b>жирным</b>, поместите его в <b ></ b> \n(Без между символами "/", ">" и "b" не должно быть пробелов)')
+    await call.message.answer("Пришлите текст рассылки")
     await Mailing.Text.set()
 
 @dp.message_handler(user_id=admin_id, state=Mailing.Text)
