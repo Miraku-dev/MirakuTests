@@ -376,14 +376,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-                  
+
         markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                    [InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
-        markup2 = InlineKeyboardMarkup(
             inline_keyboard=
             [
                 [
@@ -396,7 +390,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ]
         )
         next_id = item.id
-        # Отправляем фотку товара с подписью и кнопкой "купить"
+        # Отправляем фотку товара с подписью и кнопкой "купить"s
         await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
@@ -407,7 +401,6 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup
         )
-        await call.message.edit_reply_markup(reply_markup=markup2)
         await state.update_data(next_id=next_id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
