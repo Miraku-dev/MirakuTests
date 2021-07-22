@@ -356,10 +356,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     category = data.get("category")
     id = data.get("id")
-
-    for message_id in range((call.message.message_id-2),call.message.message_id):
-        bot.delete_message(call.message.chat.id, message_id)
-    
+    bot.delete_message(-2)
     next_id = data.get("next_id")
     all_items = await database.Item.query.where(database.Item.category == category).where(
         database.Item.id != id).where(database.Item.id != next_id).limit(2).gino.all()
