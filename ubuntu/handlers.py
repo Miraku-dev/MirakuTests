@@ -106,9 +106,10 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id)),
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                [
                     InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_daya="cancel")
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
         )
@@ -132,8 +133,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 
 
 # Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="accessories")
-async def show_accessories(call: CallbackQuery):
+@dp.callback_query_handler(text_contains="accessories", state=states.List_item.Item)
+async def show_accessories(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
     all_items = await db.show_accessories()
     # Проходимся по товарам, пронумеровывая
@@ -158,21 +159,22 @@ async def show_accessories(call: CallbackQuery):
                 ],
             ]
         )
-
+        id = item.id
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
-                id=item.id,
+                id=id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
         )
+        await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
-
+        await states.List_item.Next.set()
 
 # Показываем список доступных товаров
 @dp.callback_query_handler(text_contains="malling")
@@ -350,12 +352,13 @@ async def show_other(call: CallbackQuery):
 @dp.callback_query_handler(text_contains="next", state=states.List_item.Next)
 async def show_hats(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
-    await call.message.delete()
+    await call.message.delete(2)
     data = await state.get_data()
     category = data.get("category")
     id = data.get("id")
-    all_items = await database.Item.query.where(database.Item.category == category and
-        database.Item.id != id).limit(1).gino.all()
+    next_id = data.get("next_id")
+    all_items = await database.Item.query.where(database.Item.category == category).where(
+        database.Item.id != id).where(database.Item.id != next_id).limit(2).gino.all()
 
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
@@ -382,19 +385,19 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        id = item.id
+        next_id = item.id
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
-                id=id,
+                id=next_id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
         )
-        await state.update_data(id=id)
+        await state.update_data(next_id=next_id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
