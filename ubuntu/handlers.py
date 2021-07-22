@@ -101,40 +101,31 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             text += ("\n"
                   "id: \t{id}")
         
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
-                ],
-            ]
-        )
         markup2 = InlineKeyboardMarkup(
             inline_keyboard=
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
                     InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id)),
-                    InlineKeyboardButton(text="Далее", callback_data="next")
+                    InlineKeyboardButton(text="Далее", callback_data="next"),
+                    InlineKeyboardButton(text="Назад", callback_daya="cancel")
                 ],
             ]
         )
-
+        id = item.id
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
-                id=item.id,
+                id=id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup
+            reply_markup=markup2
         )
-        id = item.id 
+
         await state.update_data(id=id)
-        await call.message.edit_reply_markup(reply_markup=markup2)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
@@ -363,8 +354,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     category = data.get("category")
     id = data.get("id")
-    all_items = await database.Item.query.where(database.Item.category == category, 
-    database.Item.id != id).limit(+2).gino.all()
+    all_items = await database.Item.query.where(database.Item.category == category and
+        database.Item.id != id).limit(1).gino.all()
+
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
         text = ("\t<b>{name}</b>\n")
@@ -377,17 +369,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-        
+                  
         markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))]
-            ]
-        )
-
-        markup2 = InlineKeyboardMarkup(
             inline_keyboard=
             [
                 [
@@ -395,24 +378,22 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
                 [
                     InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text='Назад', callback_data="back")
+                    InlineKeyboardButton(text="Назад", callback_data="back")
                 ],
             ]
         )
-
+        id = item.id
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
-                id=item.id,
+                id=id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
         )
-        id = item.id
-        await call.message.edit_reply_markup(reply_markup=markup2)
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
