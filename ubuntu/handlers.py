@@ -357,8 +357,10 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     id = data.get("id")
     next_id = data.get("next_id")
     id_item = database.Item.id
+    next_ = next(next_id)
+    id_next = next(id)
     all_items = await database.Item.query.where(database.Item.category == category).where(
-        id_item != id).where(id_item != next(id)).where(id_item != next_id).where(id_item != next(next_id)
+        id_item != id).where(id_item != id_next).where(id_item != next_id).where(id_item != next_
         ).limit(2).gino.all()
 
     # Проходимся по товарам, пронумеровывая
