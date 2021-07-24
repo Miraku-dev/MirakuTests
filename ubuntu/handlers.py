@@ -357,7 +357,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     id = data.get("id")
     next_id = data.get("next_id")
     all_items = await database.Item.query.where(database.Item.category == category).where(
-        database.Item.id != id).where(database.Item.id != next_id).limit(2).gino.all()
+        database.Item.id != id, id).where(database.Item.id != next_id).limit(+2).gino.all()
 
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
@@ -380,7 +380,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
                 [
                     InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_data="back")
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
         )
