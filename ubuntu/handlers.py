@@ -352,11 +352,9 @@ async def show_other(call: CallbackQuery):
 @dp.callback_query_handler(text_contains="next", state=states.List_item.Next)
 async def show_hats(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
-    await call.message.delete()
     data = await state.get_data()
     category = data.get("category")
     id = data.get("id")
-    bot.delete_message(-2)
     next_id = data.get("next_id")
     all_items = await database.Item.query.where(database.Item.category == category).where(
         database.Item.id != id).where(database.Item.id != next_id).limit(2).gino.all()
