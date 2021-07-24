@@ -87,7 +87,6 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
     category = "add_hat"
     all_items = await database.Item.query.where(database.Item.category == database.Item.category).limit(2).gino.all()
-    await state.update_data(all_items=all_items)
     category = "add_hat"
     await state.update_data(category=category)
     # Проходимся по товарам, пронумеровывая
@@ -358,8 +357,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     category = data.get("category")
     id = data.get("id")
     next_id = data.get("next_id")
-    all_items = data.get("all_items")
-    all_items = all_items.limit(+2)
+    all_items = await database.Item.query.where(database.Item.category == database.Item.category).limit(+2).gino.all()
 
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
