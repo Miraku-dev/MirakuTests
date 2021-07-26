@@ -431,6 +431,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 # Для фильтрования по коллбекам можно использовать buy_item.filter()
 @dp.callback_query_handler(buy_item.filter())
 async def buying_item(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    await state.finish()
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
     item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
