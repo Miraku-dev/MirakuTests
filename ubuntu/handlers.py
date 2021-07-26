@@ -86,8 +86,7 @@ async def categories_list(call: CallbackQuery, state: FSMContext):
 async def show_hats(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
     category = "add_hat"
-    all_items = await database.Item.query.where(database.Item.category == database.Item.category).limit(2).gino.all()
-    category = "add_hat"
+    all_items = await db.show_hats()
     await state.update_data(category=category)
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
@@ -345,7 +344,6 @@ async def show_other(call: CallbackQuery):
             ),
             reply_markup=markup
         )
-        id = item,id
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
 
@@ -357,7 +355,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     category = data.get("category")
     id = data.get("id")
     next_id = data.get("next_id")
-    all_items = await database.Item.query.where(database.Item.category == database.Item.category).limit(+2).gino.all()
+    all_items = await database.Item.query.where(database.Item.category == database.Item.category).offset(2).limit(2).gino.all()
 
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
