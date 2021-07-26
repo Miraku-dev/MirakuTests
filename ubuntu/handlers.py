@@ -5,7 +5,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
-                           CallbackQuery, LabeledPrice, PreCheckoutQuery)
+                           CallbackQuery, LabeledPrice, PreCheckoutQuery, InputMediaPhoto, InputMediaVideo)
 from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
 
@@ -587,6 +587,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             receiver=query.order_info.name,
             email=query.order_info.email
         ).apply()
+        await purchase.create()
         await state.reset_state()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:

@@ -2,7 +2,9 @@ from asyncio import sleep
 import asyncio
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, shipping_address
+from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, shipping_address, 
+                                InputMediaVideo, InputMediaPhoto)
+                                
 from aiogram.types.callback_query import CallbackQuery
 from aiogram.types.message import ContentType, Message
 
