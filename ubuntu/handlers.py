@@ -59,14 +59,12 @@ async def register_user(message: types.Message):
 @dp.callback_query_handler(text_contains="storage")
 async def storage(call: CallbackQuery):
     text = "По этой кнопке мы можем сделать переход на сайт вашего магазина или его страницу в соцсетях."
-    await bot.answer_callback_query(call.from_user.id,
-        text,
-        show_alert=True)
+    await call.answer(text, show_alert=True)
 
 
 @dp.callback_query_handler(text_contains="help")
 async def help(call: CallbackQuery):
-    await bot.answer_callback_query(call.from_user.id,
+    await call.answer(
         "По этой кнопке мы можем сделать переход на поддержку вашего магазина в telegram или любой другой социальной сети.",
     show_alert=True)
 
@@ -103,7 +101,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             text += ("\n"
                   "id: \t{id}")
         
-        markup2 = InlineKeyboardMarkup(
+        markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
                 [
@@ -125,7 +123,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
 
         await state.update_data(id=id)
@@ -159,7 +157,10 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                [
+                    InlineKeyboardButton(text="Далее", callback_data="next"),
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
         )
@@ -175,6 +176,7 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup
         )
+        await call.message.edit_reply_markup(reply_markup=markup)
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -205,7 +207,10 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                [
+                    InlineKeyboardButton(text="Далее", callback_data="next"),
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
         )
@@ -251,7 +256,10 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                [
+                    InlineKeyboardButton(text="Далее", callback_data="next"),
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
         )
@@ -297,7 +305,10 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                [
+                    InlineKeyboardButton(text="Далее", callback_data="next"),
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
         )
@@ -343,7 +354,10 @@ async def show_other(call: CallbackQuery, state: FSMContext):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                [
+                    InlineKeyboardButton(text="Далее", callback_data="next"),
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
         )
