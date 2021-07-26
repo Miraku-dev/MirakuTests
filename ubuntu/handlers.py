@@ -132,7 +132,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 price=item.price / 100
             ),
             reply_markup=markup2
-        ), call.message.edit_reply_markup(reply_markup=markup)
+        )
+        await call.message.edit_reply_markup()
+        await call.message.edit_reply_markup(reply_markup=markup)
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -191,6 +193,7 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup2
         )
+        await call.message.edit_reply_markup()
         await call.message.edit_reply_markup(reply_markup=markup)
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
@@ -249,6 +252,7 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup2
         )
+        await call.message.edit_reply_markup()
         await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -307,6 +311,7 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup2
         )
+        await call.message.edit_reply_markup()
         await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -365,6 +370,7 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup2
         )
+        await call.message.edit_reply_markup()
         await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -423,6 +429,7 @@ async def show_other(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup2
         )
+        await call.message.edit_reply_markup()
         await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -473,7 +480,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-
+        
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
             photo=item.photo,
@@ -485,6 +492,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup2
         )
+        await call.message.edit_reply_markup()
         await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -498,16 +506,22 @@ async def buying_item(call: CallbackQuery, callback_data: dict, state: FSMContex
     item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
 
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
+            ]
+    )
     # Достаем информацию о товаре из базы данных
     item = await database.Item.get(item_id)
     if not item:
-        await call.message.answer("Такого товара не существует")
+        await call.message.answer("Такого товара не существует", reply_markup=button)
         return
 
     text = ("Вы хотите купить товар \"<b>{name}</b>\" по цене: <i>{price:,}/шт.</i>\n"
-             "Введите количество или нажмите отмена").format(name=item.name,
+             'Введите количество или нажмите "Отмена"').format(name=item.name,
                                                              price=item.price / 100)
-    await call.message.answer(text)
+    await call.message.answer(text, reply_markup=button)
     await states.Purchase.EnterQuantity.set()
 
     # Сохраняем в ФСМ класс товара и покупки
