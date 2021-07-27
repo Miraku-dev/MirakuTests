@@ -13,7 +13,6 @@ from load_all import dp, bot
 from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
 from database import Item, Purchase, User, DBCommands
 import buttons
-import re
 
 db = DBCommands()
 
