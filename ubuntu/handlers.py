@@ -14,6 +14,7 @@ import states
 from config import lp_token, admin_id
 from load_all import dp, bot
 import buttons
+import re
 
 db = database.DBCommands()
 
@@ -133,11 +134,11 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup2
         )
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await call.message.edit_reply_markup()
+        await call.message.edit_reply_markup(reply_markup=markup)
         await states.List_item.Next.set()
 
 
@@ -497,6 +498,61 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
+        
+
+@dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
+async def order_list(call: CallbackQuery, state: FSMContext):
+    all_order = await db.show_order()
+    for num, order in enumerate(all_order):
+        text = ("Покупатель: {buyer}\n"
+                    "id данных в списке: {id}\n"
+                    "id товара: {item_id}\n"
+                    "Цена товара: {amount}\n"
+                    "Количество купленного товара: {quantity}\n"
+                    "Время покупки: {purchase_time}\n"
+                    "Адрес:\n {shipping_address}\n"
+                    "Номер телефона покупателя: {phone_number}\n"
+                    "Имя покупателя: {receiver}\n")
+
+    shipping_address = order.shipping_address
+
+    shipping_address = re.sub(r"{", "", str(shipping_address))
+    shipping_address = re.sub(r"}", "", str(shipping_address))
+    shipping_address = re.sub(r"'", "", str(shipping_address))
+    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
+    shipping_address = re.sub(r"state", "Область", str(shipping_address))
+    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"city", "Город", str(shipping_address))
+    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
+    shipping_address = re.sub(r",", ",\n", str(shipping_address))
+
+
+    markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text="Удалить информацию", callback_data="delete_order")
+                ],
+            ]
+        )
+    
+    await call.message.answer(
+            text.format(
+                id=order.id,
+                item_id=order.item_id,
+                buyer=order.buyer,
+                phone_number=order.phone_number,
+                amount=order.amount / 100,
+                quantity=order.quantity,
+                purchase_time=order.purchase_time,
+                receiver=order.receiver,
+                shipping_address=shipping_address
+            ),
+            reply_markup=markup
+        )
+    await asyncio.sleep(0.4)
 
 # Для фильтрования по коллбекам можно использовать buy_item.filter()
 @dp.callback_query_handler(buy_item.filter(), state='*')
