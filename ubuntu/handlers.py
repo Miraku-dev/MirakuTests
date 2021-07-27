@@ -101,16 +101,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-
-        markup2 = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
-        
+     
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -132,14 +123,12 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
 
 
 # Показываем список доступных товаров
@@ -161,16 +150,7 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-        
-        markup2 = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
-        
+
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -192,10 +172,8 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
@@ -220,16 +198,7 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-        
-        markup2 = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
-        
+
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -251,10 +220,8 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
@@ -279,16 +246,7 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-        
-        markup2 = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
-        
+
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -310,10 +268,8 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
@@ -338,16 +294,7 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-        
-        markup2 = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
-        
+
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -369,10 +316,8 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
@@ -398,15 +343,6 @@ async def show_other(call: CallbackQuery, state: FSMContext):
             text += ("\n"
                   "id: \t{id}")
         
-        markup2 = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
-        
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -428,10 +364,8 @@ async def show_other(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
@@ -459,15 +393,6 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         if call.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}")
-
-        markup2 = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-            ]
-        )
         
         markup = InlineKeyboardMarkup(
             inline_keyboard=
@@ -491,10 +416,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 description=item.description,
                 price=item.price / 100
             ),
-            reply_markup=markup2
+            reply_markup=markup
         )
-        await call.message.edit_reply_markup()
-        await call.message.edit_reply_markup(reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await states.List_item.Next.set()
@@ -505,7 +428,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await db.show_order()
     for num, order in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
-                    "id данных в списке: {purch_id}\n"
+                    "id данных в списке: {id}\n"
                     "id товара: {item_id}\n"
                     "Цена товара: {amount}\n"
                     "Количество купленного товара: {quantity}\n"
@@ -533,14 +456,14 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text="Удалить информацию", callback_data="delete_order")
+                    InlineKeyboardButton(text=("Удалить информацию"), callback_data="delete_order")
                 ],
             ]
         )
     
     await call.message.answer(
             text.format(
-                pyrch_id=order.id,
+                id=order.id,
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
@@ -721,7 +644,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             email=query.order_info.email
         ).apply()
         await purchase.create()
-        await state.reset_state()
+        await state.finish()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:
         await bot.send_message(query.from_user.id, ("Покупка не была подтверждена, попробуйте позже..."))
