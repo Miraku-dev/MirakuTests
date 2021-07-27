@@ -137,9 +137,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await states.List_item.Next.set()
         await call.message.edit_reply_markup()
         await call.message.edit_reply_markup(reply_markup=markup)
-        await states.List_item.Next.set()
 
 
 # Показываем список доступных товаров
@@ -505,7 +505,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await db.show_order()
     for num, order in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
-                    "id данных в списке: {id}\n"
+                    "id данных в списке: {purch_id}\n"
                     "id товара: {item_id}\n"
                     "Цена товара: {amount}\n"
                     "Количество купленного товара: {quantity}\n"
@@ -540,7 +540,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await call.message.answer(
             text.format(
-                id=order.id,
+                pyrch_id=order.purch_id,
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
