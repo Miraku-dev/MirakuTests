@@ -256,11 +256,10 @@ async def add_photo(message: types.Message, state: FSMContext):
             ]
     )
     for photo_id in photo:
-        media_group = (InputMediaPhoto(photo_id))
+        media_group = [InputMediaPhoto(photo_id, ("Название: {name}"
+                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name))]
 
-    await message.answer_media_group(media_group,
-        caption=("Название: {name}"
-                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name), reply_markup=button)
+    await message.answer_media_group(media_group, reply_markup=button)
     item.photo = media_group
     await NewItem.Price.set()
     await state.update_data(item=item)
