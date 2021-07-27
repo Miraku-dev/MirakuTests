@@ -8,7 +8,6 @@ class Purchase(StatesGroup):
     EnterQuantity = State()
     Approval = State()
     Payment = State()
-    Finish = State()
 
 
 class NewItem(StatesGroup):

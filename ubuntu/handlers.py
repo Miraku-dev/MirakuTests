@@ -540,7 +540,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await call.message.answer(
             text.format(
-                pyrch_id=order.purch_id,
+                pyrch_id=order.id,
                 item_id=order.item_id,
                 buyer=order.buyer,
                 phone_number=order.phone_number,
