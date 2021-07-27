@@ -246,7 +246,7 @@ async def enter_description(message: Message, state: FSMContext):
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.PHOTO)
 async def add_photo(message: types.Message, state: FSMContext):
-    photo = message.photo[-1].file_id
+    photo = message.photo[-2].file_id
     data = await state.get_data()
     item: Item = data.get("item")
     item.photo = photo
@@ -256,9 +256,11 @@ async def add_photo(message: types.Message, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
+    for photo_id in photo:
+        photo_group = (InputMediaPhoto(photo_id))
 
-    await message.answer_photo(
-        photo=photo,
+    await message.answer_media_group(
+        photo=photo_group,
         caption=("Название: {name}"
                   '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name), reply_markup=button)
 
