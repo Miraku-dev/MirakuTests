@@ -593,7 +593,7 @@ async def approval(call: CallbackQuery, state: FSMContext):
     # Теперь можно внести данные о покупке в базу данных через .create()
     await purchase.create()
     await bot.send_message(chat_id=call.from_user.id,
-                           text=("Хорошо. Оплатите <b>{amount:,}</b> по методу указанному ниже и нажмите "
+                           text=("Хорошо. Оплатите по методу указанному ниже и нажмите "
                                   "на кнопку ниже").format(amount=purchase.amount))
     ################
     # --Ниже выбрать нужные параметры--
@@ -643,7 +643,6 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             receiver=query.order_info.name,
             email=query.order_info.email
         ).apply()
-        await purchase.create()
         await state.finish()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:
