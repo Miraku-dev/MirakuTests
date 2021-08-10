@@ -10,7 +10,7 @@ from aiogram.types.message import ContentType, Message
 
 from config import admin_id
 from load_all import dp, bot
-from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data, OrderList
+from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
 from database import Item, Purchase, User, DBCommands
 import buttons
 
@@ -60,9 +60,8 @@ async def admin_panel(message: types.Message):
         ]
     )
     await message.answer("Что вы хотите сделать?", reply_markup=admin_panel_markup)
-    await OrderList.First.set()
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="add_item", state=OrderList.First)
+@dp.callback_query_handler(user_id=admin_id, text_contains="add_item")
 async def item_category(call: types.CallbackQuery):
     chat_id = call.from_user.id
     categories_markup = InlineKeyboardMarkup(
@@ -247,21 +246,22 @@ async def enter_description(message: Message, state: FSMContext):
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.PHOTO)
 async def add_photo(message: types.Message, state: FSMContext):
-    photo = message.photo[-2].file_id
+    photo = message.photo[-1].file_id
     data = await state.get_data()
     item: Item = data.get("item")
+    item.photo = photo
     button = InlineKeyboardMarkup(
         inline_keyboard=
             [
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    for photo_id in photo:
-        media_group = [InputMediaPhoto(photo_id, ("Название: {name}"
-                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name))]
 
-    await bot.send_media_group(message.from_user.id, media_group)
-    item.photo = media_group
+    await message.answer_photo(
+        photo=photo,
+        caption=("Название: {name}"
+                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name), reply_markup=button)
+
     await NewItem.Price.set()
     await state.update_data(item=item)
 
@@ -320,10 +320,9 @@ async def enter_price(call: types.CallbackQuery, state: FSMContext):
     await state.reset_state()
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"], state=OrderList.First)
+@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"])
 async def mailing(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Пришлите текст рассылки.")
-    await state.finish()
     await Mailing.Text.set()
 
 @dp.callback_query_handler(user_id=admin_id, text_contains=["mailing1"], state='*')
@@ -425,7 +424,7 @@ async def mailing_start(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Рассылка выполнена.\nАдмин-панель:\n/admin_panel", reply_markup=buttons.new_start_markup)
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="delete_item", state=OrderList.First)
+@dp.callback_query_handler(user_id=admin_id, text_contains="delete_item")
 async def delete(call: types.CallbackQuery):
     await call.message.answer("Пришлите id товара, который вы хотите удалить.")
     await DeleteItem.Get_id.set()

@@ -35,7 +35,3 @@ class DeleteOrder(StatesGroup):
 class List_item(StatesGroup):
     Item = State()
     Next = State()
-
-class OrderList(StatesGroup):
-    First = State()
-    Next = State()
