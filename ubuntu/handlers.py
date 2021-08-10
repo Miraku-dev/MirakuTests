@@ -425,8 +425,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
 async def order_list(call: CallbackQuery, state: FSMContext):
-    all_order = await database.Purchase.gino.all()
-    for num, order in enumerate(all_order):
+    all_order = await database.Purchase.query.gino.all()
+    for num, purchase in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
                     "id данных в списке: {id}\n"
                     "id товара: {item_id}\n"
@@ -437,7 +437,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
-    shipping_address = order.shipping_address
+    shipping_address = purchase.shipping_address
 
     shipping_address = re.sub(r"{", "", str(shipping_address))
     shipping_address = re.sub(r"}", "", str(shipping_address))
@@ -464,14 +464,14 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await call.message.answer(
         text=text.format(
-            id=order.id,
-            item_id=order.item_id,
-            buyer=order.buyer,
-            phone_number=order.phone_number,
-            amount=order.amount / 100,
-            quantity=order.quantity,
-            purchase_time=order.purchase_time,
-            receiver=order.receiver,
+            id=purchase.id,
+            item_id=purchase.item_id,
+            buyer=purchase.buyer,
+            phone_number=purchase.phone_number,
+            amount=purchase.amount / 100,
+            quantity=purchase.quantity,
+            purchase_time=purchase.purchase_time,
+            receiver=purchase.receiver,
             shipping_address=shipping_address
         ),
         reply_markup=markup
