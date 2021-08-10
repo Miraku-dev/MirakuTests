@@ -462,19 +462,19 @@ async def order_list(call: CallbackQuery, state: FSMContext):
         )
     
     await call.message.answer(
-            text.format(
-                id=order.id,
-                item_id=order.item_id,
-                buyer=order.buyer,
-                phone_number=order.phone_number,
-                amount=order.amount / 100,
-                quantity=order.quantity,
-                purchase_time=order.purchase_time,
-                receiver=order.receiver,
-                shipping_address=shipping_address
-            ),
-            reply_markup=markup
-        )
+        text=text.format(
+            id=order.id,
+            item_id=order.item_id,
+            buyer=order.buyer,
+            phone_number=order.phone_number,
+            amount=order.amount / 100,
+            quantity=order.quantity,
+            purchase_time=order.purchase_time,
+            receiver=order.receiver,
+            shipping_address=shipping_address
+        ),
+        reply_markup=markup
+    )
     await asyncio.sleep(0.3)
 
 # Для фильтрования по коллбекам можно использовать buy_item.filter()
