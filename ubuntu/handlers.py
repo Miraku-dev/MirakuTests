@@ -425,7 +425,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
 async def order_list(call: CallbackQuery, state: FSMContext):
-    all_order = await db.show_order()
+    all_order = await database.Purchase.query.gino.all()
     for num, order in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
                     "id данных в списке: {id}\n"
@@ -475,7 +475,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             ),
             reply_markup=markup
         )
-    await asyncio.sleep(0.4)
+    await asyncio.sleep(0.3)
 
 # Для фильтрования по коллбекам можно использовать buy_item.filter()
 @dp.callback_query_handler(buy_item.filter(), state='*')
