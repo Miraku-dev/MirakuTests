@@ -423,7 +423,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         await states.List_item.Next.set()
         
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="order_list", state='*')
+@dp.callback_query_handler(user_id=admin_id, text_contains="order_list", state=states.OrderList.First)
 async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await db.show_order()
     await state.update_data(a=5)
@@ -703,7 +703,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     success = await check_payment(purchase)
 
     if success:
-        await purchase.update(
+        await purchase.create(
             successful=True,
             shipping_address=query.order_info.shipping_address.to_python()
             if query.order_info.shipping_address
@@ -711,8 +711,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             phone_number=query.order_info.phone_number,
             receiver=query.order_info.name,
             email=query.order_info.email
-        ).apply()
-        await purchase.create()
+        )
         await state.finish()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:

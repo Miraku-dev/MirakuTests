@@ -37,4 +37,5 @@ class List_item(StatesGroup):
     Next = State()
 
 class OrderList(StatesGroup):
+    First = State()
     Next = State()

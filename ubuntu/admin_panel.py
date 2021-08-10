@@ -10,7 +10,7 @@ from aiogram.types.message import ContentType, Message
 
 from config import admin_id
 from load_all import dp, bot
-from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
+from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data, OrderList
 from database import Item, Purchase, User, DBCommands
 import buttons
 
@@ -60,8 +60,9 @@ async def admin_panel(message: types.Message):
         ]
     )
     await message.answer("Что вы хотите сделать?", reply_markup=admin_panel_markup)
+    await OrderList.First.set()
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="add_item")
+@dp.callback_query_handler(user_id=admin_id, text_contains="add_item", state=OrderList.First)
 async def item_category(call: types.CallbackQuery):
     chat_id = call.from_user.id
     categories_markup = InlineKeyboardMarkup(
@@ -259,7 +260,7 @@ async def add_photo(message: types.Message, state: FSMContext):
         media_group = [InputMediaPhoto(photo_id, ("Название: {name}"
                   '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name))]
 
-    await bot.send_media_group(media_group, reply_markup=button)
+    await bot.send_media_group(message.from_user.id, media_group)
     item.photo = media_group
     await NewItem.Price.set()
     await state.update_data(item=item)
@@ -319,9 +320,10 @@ async def enter_price(call: types.CallbackQuery, state: FSMContext):
     await state.reset_state()
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"])
+@dp.callback_query_handler(user_id=admin_id, text_contains=["mailing"], state=OrderList.First)
 async def mailing(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Пришлите текст рассылки.")
+    await state.finish()
     await Mailing.Text.set()
 
 @dp.callback_query_handler(user_id=admin_id, text_contains=["mailing1"], state='*')
@@ -423,7 +425,7 @@ async def mailing_start(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Рассылка выполнена.\nАдмин-панель:\n/admin_panel", reply_markup=buttons.new_start_markup)
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="delete_item")
+@dp.callback_query_handler(user_id=admin_id, text_contains="delete_item", state=OrderList.First)
 async def delete(call: types.CallbackQuery):
     await call.message.answer("Пришлите id товара, который вы хотите удалить.")
     await DeleteItem.Get_id.set()
