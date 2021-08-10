@@ -426,7 +426,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
 async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await database.Purchase.query.gino.all()
-    for num, purchase in enumerate(all_order):
+    for purchase in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
                     "id данных в списке: {id}\n"
                     "id товара: {item_id}\n"
