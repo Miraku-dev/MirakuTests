@@ -8,6 +8,7 @@ from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
                            CallbackQuery, LabeledPrice, PreCheckoutQuery, InputMediaPhoto, InputMediaVideo)
 from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
+from sqlalchemy.sql.expression import desc
 
 import database
 import states
@@ -163,13 +164,15 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
+        description = item.description
+        description = re.sub(r",", "", str (description))
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
                 id=item.id,
                 name=item.name,
-                description=item.description,
+                description=description,
                 price=item.price / 100
             ),
             reply_markup=markup
@@ -425,15 +428,29 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
 async def order_list(call: CallbackQuery, state: FSMContext):
-    all_order = await database.Item.query.gino.all()
+    all_order = await database.Purchase.query.gino.all()
     for num, purchase in enumerate(all_order):
-        text = ("Покупатель: {name}\n"
+        text = ("Покупатель: {buyer}\n"
                     "id данных в списке: {id}\n"
-                    "Цена товара: {price}\n"
-                    "Адрес:\n {shipping_address}\n")
+                    "id товара: {item_id}\n"
+                    "Цена товара: {amount}\n"
+                    "Количество купленного товара: {quantity}\n"
+                    "Время покупки: {purchase_time}\n"
+                    "Адрес:\n {shipping_address}\n"
+                    "Номер телефона покупателя: {phone_number}\n"
+                    "Имя покупателя: {receiver}\n")
 
-    shipping_address = purchase.description
+    shipping_address = purchase.shipping_address
 
+    shipping_address = re.sub(r"{", "", str(shipping_address))
+    shipping_address = re.sub(r"}", "", str(shipping_address))
+    shipping_address = re.sub(r"'", "", str(shipping_address))
+    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
+    shipping_address = re.sub(r"state", "Область", str(shipping_address))
+    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"city", "Город", str(shipping_address))
+    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
     shipping_address = re.sub(r",", ",\n", str(shipping_address))
 
 
@@ -450,10 +467,15 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await call.message.answer(
         text=text.format(
-                id=purchase.id,
-                name=purchase.name,
-                shipping_address=purchase.description,
-                price=purchase.price / 100
+            id=purchase.id,
+            item_id=purchase.item_id,
+            buyer=purchase.buyer,
+            phone_number=purchase.phone_number,
+            amount=purchase.amount / 100,
+            quantity=purchase.quantity,
+            purchase_time=purchase.purchase_time,
+            receiver=purchase.receiver,
+            shipping_address=shipping_address
         ),
         reply_markup=markup
     )
