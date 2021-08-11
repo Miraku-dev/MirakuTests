@@ -435,7 +435,6 @@ async def order_list(call: CallbackQuery):
                     "Цена товара: {amount}\n"
                     "Количество купленного товара: {quantity}\n"
                     "Время покупки: {purchase_time}\n"
-                    "Адрес:\n {shipping_address}\n"
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
@@ -457,11 +456,10 @@ async def order_list(call: CallbackQuery):
             quantity=purchase.quantity,
             purchase_time=purchase.purchase_time,
             receiver=purchase.receiver,
-            shipping_address=purchase.shipping_address
         )
 
     await call.message.answer(text, reply_markup=markup)
-    
+
     await asyncio.sleep(0.3)
 
 
