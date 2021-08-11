@@ -37,7 +37,7 @@ class Item(db.Model):
     name = Column(String(50))
     description = Column(String(500))
     photo = Column(String(250))
-    price = Column(Integer)  # Цена в копейках (потом делим на 100)
+    price = Column(Integer)
     category = Column(String(25))
 
     def __repr__(self):
@@ -52,7 +52,7 @@ class Purchase(db.Model):
     id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)
-    amount = Column(Integer)  # Цена в копейках (потом делим на 100)
+    amount = Column(Integer)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
     shipping_address = Column(JSON)
@@ -143,6 +143,11 @@ class DBCommands:
         items = await Item.query.where(Item.category == category).limit(5).gino.all()
 
         return items
+
+    async def show_order(self):
+        purchases = await Purchase.query.gino.all()
+
+        return purchases
 
 
 async def create_db():

@@ -425,7 +425,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
 async def order_list(call: CallbackQuery, state: FSMContext):
-    all_order = await database.Purchase.query.gino.all()
+    all_order = await db.show_order()
     for num, purchase in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
                     "id данных в списке: {id}\n"
@@ -442,7 +442,6 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             inline_keyboard=
             [
                 [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
                     InlineKeyboardButton(text=("Удалить информацию"), callback_data="delete_order"),
                     InlineKeyboardButton(text='Далее', callback_data="next_order")
                 ],
@@ -622,7 +621,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     data = await state.get_data()
     purchase: database.Purchase = data.get("purchase")
     success = await check_payment(purchase)
-
+    
     if success:
         await purchase.update(
             successful=True,
