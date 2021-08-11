@@ -437,17 +437,8 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
-    shipping_address = purchase.shipping_address
+    shipping_address = purchase.description
 
-    shipping_address = re.sub(r"{", "", str(shipping_address))
-    shipping_address = re.sub(r"}", "", str(shipping_address))
-    shipping_address = re.sub(r"'", "", str(shipping_address))
-    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
-    shipping_address = re.sub(r"state", "Область", str(shipping_address))
-    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"city", "Город", str(shipping_address))
-    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
     shipping_address = re.sub(r",", ",\n", str(shipping_address))
 
 
@@ -464,15 +455,10 @@ async def order_list(call: CallbackQuery, state: FSMContext):
     
     await call.message.answer(
         text=text.format(
-            id=purchase.id,
-            item_id=purchase.item_id,
-            buyer=purchase.buyer,
-            phone_number=purchase.phone_number,
-            amount=purchase.amount / 100,
-            quantity=purchase.quantity,
-            purchase_time=purchase.purchase_time,
-            receiver=purchase.receiver,
-            shipping_address=shipping_address
+                id=purchase.id,
+                name=purchase.name,
+                description=purchase.description,
+                price=purchase.price / 100
         ),
         reply_markup=markup
     )
