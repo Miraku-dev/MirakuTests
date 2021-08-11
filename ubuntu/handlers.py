@@ -8,7 +8,6 @@ from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
                            CallbackQuery, LabeledPrice, PreCheckoutQuery, InputMediaPhoto, InputMediaVideo)
 from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
-from sqlalchemy.sql.expression import desc
 
 import database
 import states
@@ -164,15 +163,13 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        description = item.description
-        description = re.sub(r",", "", str (description))
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_photo(
             photo=item.photo,
             caption=text.format(
                 id=item.id,
                 name=item.name,
-                description=description,
+                description=item.description,
                 price=item.price / 100
             ),
             reply_markup=markup
@@ -440,20 +437,6 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
-    shipping_address = purchase.shipping_address
-
-    shipping_address = re.sub(r"{", "", str(shipping_address))
-    shipping_address = re.sub(r"}", "", str(shipping_address))
-    shipping_address = re.sub(r"'", "", str(shipping_address))
-    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
-    shipping_address = re.sub(r"state", "Область", str(shipping_address))
-    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"city", "Город", str(shipping_address))
-    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
-    shipping_address = re.sub(r",", ",\n", str(shipping_address))
-
-
     markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -475,7 +458,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             quantity=purchase.quantity,
             purchase_time=purchase.purchase_time,
             receiver=purchase.receiver,
-            shipping_address=shipping_address
+            shipping_address=purchase.shipping_address
         ),
         reply_markup=markup
     )
@@ -638,12 +621,25 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     data = await state.get_data()
     purchase: database.Purchase = data.get("purchase")
     success = await check_payment(purchase)
+    shipping_address=query.order_info.shipping_address.to_python()
+
+    shipping_address = re.sub(r"{", "", str(shipping_address))
+    shipping_address = re.sub(r"}", "", str(shipping_address))
+    shipping_address = re.sub(r"'", "", str(shipping_address))
+    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
+    shipping_address = re.sub(r"state", "Область", str(shipping_address))
+    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
+    shipping_address = re.sub(r"city", "Город", str(shipping_address))
+    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
+    shipping_address = re.sub(r",", ",\n", str(shipping_address))
+
 
     if success:
         await purchase.update(
             successful=True,
-            shipping_address=query.order_info.shipping_address.to_python()
-            if query.order_info.shipping_address
+            shipping_address=shipping_address
+            if shipping_address
             else None,
             phone_number=query.order_info.phone_number,
             receiver=query.order_info.name,
