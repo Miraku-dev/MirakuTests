@@ -115,8 +115,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ]
         )
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer(
-            text.format(
+        await call.message.answer_photo(
+            photo=item.photo,
+            caption=text.format(
                 id=item.id,
                 name=item.name,
                 description=item.description,
@@ -636,15 +637,7 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
     success = await check_payment(purchase)
 
     if success:
-        await purchase.update(
-            successful=True,
-            shipping_address=query.order_info.shipping_address.to_python()
-            if query.order_info.shipping_address
-            else None,
-            phone_number=query.order_info.phone_number,
-            receiver=query.order_info.name,
-            email=query.order_info.email
-        ).apply()
+        await purchase.create()
         await state.finish()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:
