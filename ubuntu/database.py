@@ -62,7 +62,7 @@ class Purchase(db.Model):
     successful = Column(Boolean, default=False)
 
     def __pepr__(self):
-        return "<Purchase(id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}')>".format(
+        return "<Purchase(id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}', successful='{}')>".format(
             self.id, self.buyer, self.item_id, self.quantity, self.amount, self.shipping_address,
             self.phone_number, self.receiver, self.purchase_time, self.email)
 

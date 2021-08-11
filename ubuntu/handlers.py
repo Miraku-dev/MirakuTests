@@ -424,8 +424,10 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
-async def order_list(call: CallbackQuery, state: FSMContext):
+async def order_list(call: CallbackQuery):
+
     all_order = await db.show_order()
+
     for num, purchase in enumerate(all_order):
         text = ("Покупатель: {buyer}\n"
                     "id данных в списке: {id}\n"
@@ -437,9 +439,8 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
-
     markup = InlineKeyboardMarkup(
-            inline_keyboard=
+        inline_keyboard=
             [
                 [
                     InlineKeyboardButton(text=("Удалить информацию"), callback_data="delete_order"),
@@ -447,9 +448,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-    
-    await call.message.answer(
-        text=text.format(
+    text = text.format(
             id=purchase.id,
             item_id=purchase.item_id,
             buyer=purchase.buyer,
@@ -459,9 +458,10 @@ async def order_list(call: CallbackQuery, state: FSMContext):
             purchase_time=purchase.purchase_time,
             receiver=purchase.receiver,
             shipping_address=purchase.shipping_address
-        ),
-        reply_markup=markup
-    )
+        )
+
+    await call.message.answer(text, reply_markup=markup)
+    
     await asyncio.sleep(0.3)
 
 
