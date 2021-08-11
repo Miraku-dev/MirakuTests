@@ -427,15 +427,10 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
 async def order_list(call: CallbackQuery, state: FSMContext):
     all_order = await database.Item.query.gino.all()
     for num, purchase in enumerate(all_order):
-        text = ("Покупатель: {buyer}\n"
+        text = ("Покупатель: {name}\n"
                     "id данных в списке: {id}\n"
-                    "id товара: {item_id}\n"
-                    "Цена товара: {amount}\n"
-                    "Количество купленного товара: {quantity}\n"
-                    "Время покупки: {purchase_time}\n"
-                    "Адрес:\n {shipping_address}\n"
-                    "Номер телефона покупателя: {phone_number}\n"
-                    "Имя покупателя: {receiver}\n")
+                    "Цена товара: {price}\n"
+                    "Адрес:\n {shipping_address}\n")
 
     shipping_address = purchase.description
 
@@ -457,7 +452,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
         text=text.format(
                 id=purchase.id,
                 name=purchase.name,
-                description=purchase.description,
+                shipping_address=purchase.description,
                 price=purchase.price / 100
         ),
         reply_markup=markup
