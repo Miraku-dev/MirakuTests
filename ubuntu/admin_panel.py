@@ -260,7 +260,7 @@ async def add_photo(message: types.Message, state: FSMContext):
     )
     media.attach_photo(None, ("Название: {name}"
                   '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
-                  
+
     await message.answer_media_group(
         media=item.media, reply_markup=button)
 
@@ -292,8 +292,8 @@ async def add_photo(message: types.Message, state: FSMContext):
     await state.update_data(item=item)
 
 
-@dp.message_handler(user_id=admin_id, text="done", state=NewItem.Photo)
-async def add_photo(message: types.Message, state: FSMContext):
+@dp.message_handler(user_id=admin_id, text_constains="done", state=NewItem.Photo)
+async def add_photo(call: types.Message, state: FSMContext):
     data = await state.get_data()
     item: Item = data.get("item")
     media = item.media
@@ -307,8 +307,8 @@ async def add_photo(message: types.Message, state: FSMContext):
     media.attach_photo(None, "Название: {name}"
                   '\nПришлите мне цену товара в копейках или нажмите "Отмена"'.format(name=item.name), reply_markup=button)
 
-    await message.answer_media_group(
-        media=item.media, reply_markup=button)
+    await call.answer_media_group(media=item.media)
+    await call.edit_reply_markup(reply_markup=button)
 
     await NewItem.Price.set()
     await state.update_data(item=item)
