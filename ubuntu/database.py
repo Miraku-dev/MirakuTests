@@ -59,11 +59,12 @@ class Purchase(db.Model):
     phone_number = Column(String(50))
     email = Column(String(200))
     receiver = Column(String(100))
+    successful = Column(Boolean, default=False)
 
     def __pepr__(self):
-        return "<Purchase(id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}')>".format(
+        return "<Purchase(id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}', successful='{}')>".format(
             self.id, self.buyer, self.item_id, self.quantity, self.amount, self.shipping_address,
-            self.phone_number, self.receiver, self.purchase_time, self.email)
+            self.phone_number, self.receiver, self.purchase_time, self.email, self.successful)
 
 class DBCommands:
 
