@@ -247,9 +247,55 @@ async def enter_description(message: Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.PHOTO)
 async def add_photo(message: types.Message, state: FSMContext):
     photo = message.photo[-1].file_id
+    media = types.MediaGroup()
+    media.attach_photo('<{photo}>'.format(photo=photo))
     data = await state.get_data()
     item: Item = data.get("item")
-    item.photo = photo
+    item.media = media
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Готово"), callback_data="done")],
+            ]
+    )
+
+    await message.answer_media_group(
+        media=item.media,
+        caption=("Название: {name}"
+                  '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
+
+    await NewItem.Photo.set()
+    await state.update_data(item=item)
+
+
+@dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.VIDEO)
+async def add_photo(message: types.Message, state: FSMContext):
+    video = message.video[-1].file_id
+    media = types.MediaGroup()
+    media.attach_video('<{video}>'.format(video=video))
+    data = await state.get_data()
+    item: Item = data.get("item")
+    item.media = media
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+            [
+                [InlineKeyboardButton(text=("Готово"), callback_data="done")],
+            ]
+    )
+
+    await message.answer_media_group(
+        media=item.media,
+        caption=("Название: {name}"
+                  '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
+
+    await NewItem.Photo.set()
+    await state.update_data(item=item)
+
+
+@dp.message_handler(user_id=admin_id, text="done", state=NewItem.Photo)
+async def add_photo(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    item: Item = data.get("item")
     button = InlineKeyboardMarkup(
         inline_keyboard=
             [
@@ -257,8 +303,8 @@ async def add_photo(message: types.Message, state: FSMContext):
             ]
     )
 
-    await message.answer_photo(
-        photo=photo,
+    await message.answer_media_group(
+        media=item.media,
         caption=("Название: {name}"
                   '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name), reply_markup=button)
 
