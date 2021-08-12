@@ -37,14 +37,12 @@ class Item(db.Model):
     name = Column(String(50))
     description = Column(String(500))
     photo = Column(String(250))
-    price = Column(Integer)
+    price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
-    chkhskjds = Column(Boolean, default=False)
-
 
     def __repr__(self):
-        return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}', chkhskjds='{}')>".format(
-            self.id, self.name, self.description, self.price, self.category, self.chkhskjds)
+        return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}')>".format(
+            self.id, self.name, self.description, self.price, self.category)
 
 
 class Purchase(db.Model):
@@ -54,7 +52,7 @@ class Purchase(db.Model):
     id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)
-    amount = Column(Integer)
+    amount = Column(Integer)  # Цена в копейках (потом делим на 100)
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
     shipping_address = Column(JSON)
@@ -62,11 +60,6 @@ class Purchase(db.Model):
     email = Column(String(200))
     receiver = Column(String(100))
     successful = Column(Boolean, default=False)
-
-    def __pepr__(self):
-        return "<Purchase(id='{}', buyer='{}', item_id='{}', amount='{}', shipping_address='{}', phone_number='{}', receiver='{}', purchase_time='{}', quanity='{}', email='{}', successful='{}')>".format(
-            self.id, self.buyer, self.item_id, self.quantity, self.amount, self.shipping_address,
-            self.phone_number, self.receiver, self.purchase_time, self.email, self.successful)
 
 class DBCommands:
 
@@ -112,7 +105,7 @@ class DBCommands:
 
     async def show_hats(self):
         category = "add_hat"
-        items = await Item.query.where(Item.category == category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == Item.category).limit(5).gino.all()
 
         return items
 
@@ -147,9 +140,10 @@ class DBCommands:
         return items
 
     async def show_order(self):
-        purchases = await Purchase.query.gino.all()
+        order = await Purchase.query.limit(5).gino.all()
 
-        return purchases
+        return order
+
 
 
 async def create_db():
