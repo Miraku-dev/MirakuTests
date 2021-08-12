@@ -39,10 +39,12 @@ class Item(db.Model):
     photo = Column(String(250))
     price = Column(Integer)
     category = Column(String(25))
+    chkhskjds = Column(Boolean, default=False)
+
 
     def __repr__(self):
-        return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}')>".format(
-            self.id, self.name, self.description, self.price, self.category)
+        return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}', chkhskjds='{}')>".format(
+            self.id, self.name, self.description, self.price, self.category, self.chkhskjds)
 
 
 class Purchase(db.Model):
