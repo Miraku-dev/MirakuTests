@@ -114,15 +114,16 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer_media_group(
-            media=item.media,
-            caption=text.format(
+        media = item.media
+        media.attach_photo(None, text.format(
                 id=item.id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100
-            ),
+            ))
+        # Отправляем фотку товара с подписью и кнопкой "купить"
+        await call.message.answer_media_group(
+            media=item.media,
             reply_markup=markup
         )
         await state.update_data(id=id)
