@@ -105,7 +105,7 @@ class DBCommands:
 
     async def show_hats(self):
         category = "add_hat"
-        items = await Item.query.where(Item.category == Item.category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == category).limit(5).gino.all()
 
         return items
 
