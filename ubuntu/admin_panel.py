@@ -261,8 +261,7 @@ async def add_photo(message: types.Message, state: FSMContext):
     media.attach_photo(None, ("Название: {name}"
                   '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
 
-    await message.answer_media_group(
-        media=item.media)
+    await message.answer_media_group(media=media)
     await message.edit_reply_markup(reply_markup=button)
 
     await NewItem.Photo.set()
@@ -309,8 +308,8 @@ async def add_confirm(call: types.CallbackQuery, state: FSMContext):
     media.attach_photo(None, "Название: {name}"
                   '\nПришлите мне цену товара в копейках или нажмите "Отмена"'.format(name=item.name), reply_markup=button)
 
-    await call.answer_media_group(media=item.media)
-    await call.edit_reply_markup(reply_markup=button)
+    await call.message.answer_media_group(media=item.media)
+    await call.message.edit_reply_markup(reply_markup=button)
 
     await NewItem.Price.set()
     await state.update_data(item=item)
