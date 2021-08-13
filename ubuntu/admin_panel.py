@@ -262,14 +262,15 @@ async def add_photo(message: types.Message, state: FSMContext):
                   '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
 
     await message.answer_media_group(
-        media=item.media, reply_markup=button)
+        media=item.media)
+    await message.edit_reply_markup(reply_markup=button)
 
     await NewItem.Photo.set()
     await state.update_data(item=item)
 
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.VIDEO)
-async def add_photo(message: types.Message, state: FSMContext):
+async def add_video(message: types.Message, state: FSMContext):
     video = message.video.file_id
     data = await state.get_data()
     item: Item = data.get("item")
@@ -286,14 +287,15 @@ async def add_photo(message: types.Message, state: FSMContext):
             ]
     )
 
-    await message.answer_media_group(media=item.media, reply_markup=button)
+    await message.answer_media_group(media=item.media)
+    await message.edit_reply_markup(reply_markup=button)
 
     await NewItem.Photo.set()
     await state.update_data(item=item)
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="done", state=NewItem.Photo)
-async def add_photo(call: types.CallbackQuery, state: FSMContext):
+async def add_confirm(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     item: Item = data.get("item")
     media = item.media
