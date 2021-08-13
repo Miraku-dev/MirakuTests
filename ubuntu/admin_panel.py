@@ -293,7 +293,7 @@ async def add_photo(message: types.Message, state: FSMContext):
 
 
 @dp.callback_query_handler(user_id=admin_id, text_constains="done", state=NewItem.Photo)
-async def add_photo(call: types.Message, state: FSMContext):
+async def add_photo(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     item: Item = data.get("item")
     media = item.media
