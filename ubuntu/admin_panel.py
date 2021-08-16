@@ -248,24 +248,56 @@ async def enter_description(message: Message, state: FSMContext):
 async def add_photo(message: types.Message, state: FSMContext):
     photo = message.photo[-1].file_id
     media = types.MediaGroup()
-    media.attach_photo('<{photo}>'.format(photo=photo))
     data = await state.get_data()
     item: Item = data.get("item")
     item.media = media
-    button = InlineKeyboardMarkup(
-        inline_keyboard=
-            [
-                [InlineKeyboardButton(text=("Готово"), callback_data="done")],
-            ]
-    )
-    media.attach_photo(None, ("Название: {name}"
-                  '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
+    category = item.category
 
-    await message.answer_media_group(media=media)
-    await message.edit_reply_markup(reply_markup=button)
+    if category == "add_hat":
+        all_items = await db.show_hats()
+    if category == "add_accessories":
+        all_items = await db.show_accessories()
+    if category == "add_malling":
+        all_items = await db.show_malling()
+    if category == "add_pants":
+        all_items = await db.show_pants()
+    if category == "add_shoes":
+        all_items = await db.show_shoes()
+    if category == "add_other":
+        all_items = await db.show_hats()
 
-    await NewItem.Photo.set()
-    await state.update_data(item=item)
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("{description}\n")
+        
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
+
+        if message.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        
+        media.attach_photo(('<{photo}>'.format(photo=photo)), (text.format(
+                id=item.id,
+                name=item.name,
+                description=item.description,
+                price=item.price / 100)
+        ))
+        
+        button = InlineKeyboardMarkup(
+            inline_keyboard=
+                [
+                    [InlineKeyboardButton(text=("Готово"), callback_data="done")],
+                ]
+        )
+        await message.answer_media_group(media=media)
+        await message.edit_reply_markup(reply_markup=button)
+        await message.edit_caption(caption=("Название: {name}"
+                    '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
+
+        await NewItem.Photo.set()
+        await state.update_data(item=item)
 
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.VIDEO)
@@ -288,6 +320,8 @@ async def add_video(message: types.Message, state: FSMContext):
 
     await message.answer_media_group(media=item.media)
     await message.edit_reply_markup(reply_markup=button)
+    await message.edit_caption(caption=("Название: {name}"
+                  '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
 
     await NewItem.Photo.set()
     await state.update_data(item=item)
@@ -305,12 +339,10 @@ async def add_confirm(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    media.attach_photo(None, "Название: {name}"
-                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"'.format(name=item.name), reply_markup=button)
-
     await call.message.answer_media_group(media=item.media)
     await call.message.edit_reply_markup(reply_markup=button)
-
+    await call.message.edit_caption(caption="Название: {name}"
+                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"'.format(name=item.name))
     await NewItem.Price.set()
     await state.update_data(item=item)
 
