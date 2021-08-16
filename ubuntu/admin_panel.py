@@ -101,6 +101,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
+    await state.update_data(category=category)
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_accessories", state=NewItem.Category)
@@ -117,6 +118,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
+    await state.update_data(category=category)
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_pants", state=NewItem.Category)
@@ -133,6 +135,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
+    await state.update_data(category=category)
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_shoes", state=NewItem.Category)
@@ -149,6 +152,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
+    await state.update_data(category=category)
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_malling", state=NewItem.Category)
@@ -165,6 +169,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
+    await state.update_data(category=category)
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_other", state=NewItem.Category)
@@ -181,6 +186,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Введите название товара или нажмите:", reply_markup=button)
     await NewItem.Name.set()
     await state.update_data(item=item)
+    await state.update_data(category=category)
 
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Name)
@@ -251,7 +257,7 @@ async def add_photo(message: types.Message, state: FSMContext):
     data = await state.get_data()
     item: Item = data.get("item")
     item.media = media
-    category = item.category
+    category = data.get("category")
 
     if category == "add_hat":
         all_items = await db.show_hats()
@@ -277,7 +283,7 @@ async def add_photo(message: types.Message, state: FSMContext):
         if message.from_user.id == admin_id:
             text += ("\n"
                         "id: \t{id}")
-            
+
         media.attach_photo(('<{photo}>'.format(photo=photo)), (text.format(
                 id=item.id,
                 name=item.name,
@@ -291,12 +297,12 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text=("Готово"), callback_data="done")],
                     ]
             )
-        await message.answer_photo(photo=photo, caption=("Фото добавлено."
-                        "Название: {name}"
-                        '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
+    await message.answer_photo(photo=photo, caption=("Фото добавлено."
+            "Название: {name}"
+            '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
 
-        await NewItem.Photo.set()
-        await state.update_data(item=item)
+    await NewItem.Photo.set()
+    await state.update_data(item=item)
 
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.VIDEO)
