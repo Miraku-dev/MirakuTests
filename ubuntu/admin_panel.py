@@ -291,10 +291,9 @@ async def add_photo(message: types.Message, state: FSMContext):
                     [InlineKeyboardButton(text=("Готово"), callback_data="done")],
                 ]
         )
-        await message.answer_media_group(media=media)
-        await message.edit_reply_markup(reply_markup=button)
-        await message.edit_caption(caption=("Название: {name}"
-                    '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
+        await message.answer_photo(photo=photo, caption=("Фото добавлено."
+                    "Название: {name}"
+                    '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
 
         await NewItem.Photo.set()
         await state.update_data(item=item)
@@ -307,8 +306,7 @@ async def add_video(message: types.Message, state: FSMContext):
     item: Item = data.get("item")
     media = types.MediaGroup()
 
-    media.attach_video('<{video}>'.format(video=video), ("Название: {name}"
-                  '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
+    media.attach_video('<{video}>'.format(video=video))
     
     item.media = media
     button = InlineKeyboardMarkup(
@@ -317,12 +315,9 @@ async def add_video(message: types.Message, state: FSMContext):
                 [InlineKeyboardButton(text=("Готово"), callback_data="done")],
             ]
     )
-
-    await message.answer_media_group(media=item.media)
-    await message.edit_reply_markup(reply_markup=button)
-    await message.edit_caption(caption=("Название: {name}"
-                  '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name))
-
+    await message.answer_video(video=video, caption=("Видео добавлено."
+                "Название: {name}"
+                '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
     await NewItem.Photo.set()
     await state.update_data(item=item)
 
@@ -339,10 +334,8 @@ async def add_confirm(call: types.CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer_media_group(media=item.media)
-    await call.message.edit_reply_markup(reply_markup=button)
-    await call.message.edit_caption(caption="Название: {name}"
-                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"'.format(name=item.name))
+    await call.message.answer(("Название: {name}"
+                  '\nПришлите мне цену товара в копейках или нажмите "Отмена"').format(name=item.name), reply_markup=button)
     await NewItem.Price.set()
     await state.update_data(item=item)
 
