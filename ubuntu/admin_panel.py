@@ -271,29 +271,29 @@ async def add_photo(message: types.Message, state: FSMContext):
 
         if item.description != "none":
             text += ("{description}\n")
-        
+            
         text += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if message.from_user.id == admin_id:
             text += ("\n"
-                  "id: \t{id}")
-        
+                        "id: \t{id}")
+            
         media.attach_photo(('<{photo}>'.format(photo=photo)), (text.format(
                 id=item.id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100)
-        ))
-        
+            ))
+            
         button = InlineKeyboardMarkup(
             inline_keyboard=
-                [
-                    [InlineKeyboardButton(text=("Готово"), callback_data="done")],
-                ]
-        )
+                    [
+                        [InlineKeyboardButton(text=("Готово"), callback_data="done")],
+                    ]
+            )
         await message.answer_photo(photo=photo, caption=("Фото добавлено."
-                    "Название: {name}"
-                    '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
+                        "Название: {name}"
+                        '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
 
         await NewItem.Photo.set()
         await state.update_data(item=item)
