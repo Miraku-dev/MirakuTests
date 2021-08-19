@@ -7,6 +7,7 @@ from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, shipping_
                                 
 from aiogram.types.callback_query import CallbackQuery
 from aiogram.types.message import ContentType, Message
+from sqlalchemy.sql.elements import Null
 
 from config import admin_id
 from load_all import dp, bot
@@ -257,8 +258,9 @@ async def add_photo(message: types.Message, state: FSMContext):
     media = data.get("media")
     if media == None:
         media = types.MediaGroup()
+    if media == Null:
+        media = types.MediaGroup()
     item: Item = data.get("item")
-    item.media = media
     category = data.get("category")
 
     if category == "add_hat":
@@ -307,6 +309,8 @@ async def add_photo(message: types.Message, state: FSMContext):
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
             '\nПришлите ещё одно фото или видео или нажмите "Готово"'.format(name=item.name), reply_markup=button)
+            
+    item.media = media
 
     await NewItem.Photo.set()
     await state.update_data(item=item)
