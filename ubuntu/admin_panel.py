@@ -258,8 +258,6 @@ async def add_photo(message: types.Message, state: FSMContext):
     media = data.get("media")
     if media == None:
         media = types.MediaGroup()
-    if media == Null:
-        media = types.MediaGroup()
     item: Item = data.get("item")
     category = data.get("category")
 
