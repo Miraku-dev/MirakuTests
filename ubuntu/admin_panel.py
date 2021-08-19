@@ -253,22 +253,29 @@ async def enter_description(message: Message, state: FSMContext):
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.PHOTO)
 async def add_photo(message: types.Message, state: FSMContext):
     photo = message.photo[-1].file_id
-    media = types.MediaGroup()
     data = await state.get_data()
+    media = data.get("media")
+    if media == None:
+        media = types.MediaGroup()
     item: Item = data.get("item")
     item.media = media
     category = data.get("category")
 
     if category == "add_hat":
         all_items = await db.show_hats()
+        
     if category == "add_accessories":
         all_items = await db.show_accessories()
+
     if category == "add_malling":
         all_items = await db.show_malling()
+
     if category == "add_pants":
         all_items = await db.show_pants()
+
     if category == "add_shoes":
         all_items = await db.show_shoes()
+
     if category == "add_other":
         all_items = await db.show_hats()
 
@@ -297,7 +304,7 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text=("Готово"), callback_data="done")],
                     ]
             )
-    await message.answer_photo(photo=photo, caption="Фото добавлено."
+    await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
             '\nПришлите ещё одно фото или видео или нажмите "Готово"'.format(name=item.name), reply_markup=button)
 
@@ -310,10 +317,10 @@ async def add_video(message: types.Message, state: FSMContext):
     video = message.video.file_id
     data = await state.get_data()
     item: Item = data.get("item")
-    media = types.MediaGroup()
-
+    media = data.get("media")
+    if media == None:
+        media = types.MediaGroup()
     media.attach_video('<{video}>'.format(video=video))
-    
     item.media = media
     button = InlineKeyboardMarkup(
         inline_keyboard=
@@ -321,7 +328,7 @@ async def add_video(message: types.Message, state: FSMContext):
                 [InlineKeyboardButton(text=("Готово"), callback_data="done")],
             ]
     )
-    await message.answer_video(video=video, caption=("Видео добавлено."
+    await message.answer_video(video=video, caption=("Видео добавлено.\n"
                 "Название: {name}"
                 '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
     await NewItem.Photo.set()
@@ -332,7 +339,7 @@ async def add_video(message: types.Message, state: FSMContext):
 async def add_confirm(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     item: Item = data.get("item")
-    media = item.media
+    media = data.get("media")
     item.media = media
     button = InlineKeyboardMarkup(
         inline_keyboard=
