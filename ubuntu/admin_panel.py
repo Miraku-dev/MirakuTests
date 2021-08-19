@@ -293,12 +293,12 @@ async def add_photo(message: types.Message, state: FSMContext):
             text += ("\n"
                         "id: \t{id}")
 
-    media.attach_photo(('<{photo}>'.format(photo=photo)), (text.format(
+    media.attach_photo('<{photo}>'.format(photo=photo), text.format(
                 id=item.id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100)
-            ))
+            )
             
     button = InlineKeyboardMarkup(
         inline_keyboard=
