@@ -312,8 +312,8 @@ async def add_photo(message: types.Message, state: FSMContext):
             
     item.media = media
 
-    await NewItem.Photo.set()
     await state.update_data(item=item)
+    await NewItem.Photo.set()
 
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.VIDEO)
