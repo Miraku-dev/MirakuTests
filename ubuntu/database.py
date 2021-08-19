@@ -41,8 +41,8 @@ class Item(db.Model):
     category = Column(String(25))
 
     def __repr__(self):
-        return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}')>".format(
-            self.id, self.name, self.description, self.price, self.category)
+        return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}', media='{}')>".format(
+            self.id, self.name, self.description, self.price, self.category, self.media)
 
 
 class Purchase(db.Model):
