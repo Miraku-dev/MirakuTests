@@ -282,18 +282,18 @@ async def add_photo(message: types.Message, state: FSMContext):
         all_items = await db.show_hats()
 
     for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n")
+        text1 = ("\t<b>{name}</b>\n")
 
         if item.description != "none":
-            text += ("{description}\n")
+            text1 += ("{description}\n")
             
-        text += ("\n<b>Цена:</b> \t{price:,}\n")
+        text1 += ("\n<b>Цена:</b> \t{price:,}\n")
 
         if message.from_user.id == admin_id:
-            text += ("\n"
+            text1 += ("\n"
                         "id: \t{id}")
 
-    media.attach_photo('<{photo}>'.format(photo=photo), text.format(
+    media.attach_photo('<{photo}>'.format(photo=photo), text=text1.format(
                 id=item.id,
                 name=item.name,
                 description=item.description,
