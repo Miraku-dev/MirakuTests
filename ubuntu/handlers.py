@@ -116,7 +116,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         )
         # Отправляем фотку товара с подписью и кнопкой "купить"
         await call.message.answer_media_group(
-            media=item.media, reply_markup=markup)
+            media=item.media)
+        await call.message.edit_reply_markup(reply_markup=markup)
         await state.update_data(id=id)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
