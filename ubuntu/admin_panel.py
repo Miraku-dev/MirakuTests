@@ -258,6 +258,8 @@ async def add_photo(message: types.Message, state: FSMContext):
     media = data.get("media")
     if media == None:
         media = types.MediaGroup()
+    if media == Null:
+        media = types.MediaGroup()
     item: Item = data.get("item")
     category = data.get("category")
 
@@ -291,27 +293,27 @@ async def add_photo(message: types.Message, state: FSMContext):
             text += ("\n"
                         "id: \t{id}")
 
-        media.attach_photo(('<{photo}>'.format(photo=photo)), (text.format(
+    media.attach_photo(('<{photo}>'.format(photo=photo)), (text.format(
                 id=item.id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100)
             ))
             
-        button = InlineKeyboardMarkup(
-            inline_keyboard=
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
                     [
                         [InlineKeyboardButton(text=("Готово"), callback_data="done")],
                     ]
             )
-        await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
+    await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
             '\nПришлите ещё одно фото или видео или нажмите "Готово"'.format(name=item.name), reply_markup=button)
 
-        item.media = media
+    item.media = media
 
-        await state.update_data(item=item)
-        await NewItem.Photo.set()
+    await state.update_data(item=item)
+    await NewItem.Photo.set()
 
 
 @dp.message_handler(user_id=admin_id, state=NewItem.Photo, content_types=types.ContentType.VIDEO)
