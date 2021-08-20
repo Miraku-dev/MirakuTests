@@ -36,7 +36,7 @@ class Item(db.Model):
     id = Column(Integer, Sequence('item_seq'), primary_key=True)
     name = Column(String(50))
     description = Column(String(1250))
-    media = Column(String)
+    media = Column(list)
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
 
