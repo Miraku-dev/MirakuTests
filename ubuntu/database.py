@@ -36,7 +36,7 @@ class Item(db.Model):
     id = Column(Integer, Sequence('item_seq'), primary_key=True)
     name = Column(String(50))
     description = Column(String(1250))
-    media = Column(String(2250))
+    media = Column(Integer)
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
 
@@ -49,7 +49,7 @@ class Purchase(db.Model):
     __tablename__ = 'purchases'
     query: sql.Select
 
-    id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
+    pyrchase_id = Column(Integer, Sequence('order_id_seq'), primary_key=True)
     buyer = Column(BigInteger)
     item_id = Column(Integer)
     amount = Column(Integer)  # Цена в копейках (потом делим на 100)
