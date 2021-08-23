@@ -116,7 +116,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ]
         )
     element = item.media
-    print(element)
+    await print(element)
     media = MediaGroup()
     for elem in element:
         media.attach_photo('<{elemen}>'.format(elemen=elem))
