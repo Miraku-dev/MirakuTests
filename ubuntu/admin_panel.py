@@ -263,25 +263,25 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    if item.photo_1 == Null:
+    if item.photo_1 == None:
         item.photo_1 = photo
-    if item.photo_1 != Null:
+    if item.photo_1 != None:
         item.photo_2 = photo
-    if item.photo_2 != Null:
+    if item.photo_2 != None:
         item.photo_3 = photo
-    if item.photo_3 != Null:
+    if item.photo_3 != None:
         item.photo_4 = photo
-    if item.photo_4 != Null:
+    if item.photo_4 != None:
         item.photo_5 = photo
-    if item.photo_5 != Null:
+    if item.photo_5 != None:
         item.photo_6 = photo
-    if item.photo_6 != Null:
+    if item.photo_6 != None:
         item.photo_7 = photo
-    if item.photo_7 != Null:
+    if item.photo_7 != None:
         item.photo_8 = photo
-    if item.photo_8 != Null:
+    if item.photo_8 != None:
         item.photo_9 = photo
-    if item.photo_9 != Null:
+    if item.photo_9 != None:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
