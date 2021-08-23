@@ -116,11 +116,10 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ]
         )
     element = item.media
-    await print(element)
     media = MediaGroup()
     for elem in element:
         media.attach_photo('<{elemen}>'.format(elemen=elem))
-    #await call.message.answer_media_group(media=media)
+    await call.message.answer_media_group(media=media)
     #await call.message.edit_reply_markup(reply_markup=markup)
     #await call.message.edit_caption(caption=text.format(id=item.id,
     #            name=item.name,
@@ -128,8 +127,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     #            price=item.price / 100))
     #await state.update_data(id=id)
     # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-    #await asyncio.sleep(0.3)
-    #await states.List_item.Next.set()
+    await asyncio.sleep(0.3)
+    await states.List_item.Next.set()
 
 
 # Показываем список доступных товаров
