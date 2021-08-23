@@ -6,6 +6,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
                            CallbackQuery, LabeledPrice, PreCheckoutQuery, InputMediaPhoto, InputMediaVideo)
+from aiogram.types.input_media import MediaGroup
 from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
 
@@ -102,8 +103,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             text += ("\n"
                   "id: \t{id}")
      
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=
+    markup = InlineKeyboardMarkup(
+        inline_keyboard=
             [
                 [
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
@@ -114,16 +115,20 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        await call.message.answer_media_group(media=item.media)
-        await call.message.edit_reply_markup(reply_markup=markup)
-        await call.message.edit_caption(caption=text.format(id=item.id,
+    element = item.media
+    media = MediaGroup()
+    for elem in element:
+        media.attach_photo('<{elemen}>'.format(elemen=elem))
+    await call.message.answer_media_group(media=media)
+    await call.message.edit_reply_markup(reply_markup=markup)
+    await call.message.edit_caption(caption=text.format(id=item.id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100))
-        await state.update_data(id=id)
-        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-        await asyncio.sleep(0.3)
-        await states.List_item.Next.set()
+    await state.update_data(id=id)
+    # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+    await asyncio.sleep(0.3)
+    await states.List_item.Next.set()
 
 
 # Показываем список доступных товаров
