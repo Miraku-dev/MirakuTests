@@ -37,7 +37,7 @@ class Item(db.Model):
     id = Column(Integer, Sequence('item_seq'), primary_key=True)
     name = Column(String(50))
     description = Column(String(1250))
-    photo_1 = Column(String(250))
+    photo_1 = Column(String(250), nullable=True)
     photo_2 = Column(String(250), nullable=True)
     photo_3 = Column(String(250), nullable=True)
     photo_4 = Column(String(250), nullable=True)

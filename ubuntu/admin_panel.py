@@ -1,3 +1,4 @@
+from _typeshed import NoneType
 from asyncio import sleep
 import asyncio
 from aiogram import types
@@ -263,25 +264,25 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    if item.photo_1 == None:
+    if item.photo_1 == NoneType:
         item.photo_1 = photo
-    if item.photo_1 != None:
+    elif item.photo_1 != NoneType:
         item.photo_2 = photo
-    if item.photo_2 != None:
+    if item.photo_2 != NoneType:
         item.photo_3 = photo
-    if item.photo_3 != None:
+    if item.photo_3 != NoneType:
         item.photo_4 = photo
-    if item.photo_4 != None:
+    if item.photo_4 != NoneType:
         item.photo_5 = photo
-    if item.photo_5 != None:
+    if item.photo_5 != NoneType:
         item.photo_6 = photo
-    if item.photo_6 != None:
+    if item.photo_6 != NoneType:
         item.photo_7 = photo
-    if item.photo_7 != None:
+    if item.photo_7 != NoneType:
         item.photo_8 = photo
-    if item.photo_8 != None:
+    if item.photo_8 != NoneType:
         item.photo_9 = photo
-    if item.photo_9 != None:
+    if item.photo_9 != NoneType:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
