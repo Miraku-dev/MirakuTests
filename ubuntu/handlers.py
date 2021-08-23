@@ -10,6 +10,7 @@ from aiogram.types.input_media import MediaGroup
 from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
 from sqlalchemy.sql.elements import Null
+from sqlalchemy.sql.expression import null
 
 import database
 import states
@@ -121,21 +122,21 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 name=item.name,
                 description=item.description,
                 price=item.price / 100))
-    if item.photo_2 != Null:
+    if item.photo_2 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_2))
-    if item.photo_3 != Null:
+    if item.photo_3 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_3))
-    if item.photo_4 != Null:
+    if item.photo_4 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_4))
-    if item.photo_5 != Null:
+    if item.photo_5 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_5))
-    if item.photo_6 != Null:
+    if item.photo_6 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_6))
-    if item.photo_7 != Null:
+    if item.photo_7 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_7))
-    if item.photo_8 != Null:
+    if item.photo_8 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_8))
-    if item.photo_9 != Null:
+    if item.photo_9 != null:
         media.attach_photo('{photo}'.format(photo=item.photo_9))
     await call.message.answer_media_group(media=media)
     await call.message.edit_reply_markup(reply_markup=markup)

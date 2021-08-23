@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 from asyncio import sleep
 import asyncio
 from aiogram import types
@@ -9,6 +8,7 @@ from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, shipping_
 from aiogram.types.callback_query import CallbackQuery
 from aiogram.types.message import ContentType, Message
 from sqlalchemy.sql.elements import Null
+from sqlalchemy.sql.expression import null
 
 from config import admin_id
 from load_all import dp, bot
@@ -264,25 +264,25 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    if item.photo_1 == NoneType:
+    if item.photo_1 == null:
         item.photo_1 = photo
-    elif item.photo_1 != NoneType:
+    if item.photo_1 != null:
         item.photo_2 = photo
-    if item.photo_2 != NoneType:
+    if item.photo_2 != null:
         item.photo_3 = photo
-    if item.photo_3 != NoneType:
+    if item.photo_3 != null:
         item.photo_4 = photo
-    if item.photo_4 != NoneType:
+    if item.photo_4 != null:
         item.photo_5 = photo
-    if item.photo_5 != NoneType:
+    if item.photo_5 != null:
         item.photo_6 = photo
-    if item.photo_6 != NoneType:
+    if item.photo_6 != null:
         item.photo_7 = photo
-    if item.photo_7 != NoneType:
+    if item.photo_7 != null:
         item.photo_8 = photo
-    if item.photo_8 != NoneType:
+    if item.photo_8 != null:
         item.photo_9 = photo
-    if item.photo_9 != NoneType:
+    if item.photo_9 != null:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
