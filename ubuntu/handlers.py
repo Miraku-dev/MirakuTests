@@ -1,5 +1,4 @@
 import asyncio
-from asyncio.windows_events import NULL
 import datetime
 
 from aiogram import types
@@ -123,21 +122,21 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 name=item.name,
                 description=item.description,
                 price=item.price / 100))
-    if item.photo_2 != NULL:
+    if item.photo_2 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_2))
-    if item.photo_3 != NULL:
+    if item.photo_3 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_3))
-    if item.photo_4 != NULL:
+    if item.photo_4 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_4))
-    if item.photo_5 != NULL:
+    if item.photo_5 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_5))
-    if item.photo_6 != NULL:
+    if item.photo_6 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_6))
-    if item.photo_7 != NULL:
+    if item.photo_7 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_7))
-    if item.photo_8 != NULL:
+    if item.photo_8 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_8))
-    if item.photo_9 != NULL:
+    if item.photo_9 != None:
         media.attach_photo('{photo}'.format(photo=item.photo_9))
     await call.message.answer_media_group(media=media)
     await call.message.edit_reply_markup(reply_markup=markup)

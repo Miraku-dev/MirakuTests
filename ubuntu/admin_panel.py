@@ -1,6 +1,5 @@
 from asyncio import sleep
 import asyncio
-from asyncio.windows_events import NULL
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, shipping_address, 
@@ -8,8 +7,6 @@ from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, shipping_
                                 
 from aiogram.types.callback_query import CallbackQuery
 from aiogram.types.message import ContentType, Message
-from sqlalchemy.sql.elements import Null
-from sqlalchemy.sql.expression import null
 
 from config import admin_id
 from load_all import dp, bot
@@ -265,25 +262,25 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    if item.photo_1 == NULL:
+    if item.photo_1 == None:
         item.photo_1 = photo
-    if item.photo_1 != NULL:
+    if item.photo_1 != None:
         item.photo_2 = photo
-    if item.photo_2 != NULL:
+    if item.photo_2 != None:
         item.photo_3 = photo
-    if item.photo_3 != NULL:
+    if item.photo_3 != None:
         item.photo_4 = photo
-    if item.photo_4 != NULL:
+    if item.photo_4 != None:
         item.photo_5 = photo
-    if item.photo_5 != NULL:
+    if item.photo_5 != None:
         item.photo_6 = photo
-    if item.photo_6 != NULL:
+    if item.photo_6 != None:
         item.photo_7 = photo
-    if item.photo_7 != NULL:
+    if item.photo_7 != None:
         item.photo_8 = photo
-    if item.photo_8 != NULL:
+    if item.photo_8 != None:
         item.photo_9 = photo
-    if item.photo_9 != NULL:
+    if item.photo_9 != None:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
@@ -305,25 +302,25 @@ async def add_video(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    if item.photo_1 == Null:
+    if item.photo_1 == None:
         item.photo_1 = video
-    if item.photo_1 != Null:
+    if item.photo_1 != None:
         item.photo_2 = video
-    if item.photo_2 != Null:
+    if item.photo_2 != None:
         item.photo_3 = video
-    if item.photo_3 != Null:
+    if item.photo_3 != None:
         item.photo_4 = video
-    if item.photo_4 != Null:
+    if item.photo_4 != None:
         item.photo_5 = video
-    if item.photo_5 != Null:
+    if item.photo_5 != None:
         item.photo_6 = video
-    if item.photo_6 != Null:
+    if item.photo_6 != None:
         item.photo_7 = video
-    if item.photo_7 != Null:
+    if item.photo_7 != None:
         item.photo_8 = video
-    if item.photo_8 != Null:
+    if item.photo_8 != None:
         item.photo_9 = video
-    if item.photo_9 != Null:
+    if item.photo_9 != None:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
     button = InlineKeyboardMarkup(
