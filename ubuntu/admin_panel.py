@@ -1,5 +1,6 @@
 from asyncio import sleep
 import asyncio
+from asyncio.windows_events import NULL
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, shipping_address, 
@@ -264,25 +265,25 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    if item.photo_1 == null:
+    if item.photo_1 == NULL:
         item.photo_1 = photo
-    if item.photo_1 != null:
+    if item.photo_1 != NULL:
         item.photo_2 = photo
-    if item.photo_2 != null:
+    if item.photo_2 != NULL:
         item.photo_3 = photo
-    if item.photo_3 != null:
+    if item.photo_3 != NULL:
         item.photo_4 = photo
-    if item.photo_4 != null:
+    if item.photo_4 != NULL:
         item.photo_5 = photo
-    if item.photo_5 != null:
+    if item.photo_5 != NULL:
         item.photo_6 = photo
-    if item.photo_6 != null:
+    if item.photo_6 != NULL:
         item.photo_7 = photo
-    if item.photo_7 != null:
+    if item.photo_7 != NULL:
         item.photo_8 = photo
-    if item.photo_8 != null:
+    if item.photo_8 != NULL:
         item.photo_9 = photo
-    if item.photo_9 != null:
+    if item.photo_9 != NULL:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"

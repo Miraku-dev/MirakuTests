@@ -1,4 +1,5 @@
 import asyncio
+from asyncio.windows_events import NULL
 import datetime
 
 from aiogram import types
@@ -118,25 +119,25 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             ]
         )
     media = MediaGroup()
-    media.attach_photo('<{photo}>'.format(photo=item.photo_1), text.format(id=item.id,
+    media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
                 name=item.name,
                 description=item.description,
                 price=item.price / 100))
-    if item.photo_2 != null:
+    if item.photo_2 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_2))
-    if item.photo_3 != null:
+    if item.photo_3 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_3))
-    if item.photo_4 != null:
+    if item.photo_4 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_4))
-    if item.photo_5 != null:
+    if item.photo_5 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_5))
-    if item.photo_6 != null:
+    if item.photo_6 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_6))
-    if item.photo_7 != null:
+    if item.photo_7 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_7))
-    if item.photo_8 != null:
+    if item.photo_8 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_8))
-    if item.photo_9 != null:
+    if item.photo_9 != NULL:
         media.attach_photo('{photo}'.format(photo=item.photo_9))
     await call.message.answer_media_group(media=media)
     await call.message.edit_reply_markup(reply_markup=markup)
