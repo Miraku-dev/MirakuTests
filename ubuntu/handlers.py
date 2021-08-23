@@ -9,6 +9,7 @@ from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
 from aiogram.types.input_media import MediaGroup
 from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
+from sqlalchemy.sql.elements import Null
 
 import database
 import states
@@ -115,17 +116,30 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-    element = item.media
     media = MediaGroup()
-    for elem in element:
-        media.attach_photo('<{elemen}>'.format(elemen=elem))
+    media.attach_photo('<{photo}>'.format(photo=item.photo_1), text.format(id=item.id,
+                name=item.name,
+                description=item.description,
+                price=item.price / 100))
+    if item.photo_2 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_2))
+    if item.photo_3 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_3))
+    if item.photo_4 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_4))
+    if item.photo_5 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_5))
+    if item.photo_6 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_6))
+    if item.photo_7 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_7))
+    if item.photo_8 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_8))
+    if item.photo_9 != Null:
+        media.attach_photo('<{photo}>'.format(photo=item.photo_9))
     await call.message.answer_media_group(media=media)
-    #await call.message.edit_reply_markup(reply_markup=markup)
-    #await call.message.edit_caption(caption=text.format(id=item.id,
-    #            name=item.name,
-    #            description=item.description,
-    #            price=item.price / 100))
-    #await state.update_data(id=id)
+    await call.message.edit_reply_markup(reply_markup=markup)
+    await state.update_data(id=id)
     # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
     await asyncio.sleep(0.3)
     await states.List_item.Next.set()

@@ -37,13 +37,21 @@ class Item(db.Model):
     id = Column(Integer, Sequence('item_seq'), primary_key=True)
     name = Column(String(50))
     description = Column(String(1250))
-    media = Column(PickleType)
+    photo_1 = Column(String(250))
+    photo_2 = Column(String(250), nullable=True)
+    photo_3 = Column(String(250), nullable=True)
+    photo_4 = Column(String(250), nullable=True)
+    photo_5 = Column(String(250), nullable=True)
+    photo_6 = Column(String(250), nullable=True)
+    photo_7 = Column(String(250), nullable=True)
+    photo_8 = Column(String(250), nullable=True)
+    photo_9 = Column(String(250), nullable=True)
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
 
     def __repr__(self):
         return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}')>".format(
-            self.id, self.name, self.description, self.price, self.category, self.media)
+            self.id, self.name, self.description, self.price, self.category)
 
 
 class Purchase(db.Model):
@@ -57,8 +65,8 @@ class Purchase(db.Model):
     quantity = Column(Integer)
     purchase_time = Column(TIMESTAMP)
     shipping_address = Column(JSON)
-    phone_number = Column(String(50))
-    email = Column(String(200))
+    phone_number = Column(String(50), nullable=True)
+    email = Column(String(200), nullable=True)
     receiver = Column(String(100))
     successful = Column(Boolean, default=False)
 

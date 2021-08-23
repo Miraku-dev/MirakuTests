@@ -12,7 +12,7 @@ from sqlalchemy.sql.elements import Null
 from config import admin_id
 from load_all import dp, bot
 from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
-from database import Item, Purchase, User, DBCommands
+from database import Item, Purchase, User, DBCommands, Photo
 import buttons
 
 db = DBCommands()
@@ -256,22 +256,37 @@ async def add_photo(message: types.Message, state: FSMContext):
     photo = message.photo[-1].file_id
     data = await state.get_data()
     item: Item = data.get("item")
-    media = data.get("media")
-    if media == None:
-        media = []
-    media.append(photo)
-    item.media = media
-
     button = InlineKeyboardMarkup(
         inline_keyboard=
                     [
                         [InlineKeyboardButton(text=("Готово"), callback_data="done")],
+                        [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
+    if item.photo_1 == Null:
+        item.photo_1 = photo
+    if item.photo_1 != Null:
+        item.photo_2 = photo
+    if item.photo_2 != Null:
+        item.photo_3 = photo
+    if item.photo_3 != Null:
+        item.photo_4 = photo
+    if item.photo_4 != Null:
+        item.photo_5 = photo
+    if item.photo_5 != Null:
+        item.photo_6 = photo
+    if item.photo_6 != Null:
+        item.photo_7 = photo
+    if item.photo_7 != Null:
+        item.photo_8 = photo
+    if item.photo_8 != Null:
+        item.photo_9 = photo
+    if item.photo_9 != Null:
+        await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
+
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
             '\nПришлите ещё одно фото или видео или нажмите "Готово"'.format(name=item.name), reply_markup=button)
-    await state.update_data(media=media)
     await state.update_data(item=item)
     await NewItem.Photo.set()
 
@@ -281,11 +296,34 @@ async def add_video(message: types.Message, state: FSMContext):
     video = message.video.file_id
     data = await state.get_data()
     item: Item = data.get("item")
-    media = data.get("media")
-    if media == None:
-        media = []
-    media.append(video)
-    item.media = media
+    button = InlineKeyboardMarkup(
+        inline_keyboard=
+                    [
+                        [InlineKeyboardButton(text=("Готово"), callback_data="done")],
+                        [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
+                    ]
+            )
+    if item.photo_1 == Null:
+        item.photo_1 = video
+    if item.photo_1 != Null:
+        item.photo_2 = video
+    if item.photo_2 != Null:
+        item.photo_3 = video
+    if item.photo_3 != Null:
+        item.photo_4 = video
+    if item.photo_4 != Null:
+        item.photo_5 = video
+    if item.photo_5 != Null:
+        item.photo_6 = video
+    if item.photo_6 != Null:
+        item.photo_7 = video
+    if item.photo_7 != Null:
+        item.photo_8 = video
+    if item.photo_8 != Null:
+        item.photo_9 = video
+    if item.photo_9 != Null:
+        await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
+
     button = InlineKeyboardMarkup(
         inline_keyboard=
             [
@@ -296,7 +334,6 @@ async def add_video(message: types.Message, state: FSMContext):
                 "Название: {name}"
                 '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
     await NewItem.Photo.set()
-    state.update_data(media=media)
     await state.update_data(item=item)
 
 
