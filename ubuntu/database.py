@@ -4,6 +4,7 @@ from gino.schema import GinoSchemaVisitor
 from sqlalchemy import (Column, Integer, BigInteger, String,
                         Sequence, TIMESTAMP, Boolean, JSON)
 from sqlalchemy import sql
+from sqlalchemy.sql.sqltypes import PickleType
 
 from config import DB_USER, DB_PASS, DB_HOST, DB_NAME
 
@@ -36,7 +37,7 @@ class Item(db.Model):
     id = Column(Integer, Sequence('item_seq'), primary_key=True)
     name = Column(String(50))
     description = Column(String(1250))
-    media = Column(list)
+    media = Column(PickleType)
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
 
