@@ -1,4 +1,3 @@
-from _typeshed import NoneType
 from asyncio import sleep
 import asyncio
 from aiogram import types
