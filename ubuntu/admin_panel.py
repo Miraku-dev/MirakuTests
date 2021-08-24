@@ -1,3 +1,4 @@
+from _typeshed import NoneType
 from asyncio import sleep
 import asyncio
 from aiogram import types
@@ -262,26 +263,31 @@ async def add_photo(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    if item.photo_1 == None:
-        item.photo_1 = photo
-    if item.photo_1 != None:
-        item.photo_2 = photo
-    if item.photo_2 != None:
-        item.photo_3 = photo
-    if item.photo_3 != None:
-        item.photo_4 = photo
-    if item.photo_4 != None:
-        item.photo_5 = photo
-    if item.photo_5 != None:
-        item.photo_6 = photo
-    if item.photo_6 != None:
-        item.photo_7 = photo
-    if item.photo_7 != None:
-        item.photo_8 = photo
-    if item.photo_8 != None:
-        item.photo_9 = photo
+    
+    
+    
+    
+
     if item.photo_9 != None:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
+    if item.photo_8 != None:
+        item.photo_9 = photo
+    if item.photo_7 != None:
+        item.photo_8 = photo
+    if item.photo_6 != None:
+        item.photo_7 = photo
+    if item.photo_5 != None:
+        item.photo_6 = photo
+    if item.photo_4 != None:
+        item.photo_5 = photo
+    if item.photo_3 != None:
+        item.photo_4 = photo
+    if item.photo_2 != None:
+        item.photo_3 = photo
+    if item.photo_1 != None:
+        item.photo_2 = photo
+    if item.photo_1 == None:
+        item.photo_1 = photo
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
@@ -302,6 +308,7 @@ async def add_video(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
+    
     if item.photo_1 == None:
         item.photo_1 = video
     if item.photo_1 != None:
@@ -323,12 +330,6 @@ async def add_video(message: types.Message, state: FSMContext):
     if item.photo_9 != None:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
-    button = InlineKeyboardMarkup(
-        inline_keyboard=
-            [
-                [InlineKeyboardButton(text=("Готово"), callback_data="done")],
-            ]
-    )
     await message.answer_video(video=video, caption=("Видео добавлено.\n"
                 "Название: {name}"
                 '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)
