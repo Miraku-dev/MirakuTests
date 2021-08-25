@@ -125,7 +125,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                     name=item.name,
                     description=item.description,
                     price=item.price / 100))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_1), text.format(id=item.id,
                     name=item.name,
                     description=item.description,
@@ -133,42 +133,42 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     try:
         if item.photo_2 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_2))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_2))
     try:
         if item.photo_3 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_3))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_3))
     try:
         if item.photo_4 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_4))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_4))
     try:
         if item.photo_5 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_5))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_5))
     try:
         if item.photo_6 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_6))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_6))
     try:
         if item.photo_7 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_7))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_7))
     try:
         if item.photo_8 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_8))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_8))
     try:
         if item.photo_9 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_9))
-    except TypeOfFileMismatch:
+    except Exception:
         media.attach_video('{video}'.format(video=item.photo_9))
     await call.message.answer_media_group(media=media)
     # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
