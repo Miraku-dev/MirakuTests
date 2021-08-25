@@ -171,10 +171,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     except TypeOfFileMismatch:
         media.attach_video('{video}'.format(video=item.photo_9))
     await call.message.answer_media_group(media=media)
-    await call.message.edit_reply_markup(reply_markup=markup)
-    await state.update_data(id=id)
     # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
     await asyncio.sleep(0.3)
+    await state.update_data(id=id)
     await states.List_item.Next.set()
 
 
