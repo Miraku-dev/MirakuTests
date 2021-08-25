@@ -290,8 +290,9 @@ async def add_photo(message: types.Message, state: FSMContext):
                                 else:
                                     if item.photo_9 == None:
                                         item.photo_9 = photo
-                                    else:
-                                        message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
+    if item.photo_9 != None:
+        await message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
+        
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
@@ -339,8 +340,8 @@ async def add_video(message: types.Message, state: FSMContext):
                                 else:
                                     if item.photo_9 == None:
                                         item.photo_9 = video
-                                    else:
-                                        message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
+    if item.photo_9 != None:
+        await message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
 
     await message.answer_video(video=video, caption=("Видео добавлено.\n"
                 "Название: {name}"
