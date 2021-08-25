@@ -126,7 +126,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                     description=item.description,
                     price=item.price / 100))
     except TypeOfFileMismatch:
-        media.attach_video('{video}'.format(photo=item.photo_1), text.format(id=item.id,
+        media.attach_video('{video}'.format(video=item.photo_1), text.format(id=item.id,
                     name=item.name,
                     description=item.description,
                     price=item.price / 100))
