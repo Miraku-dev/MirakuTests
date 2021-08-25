@@ -256,6 +256,8 @@ async def add_photo(message: types.Message, state: FSMContext):
     photo = message.photo[-1].file_id
     data = await state.get_data()
     photo_1 = data.get("photo_1")
+    if photo_1 == None:
+        photo_1 = photo
     item: Item = data.get("item")
     button = InlineKeyboardMarkup(
         inline_keyboard=
@@ -267,7 +269,6 @@ async def add_photo(message: types.Message, state: FSMContext):
     if item.photo_1 == None:
         item.photo_1 = photo
     await state.update_data(photo_1=photo)
-    photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_1 != None:
             item.photo_2 = photo
@@ -284,7 +285,6 @@ async def add_photo(message: types.Message, state: FSMContext):
             item.photo_4 = photo
     await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
-    photo_1 = data.get("photo_1")
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_4 != None:
