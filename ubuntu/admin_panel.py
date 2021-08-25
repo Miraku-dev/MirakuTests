@@ -255,7 +255,7 @@ async def enter_description(message: Message, state: FSMContext):
 async def add_photo(message: types.Message, state: FSMContext):
     photo = message.photo[-1].file_id
     data = await state.get_data()
-    photo_1: data.get("photo")
+    photo_1 = data.get("photo")
     item: Item = data.get("item")
     button = InlineKeyboardMarkup(
         inline_keyboard=
