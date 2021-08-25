@@ -277,49 +277,41 @@ async def add_photo(message: types.Message, state: FSMContext):
     if photo != photo_1:
         if item.photo_2 != None:
             item.photo_3 = photo
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_3 != None:
             item.photo_4 = photo
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_4 != None:
             item.photo_5 = photo
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_5 != None:
             item.photo_6 = photo
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_6 != None:
             item.photo_7 = photo
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_7 != None:
             item.photo_8 = photo
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_8 != None:
             item.photo_9 = photo
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
     photo_1 = data.get("photo_1")
     if photo != photo_1:
         if item.photo_9 != None:
             await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
-    await state.reset_data("photo_1")
     await state.update_data(photo_1=photo)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
