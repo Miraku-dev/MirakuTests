@@ -255,6 +255,7 @@ async def enter_description(message: Message, state: FSMContext):
 async def add_photo(message: types.Message, state: FSMContext):
     photo = message.photo[-1].file_id
     data = await state.get_data()
+    photo_1: data.get("photo")
     item: Item = data.get("item")
     button = InlineKeyboardMarkup(
         inline_keyboard=
@@ -265,28 +266,29 @@ async def add_photo(message: types.Message, state: FSMContext):
             )
     if item.photo_1 == None:
         item.photo_1 = photo
-    if item.photo_1 != None and photo != item.photo_1:
+    if item.photo_1 != None and photo != photo_1:
         item.photo_2 = photo
-    if item.photo_2 != None and photo != item.photo_1:
+    if item.photo_2 != None and photo != photo_1:
         item.photo_3 = photo
-    if item.photo_3 != None and photo != item.photo_2:
+    if item.photo_3 != None and photo != photo_1:
         item.photo_4 = photo
-    if item.photo_4 != None and photo != item.photo_3:
+    if item.photo_4 != None and photo != photo_1:
         item.photo_5 = photo
-    if item.photo_5 != None and photo != item.photo_4:
+    if item.photo_5 != None and photo != photo_1:
         item.photo_6 = photo
-    if item.photo_6 != None and photo != item.photo_5:
+    if item.photo_6 != None and photo != photo_1:
         item.photo_7 = photo
-    if item.photo_7 != None and photo != item.photo_6:
+    if item.photo_7 != None and photo != photo_1:
         item.photo_8 = photo
-    if item.photo_8 != None and photo != item.photo_7:
+    if item.photo_8 != None and photo != photo_1:
         item.photo_9 = photo
-    if item.photo_9 != None and photo != item.photo_8:
+    if item.photo_9 != None and photo != photo_1:
         await message.answer("Достигнуто максимальное количество фотографий.", reply_markup=button)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
             '\nПришлите ещё одно фото или видео или нажмите "Готово"'.format(name=item.name), reply_markup=button)
+    await state.update_data(photo_1=photo)
     await state.update_data(item=item)
     await NewItem.Photo.set()
 
