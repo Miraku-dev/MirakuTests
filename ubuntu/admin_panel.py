@@ -264,8 +264,6 @@ async def add_photo(message: types.Message, state: FSMContext):
                     ]
             )
     
-    limit = await message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
-    
     if item.photo_1 == None:
         item.photo_1 = photo
     else:
@@ -293,7 +291,7 @@ async def add_photo(message: types.Message, state: FSMContext):
                                     if item.photo_9 == None:
                                         item.photo_9 = photo
                                     else:
-                                        limit
+                                        message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
 
     await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
             "Название: {name}"
@@ -314,8 +312,6 @@ async def add_video(message: types.Message, state: FSMContext):
                         [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                     ]
             )
-    
-    limit = await message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
 
     if item.photo_1 == None:
         item.photo_1 = video
@@ -344,7 +340,7 @@ async def add_video(message: types.Message, state: FSMContext):
                                     if item.photo_9 == None:
                                         item.photo_9 = video
                                     else:
-                                        limit
+                                        message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
 
     await message.answer_video(video=video, caption=("Видео добавлено.\n"
                 "Название: {name}"
