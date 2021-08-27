@@ -284,17 +284,9 @@ async def add_photo(message: types.Message, state: FSMContext):
                         else:
                             if item.photo_7 == None:
                                 item.photo_7 = photo
-                            else: 
-                                if item.photo_8 == None:
-                                    item.photo_8 = photo
-                                else:
-                                    if item.photo_9 == None:
-                                        item.photo_9 = photo
-                                    else:
-                                        if item.photo_9 != None:
-                                            await message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
+                                await message.answer(photo=item.photo_7, caption=("Достигнуто максимальное количество медиафайлов."), reply_markup=button)
         
-    if item.photo_9 == None:
+    if item.photo_7 == None:
         await message.answer_photo(photo=photo, caption="Фото добавлено.\n"
                 "Название: {name}"
                 '\nПришлите ещё одно фото или видео или нажмите "Готово"'.format(name=item.name), reply_markup=button)
@@ -315,35 +307,15 @@ async def add_video(message: types.Message, state: FSMContext):
                     ]
             )
 
-    if item.photo_1 == None:
-        item.photo_1 = video
-    else:
-        if item.photo_2 == None:
-            item.photo_2 = video
-        else:
-            if item.photo_3 == None:
-                item.photo_3 = video
-            else:
-                if item.photo_4 == None:
-                    item.photo_4 = video
-                else:
-                    if item.photo_5 == None:
-                        item.photo_5 = video
-                    else: 
-                        if item.photo_6 == None:
-                            item.photo_6 = video
-                        else:
-                            if item.photo_7 == None:
-                                item.photo_7 = video
-                            else: 
-                                if item.photo_8 == None:
-                                    item.photo_8 = video
-                                else:
-                                    if item.photo_9 == None:
-                                        item.photo_9 = video
-                                        await message.answer("Достигнуто максимальное количество медиафайлов.", reply_markup=button)
 
-    if item.photo_9 == None:
+    if item.video_8 == None:
+        item.video_8 = video
+    else:
+        if item.video_9 == None:
+            item.video_9 = video
+            await message.answer_video(video=video, caption=("Достигнуто максимальное количество видеофайлов."), reply_markup=button)
+
+    if item.video_9 == None:
         await message.answer_video(video=video, caption=("Видео добавлено.\n"
                     "Название: {name}"
                     '\nПришлите ещё одно фото или видео или нажмите "Готово"').format(name=item.name), reply_markup=button)

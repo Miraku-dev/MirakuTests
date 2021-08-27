@@ -44,8 +44,8 @@ class Item(db.Model):
     photo_5 = Column(String(250))
     photo_6 = Column(String(250))
     photo_7 = Column(String(250))
-    photo_8 = Column(String(250))
-    photo_9 = Column(String(250))
+    video_8 = Column(String(250))
+    video_9 = Column(String(250))
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
 

@@ -120,56 +120,26 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 ]
             )
         media = MediaGroup()
-        try:
-            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        except Exception:
-            media.attach_video('{video}'.format(video=item.photo_1), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
+        media.attach_photo('{photo}'.format(photo=item.photo_1))
         if item.photo_2 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_2))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_2))
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
         if item.photo_3 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_3))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_3))
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
         if item.photo_4 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_4))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_4))
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
         if item.photo_5 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_5))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_5))
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
         if item.photo_6 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_6))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_6))
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
         if item.photo_7 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_7))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_7))
-        if item.photo_8 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_8))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_8))
-        if item.photo_9 != None:
-            try:
-                media.attach_photo('{photo}'.format(photo=item.photo_9))
-            except Exception:
-                media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
         await call.message.answer_media_group(media=media)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
