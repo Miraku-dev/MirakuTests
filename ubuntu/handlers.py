@@ -121,7 +121,10 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             )
         media = MediaGroup()
         if item.photo_1 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_1))
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
         if item.photo_2 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_2))
         if item.photo_3 != None:
@@ -135,14 +138,14 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         if item.photo_7 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_7))
         if item.video_8 != None:
-            media.attach_video('{video}'.format(video=item.video_8))
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
         if item.video_9 != None:
             media.attach_video('{video}'.format(video=item.photo_9))
         await call.message.answer_media_group(media=media)
-        await call.message.answer(text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100), reply_markup=markup)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await state.update_data(id=id)
@@ -182,19 +185,36 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
             ]
         )
         # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer_photo(
-            photo=item.photo,
-            caption=text.format(
-                id=item.id,
-                name=item.name,
-                description=item.description,
-                price=item.price / 100
-            ),
-            reply_markup=markup
-        )
-        await state.update_data(id=id)
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
+        await call.message.answer_media_group(media=media)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await state.update_data(id=id)
         await states.List_item.Next.set()
 
 # Показываем список доступных товаров
@@ -229,19 +249,36 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer_photo(
-            photo=item.photo,
-            caption=text.format(
-                id=item.id,
-                name=item.name,
-                description=item.description,
-                price=item.price / 100
-            ),
-            reply_markup=markup
-        )
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
+        await call.message.answer_media_group(media=media)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await state.update_data(id=id)
         await states.List_item.Next.set()
 
 
@@ -277,19 +314,36 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer_photo(
-            photo=item.photo,
-            caption=text.format(
-                id=item.id,
-                name=item.name,
-                description=item.description,
-                price=item.price / 100
-            ),
-            reply_markup=markup
-        )
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
+        await call.message.answer_media_group(media=media)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await state.update_data(id=id)
         await states.List_item.Next.set()
 
 
@@ -325,19 +379,36 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer_photo(
-            photo=item.photo,
-            caption=text.format(
-                id=item.id,
-                name=item.name,
-                description=item.description,
-                price=item.price / 100
-            ),
-            reply_markup=markup
-        )
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
+        await call.message.answer_media_group(media=media)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await state.update_data(id=id)
         await states.List_item.Next.set()
 
 
@@ -373,19 +444,36 @@ async def show_other(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer_photo(
-            photo=item.photo,
-            caption=text.format(
-                id=item.id,
-                name=item.name,
-                description=item.description,
-                price=item.price / 100
-            ),
-            reply_markup=markup
-        )
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
+        await call.message.answer_media_group(media=media)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await state.update_data(id=id)
         await states.List_item.Next.set()
 
 
@@ -424,20 +512,36 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 ],
             ]
         )
-        
-        # Отправляем фотку товара с подписью и кнопкой "купить"
-        await call.message.answer_photo(
-            photo=item.photo,
-            caption=text.format(
-                id=item.id,
-                name=item.name,
-                description=item.description,
-                price=item.price / 100
-            ),
-            reply_markup=markup
-        )
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
+        await call.message.answer_media_group(media=media)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
+        await state.update_data(id=id)
         await states.List_item.Next.set()
         
 
@@ -661,7 +765,6 @@ async def checkout(query: PreCheckoutQuery, state: FSMContext):
             receiver=query.order_info.name,
             email=query.order_info.email
         ).apply()
-        await purchase.create()
         await state.finish()
         await bot.send_message(query.from_user.id, ("Спасибо за покупку."))
     else:
