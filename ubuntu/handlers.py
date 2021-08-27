@@ -135,14 +135,14 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         if item.photo_7 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_7))
         if item.video_8 != None:
-            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
+            media.attach_video('{video}'.format(video=item.video_8))
         if item.video_9 != None:
             media.attach_video('{video}'.format(video=item.photo_9))
         await call.message.answer_media_group(media=media)
-        await call.message.answer("", reply_markup=markup)
+        await call.message.answer(text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100), reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
         await asyncio.sleep(0.3)
         await state.update_data(id=id)
