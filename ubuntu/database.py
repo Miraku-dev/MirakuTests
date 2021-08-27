@@ -39,6 +39,13 @@ class Item(db.Model):
     description = Column(String(1250))
     photo_1 = Column(String(250))
     photo_2 = Column(String(250))
+    photo_3 = Column(String(250))
+    photo_4 = Column(String(250))
+    photo_5 = Column(String(250))
+    photo_6 = Column(String(250))
+    photo_7 = Column(String(250))
+    photo_8 = Column(String(250))
+    photo_9 = Column(String(250))
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
     category = Column(String(25))
 

@@ -107,39 +107,74 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
             text += ("\n"
                   "id: \t{id}")
      
-    markup = InlineKeyboardMarkup(
-        inline_keyboard=
-            [
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
                 [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                [
-                    InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_data="cancel")
-                ],
-            ]
-        )
-    media = MediaGroup()
-    try:
-        media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
-                    name=item.name,
-                    description=item.description,
-                    price=item.price / 100))
-    except Exception:
-        media.attach_video('{video}'.format(video=item.photo_1), text.format(id=item.id,
-                    name=item.name,
-                    description=item.description,
-                    price=item.price / 100))
-    if item.photo_2 != None:
+                    [
+                        # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                        InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                    [
+                        InlineKeyboardButton(text="Далее", callback_data="next"),
+                        InlineKeyboardButton(text="Назад", callback_data="cancel")
+                    ],
+                ]
+            )
+        media = MediaGroup()
         try:
-            media.attach_photo('{photo}'.format(photo=item.photo_2))
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
         except Exception:
-            media.attach_video('{video}'.format(video=item.photo_2))
-    await call.message.answer_media_group(media=media)
-    # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-    await asyncio.sleep(0.3)
-    await state.update_data(id=id)
-    await states.List_item.Next.set()
+            media.attach_video('{video}'.format(video=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_2))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_2))
+        if item.photo_3 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_3))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_3))
+        if item.photo_4 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_4))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_4))
+        if item.photo_5 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_5))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_5))
+        if item.photo_6 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_6))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_6))
+        if item.photo_7 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_7))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_7))
+        if item.photo_8 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_8))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_8))
+        if item.photo_9 != None:
+            try:
+                media.attach_photo('{photo}'.format(photo=item.photo_9))
+            except Exception:
+                media.attach_video('{video}'.format(video=item.photo_9))
+        await call.message.answer_media_group(media=media)
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
+        await state.update_data(id=id)
+        await states.List_item.Next.set()
 
 
 # Показываем список доступных товаров
@@ -448,45 +483,45 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                     "Номер телефона покупателя: {phone_number}\n"
                     "Имя покупателя: {receiver}\n")
 
-    shipping_address = order.shipping_address
+        shipping_address = order.shipping_address
 
-    shipping_address = re.sub(r"{", "", str(shipping_address))
-    shipping_address = re.sub(r"}", "", str(shipping_address))
-    shipping_address = re.sub(r"'", "", str(shipping_address))
-    shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
-    shipping_address = re.sub(r"state", "Область", str(shipping_address))
-    shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
-    shipping_address = re.sub(r"city", "Город", str(shipping_address))
-    shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
-    shipping_address = re.sub(r",", ",\n", str(shipping_address))
+        shipping_address = re.sub(r"{", "", str(shipping_address))
+        shipping_address = re.sub(r"}", "", str(shipping_address))
+        shipping_address = re.sub(r"'", "", str(shipping_address))
+        shipping_address = re.sub(r"country_code", "Код страны", str(shipping_address))
+        shipping_address = re.sub(r"state", "Область", str(shipping_address))
+        shipping_address = re.sub(r"street_line1", "Адрес 1 (улица)", str(shipping_address))
+        shipping_address = re.sub(r"street_line2", "Адрес 2 (улица)", str(shipping_address))
+        shipping_address = re.sub(r"city", "Город", str(shipping_address))
+        shipping_address = re.sub(r"post_code", "Индекс", str(shipping_address))
+        shipping_address = re.sub(r",", ",\n", str(shipping_address))
 
 
-    markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
+        markup = InlineKeyboardMarkup(
+                inline_keyboard=
                 [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Удалить информацию"), callback_data="delete_order")
-                ],
-            ]
-        )
-    
-    await call.message.answer(
-            text.format(
-                id=order.id,
-                item_id=order.item_id,
-                buyer=order.buyer,
-                phone_number=order.phone_number,
-                amount=order.amount / 100,
-                quantity=order.quantity,
-                purchase_time=order.purchase_time,
-                receiver=order.receiver,
-                shipping_address=shipping_address
-            ),
-            reply_markup=markup
-        )
-    await asyncio.sleep(0.4)
+                    [
+                        # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                        InlineKeyboardButton(text=("Удалить информацию"), callback_data="delete_order")
+                    ],
+                ]
+            )
+        
+        await call.message.answer(
+                text.format(
+                    id=order.id,
+                    item_id=order.item_id,
+                    buyer=order.buyer,
+                    phone_number=order.phone_number,
+                    amount=order.amount / 100,
+                    quantity=order.quantity,
+                    purchase_time=order.purchase_time,
+                    receiver=order.receiver,
+                    shipping_address=shipping_address
+                ),
+                reply_markup=markup
+            )
+        await asyncio.sleep(0.4)
 
 # Для фильтрования по коллбекам можно использовать buy_item.filter()
 @dp.callback_query_handler(buy_item.filter(), state='*')
