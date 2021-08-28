@@ -15,7 +15,7 @@ from aiogram.utils import callback_data
 
 from config import admin_id
 from load_all import dp, bot
-from states import DeleteOrder, Edit_item, NewItem, Mailing, DeleteItem, available_answers_data
+from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
 from database import Item, Purchase, User, DBCommands
 import buttons
 
