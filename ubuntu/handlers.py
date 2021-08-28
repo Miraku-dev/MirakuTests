@@ -143,7 +143,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                         description=item.description,
                         price=item.price / 100))
         if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_video('{video}'.format(video=item.video_9))
         await call.message.answer_media_group(media=media)
         await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
@@ -209,7 +209,7 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
                         description=item.description,
                         price=item.price / 100))
         if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_video('{video}'.format(video=item.video_9))
         await call.message.answer_media_group(media=media)
         await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
@@ -273,7 +273,7 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
                         description=item.description,
                         price=item.price / 100))
         if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_video('{video}'.format(video=item.video_9))
         await call.message.answer_media_group(media=media)
         await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
@@ -338,7 +338,7 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
                         description=item.description,
                         price=item.price / 100))
         if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_video('{video}'.format(video=item.video_9))
         await call.message.answer_media_group(media=media)
         await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
@@ -403,7 +403,7 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
                         description=item.description,
                         price=item.price / 100))
         if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_video('{video}'.format(video=item.video_9))
         await call.message.answer_media_group(media=media)
         await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
@@ -468,7 +468,7 @@ async def show_other(call: CallbackQuery, state: FSMContext):
                         description=item.description,
                         price=item.price / 100))
         if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_video('{video}'.format(video=item.video_9))
         await call.message.answer_media_group(media=media)
         await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
@@ -536,7 +536,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                         description=item.description,
                         price=item.price / 100))
         if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.photo_9))
+            media.attach_video('{video}'.format(video=item.video_9))
         await call.message.answer_media_group(media=media)
         await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
         # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
