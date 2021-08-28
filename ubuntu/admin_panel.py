@@ -532,8 +532,6 @@ async def get_id(message: types.Message, state: FSMContext):
         if message.from_user.id == admin_id:
             text += ("\n"
                   "id: \t{id}\n")
-
-        text += "\n Вы уверены что хотите удалить данный товар?"
         
         media = MediaGroup()
         if item.photo_1 != None:
@@ -572,6 +570,7 @@ async def get_id(message: types.Message, state: FSMContext):
         )
 
         await message.answer_media_group(media=media)
+        await message.answer("\n Вы уверены что хотите удалить данный товар?", reply_markup=markup)
         await DeleteItem.Delete.set()
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete", state=DeleteItem.Delete)
