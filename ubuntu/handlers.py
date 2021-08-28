@@ -6,7 +6,7 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart
 from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
-                           CallbackQuery, LabeledPrice, PreCheckoutQuery, InputMediaPhoto, InputMediaVideo)
+                           CallbackQuery, LabeledPrice, PreCheckoutQuery, InputMediaPhoto, InputMediaVideo, callback_query)
 from aiogram.types.input_media import MediaGroup
 from aiogram.types.message import ContentType
 from aiogram.utils.callback_data import CallbackData
@@ -582,6 +582,7 @@ async def order_list(call: CallbackQuery, state: FSMContext):
                         # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
                         InlineKeyboardButton(text=("Удалить информацию"), callback_data="delete_order")
                     ],
+                    [InlineKeyboardButton(text="Отмена", callback_data="cancel")]
                 ]
             )
         
