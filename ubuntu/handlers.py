@@ -486,6 +486,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     value = a + 5
     await state.update_data(a=value)
     all_items = await database.Item.query.where(database.Item.category == category).offset(a).limit(5).gino.all()
+    if all_items == None:
+        await call.message.answer("Дальше ничего нет.")
 
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):

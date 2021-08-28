@@ -149,7 +149,7 @@ class DBCommands:
         return items
 
     async def show_order(self):
-        order = await Purchase.query.limit(5).gino.all()
+        order = await Purchase.query.gino.all()
 
         return order
 

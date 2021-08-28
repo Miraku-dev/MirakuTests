@@ -229,7 +229,8 @@ async def enter_description(call: CallbackQuery, state: FSMContext):
                 [InlineKeyboardButton(text=("Отмена"), callback_data="cancel")],
             ]
     )
-    await call.message.answer('\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"', reply_markup=button)
+    await call.message.answer('\nПришлите мне фотографию товара (не документ) или нажмите "Отмена"\nОтправляйте по одному\n'
+        'Не советуем создавать товары с видеозаписями без фотографий к ним', reply_markup=button)
     await NewItem.Photo.set()
     await state.update_data(item=item)
   
