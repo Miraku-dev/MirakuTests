@@ -35,3 +35,12 @@ class DeleteOrder(StatesGroup):
 class List_item(StatesGroup):
     Item = State()
     Next = State()
+
+class Edit_item(StatesGroup):
+    Select = State()
+    Edit = State()
+    Edit_name = State()
+    Edit_description = State()
+    Edit_media = State()
+    Edit_price = State()
+    Confirm = State()

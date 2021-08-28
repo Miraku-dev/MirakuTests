@@ -1,17 +1,21 @@
 
 from asyncio import sleep
 import asyncio
+from os import fsdecode
+from re import I
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import (InlineKeyboardMarkup, InlineKeyboardButton, shipping_address, 
                                 InputMediaVideo, InputMediaPhoto)
                                 
 from aiogram.types.callback_query import CallbackQuery
+from aiogram.types.input_media import MediaGroup
 from aiogram.types.message import ContentType, Message
+from aiogram.utils import callback_data
 
 from config import admin_id
 from load_all import dp, bot
-from states import DeleteOrder, NewItem, Mailing, DeleteItem, available_answers_data
+from states import DeleteOrder, Edit_item, NewItem, Mailing, DeleteItem, available_answers_data
 from database import Item, Purchase, User, DBCommands
 import buttons
 
@@ -531,6 +535,32 @@ async def get_id(message: types.Message, state: FSMContext):
 
         text += "\n Вы уверены что хотите удалить данный товар?"
         
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.photo_9))
+
         markup = InlineKeyboardMarkup(
             inline_keyboard=
             [
@@ -541,17 +571,8 @@ async def get_id(message: types.Message, state: FSMContext):
             ]
         )
 
-        await message.answer_photo(
-            photo=item.photo,
-            caption=text.format(
-                id=item.id,
-                name=item.name,
-                description=item.description,
-                price=item.price / 100
-            ),
-            reply_markup=markup
-        )
-    await DeleteItem.Delete.set()
+        await message.answer_media_group(media=media)
+        await DeleteItem.Delete.set()
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="delete", state=DeleteItem.Delete)
 async def delete_item(call: CallbackQuery, state: FSMContext):
@@ -628,5 +649,4 @@ async def delete_order_confirm(call: CallbackQuery, state: FSMContext):
         ]
     )
     await call.message.answer("Товар удалён.\nАдмин-панель: /admin_panel", reply_markup=markup)
-    
     await state.finish()
