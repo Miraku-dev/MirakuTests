@@ -35,7 +35,13 @@ async def cancel(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text="Список товаров", callback_data="list_categories")],
             [
                 InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
-                InlineKeyboardButton(text="Поддержка", callback_data="help")
+                InlineKeyboardButton(text="Поддержка", callback_data="help"),]
+            [
+                InlineKeyboardButton(text="Корзина", callback_data="basket"),
+                InlineKeyboardButton(text="Мои заказы",xallback_data="my orders")
+
+            ]
+
             ]
         ]
     )
