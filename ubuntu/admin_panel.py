@@ -90,7 +90,7 @@ async def item_category(call: types.CallbackQuery):
             [
                 InlineKeyboardButton(text="Другое", callback_data="add_other"),
                 InlineKeyboardButton(text="Отмена", callback_data="cancel")
-            ]
+            ],
         ]
     )
     text = (
