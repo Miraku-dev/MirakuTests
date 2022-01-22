@@ -22,7 +22,7 @@ import buttons
 db = DBCommands()
 
 
-@dp.callback_query_handler(user_id=admin_id, text_contains="cancel", state='*')
+@dp.callback_query_handler(text_contains="cancel", state='*')
 async def cancel(call: types.CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     await state.finish()
@@ -37,8 +37,7 @@ async def cancel(call: types.CallbackQuery, state: FSMContext):
                 InlineKeyboardButton(text="Наш магазин", callback_data='storage'),
                 InlineKeyboardButton(text="Поддержка", callback_data="help")],
             [
-                InlineKeyboardButton(text="Корзина", callback_data="basket")],
-            [
+                InlineKeyboardButton(text="Корзина", callback_data="basket"),
                 InlineKeyboardButton(text="Мои заказы",xallback_data="my orders")],
 
             ]
