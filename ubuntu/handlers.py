@@ -572,11 +572,6 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         await state.update_data(id=id)
         await states.List_item.Next.set()
 
-
-@dp.callback_query_handler(text_contains="add_basket", state=states.List_item.Next)
-async def add_basket(call: CallbackQuery, state: FSMContext):
-basket = database.Basket()
-
     
         
 
