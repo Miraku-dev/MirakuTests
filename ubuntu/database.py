@@ -70,6 +70,13 @@ class Purchase(db.Model):
     receiver = Column(String(100))
     successful = Column(Boolean, default=False)
 
+class Basket(db.Model):
+    __tablename__='db_basket'
+    query: sql.Select
+
+    product_id = Column(Integer)
+    
+
 class DBCommands:
 
     async def get_user(self, user_id):
@@ -114,37 +121,37 @@ class DBCommands:
 
     async def show_hats(self):
         category = "add_hat"
-        items = await Item.query.where(Item.category == category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == category).limit(3).gino.all()
 
         return items
 
     async def show_accessories(self):
         category = "add_accessories"
-        items = await Item.query.where(Item.category == category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == category).limit(3).gino.all()
 
         return items
     
     async def show_malling(self):
         category = "add_malling"
-        items = await Item.query.where(Item.category == category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == category).limit(3).gino.all()
 
         return items
 
     async def show_pants(self):
         category = "add_pants"
-        items = await Item.query.where(Item.category == category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == category).limit(3).gino.all()
 
         return items
 
     async def show_shoes(self):
         category = "add_shoes"
-        items = await Item.query.where(Item.category == category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == category).limit(3).gino.all()
 
         return items
 
     async def show_other(self):
         category = "add_other"
-        items = await Item.query.where(Item.category == category).limit(5).gino.all()
+        items = await Item.query.where(Item.category == category).limit(3).gino.all()
 
         return items
 

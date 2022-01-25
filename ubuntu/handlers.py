@@ -25,6 +25,7 @@ db = database.DBCommands()
 
 # Используем CallbackData для работы с коллбеками, в данном случае для работы с покупкой товаров
 buy_item = CallbackData("buy", "item_id")
+add_to_basket = CallbackData("add", "item_id")
 
 
 # Для команды /start есть специальный фильтр, который можно тут использовать
@@ -46,7 +47,7 @@ async def register_user(message: types.Message):
                 InlineKeyboardButton(text="Поддержка", callback_data="help")],
             [
                 InlineKeyboardButton(text="Корзина", callback_data="basket"),
-                InlineKeyboardButton(text="Мои заказы", callback_data="my orders")
+                InlineKeyboardButton(text="Мои заказы", callback_data="my_orders")
             ],
        ]
     )
@@ -120,6 +121,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                         InlineKeyboardButton(text="Далее", callback_data="next"),
                         InlineKeyboardButton(text="Назад", callback_data="cancel")
                     ],
+                    [
+                        InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                    ],
                 ]
             )
         media = MediaGroup()
@@ -177,16 +181,19 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
 
         markup = InlineKeyboardMarkup(
             inline_keyboard=
-            [
                 [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                [
-                    InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_data="cancel")
-                ],
-            ]
-        )
+                    [
+                        # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                        InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                    [
+                        InlineKeyboardButton(text="Далее", callback_data="next"),
+                        InlineKeyboardButton(text="Назад", callback_data="cancel")
+                    ],
+                    [
+                        InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                    ], 
+                ]
+            )
         # Отправляем фотку товара с подписью и кнопкой "купить"
         media = MediaGroup()
         if item.photo_1 != None:
@@ -242,16 +249,19 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
 
         markup = InlineKeyboardMarkup(
             inline_keyboard=
-            [
                 [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                [
-                    InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_data="cancel")
-                ],
-            ]
-        )
+                    [
+                        # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                        InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                    [
+                        InlineKeyboardButton(text="Далее", callback_data="next"),
+                        InlineKeyboardButton(text="Назад", callback_data="cancel")
+                    ],
+                    [
+                        InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                    ],
+                ]
+            )
         media = MediaGroup()
         if item.photo_1 != None:
             media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
@@ -314,6 +324,9 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
                 [
                     InlineKeyboardButton(text="Далее", callback_data="next"),
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
+                ],
+                [
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
                 ],
             ]
         )
@@ -380,6 +393,9 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text="Далее", callback_data="next"),
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
+                [
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                ],
             ]
         )
         media = MediaGroup()
@@ -445,6 +461,9 @@ async def show_other(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text="Далее", callback_data="next"),
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
+                [
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                ],
             ]
         )
         media = MediaGroup()
@@ -488,9 +507,10 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     a = data.get("a")
     value = a + 5
     await state.update_data(a=value)
-    all_items = await database.Item.query.where(database.Item.category == category).offset(a).limit(5).gino.all()
-    if all_items == None:
-        await call.message.answer("Дальше ничего нет.")
+    all_items = await database.Item.query.where(database.Item.category == category).offset(a).limit(3).gino.all()
+    markup_2 = InlineKeyboardButton(text="Назад", callback_data="cancel")
+    if database.Item.query.where(database.Item.category == category).offset(a).limit(3).gino.all() == None:
+        await call.message.answer("Дальше ничего нет.", reply_markup=markup_2)
 
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
@@ -514,6 +534,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                 [
                     InlineKeyboardButton(text="Далее", callback_data="next"),
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
+                ],
+                [
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
                 ],
             ]
         )
@@ -548,6 +571,13 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         await asyncio.sleep(0.3)
         await state.update_data(id=id)
         await states.List_item.Next.set()
+
+
+@dp.callback_query_handler(text_contains="add_basket", state=states.List_item.Next)
+async def add_basket(call: CallbackQuery, state: FSMContext):
+basket = database.Basket()
+
+    
         
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
