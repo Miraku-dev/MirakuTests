@@ -96,7 +96,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
     category = "add_hat"
     all_items = await db.show_hats()
-    a = 5
+    a = 3
     await state.update_data(a=a)
     await state.update_data(category=category)
     # Проходимся по товарам, пронумеровывая
@@ -167,6 +167,8 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
     all_items = await db.show_accessories()
     # Проходимся по товарам, пронумеровывая
     category = "add_accessories"
+    a = 3
+    await state.update_data(a=a)
     await state.update_data(category=category)
     for num, item in enumerate(all_items):
         text = ("\t<b>{name}</b>\n")
@@ -234,6 +236,8 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
     all_items = await db.show_malling()
     category = "add_malling"
+    a = 3
+    await state.update_data(a=a)
     await state.update_data(category=category)
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
@@ -303,6 +307,8 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
     all_items = await db.show_pants()
     category = "add_pants"
     await state.update_data(category=category)
+    a = 3
+    await state.update_data(a=a)
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
         text = ("\t<b>{name}</b>\n")
@@ -370,6 +376,8 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
     # Достаем товары из базы данных
     all_items = await db.show_shoes()
     category = "add_shoes"
+    a = 3
+    await state.update_data(a=a)
     await state.update_data(category=category)
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
@@ -439,6 +447,8 @@ async def show_other(call: CallbackQuery, state: FSMContext):
     all_items = await db.show_other()
     category = "add_other"
     await state.update_data(category=category)
+    a = 3
+    await state.update_data(a=a)
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
         text = ("\t<b>{name}</b>\n")
@@ -510,8 +520,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     await state.update_data(a=value)
     all_items = await database.Item.query.where(database.Item.category == category).offset(a).limit(3).gino.all()
     markup_2 = InlineKeyboardButton(text="Назад", callback_data="cancel")
-    if await database.Item.query.where(database.Item.category == category).offset(a).limit(3).gino.all() == None:
+    if not all_items:
         await call.message.answers("Дальше ничего нет.", reply_markup=markup_2)
+        return
 
     # Проходимся по товарам, пронумеровывая
     for num, item in enumerate(all_items):
