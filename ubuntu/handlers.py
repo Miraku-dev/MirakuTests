@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 from logging import exception
+from admin_panel import item_category
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
@@ -572,8 +573,34 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         await state.update_data(id=id)
         await states.List_item.Next.set()
 
-    
-        
+
+@dp.callback_query_handler(add_to_basket.filter(), state='*')
+async def basket_add(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    await state.finish()
+    # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
+    item_id = int(callback_data.get("item_id"))
+    await call.message.edit_reply_markup()
+
+    button = InlineKeyboardMarkup(
+                inline_keyboard=
+                [
+                    [
+                        InlineKeyboardButton(text="Далее", callback_data="next"),
+                        InlineKeyboardButton(text="Назад", callback_data="cancel")
+                    ],
+                ]
+            )
+
+    text = ("Товар добавлен в корзину")
+    await call.message.answer(text, reply_markup=button)
+
+    basket = database.Basket()
+    basket.item_id = item_id
+
+
+    await basket.create()
+    await states.List_item.Next.set()
+
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
 async def order_list(call: CallbackQuery, state: FSMContext):
