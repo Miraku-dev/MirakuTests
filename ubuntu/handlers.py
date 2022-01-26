@@ -122,7 +122,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                         InlineKeyboardButton(text="Назад", callback_data="cancel")
                     ],
                     [
-                        InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                        InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
                     ],
                 ]
             )
@@ -190,7 +190,7 @@ async def show_accessories(call: CallbackQuery, state: FSMContext):
                         InlineKeyboardButton(text="Назад", callback_data="cancel")
                     ],
                     [
-                        InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                        InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
                     ], 
                 ]
             )
@@ -258,7 +258,7 @@ async def show_malling(call: CallbackQuery, state: FSMContext):
                         InlineKeyboardButton(text="Назад", callback_data="cancel")
                     ],
                     [
-                        InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                        InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
                     ],
                 ]
             )
@@ -326,7 +326,7 @@ async def show_pants(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
                 [
-                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
                 ],
             ]
         )
@@ -394,7 +394,7 @@ async def show_shoes(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
                 [
-                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
                 ],
             ]
         )
@@ -462,7 +462,7 @@ async def show_other(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
                 [
-                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
                 ],
             ]
         )
@@ -536,7 +536,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
                 [
-                    InlineKeyboardButton(text='Добавить в корзину', callback_data="add_basket", callback_data=add_to_basket.new(item_id=item.id))
+                    InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
                 ],
             ]
         )
