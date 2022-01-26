@@ -574,9 +574,8 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         await states.List_item.Next.set()
 
 
-@dp.callback_query_handler(add_to_basket.filter(), state='*')
+@dp.callback_query_handler(add_to_basket.filter(), state=states.List_item.Next)
 async def basket_add(call: CallbackQuery, callback_data: dict, state: FSMContext):
-    await state.finish()
     # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
     item_id = int(callback_data.get("item_id"))
     await call.message.edit_reply_markup()
