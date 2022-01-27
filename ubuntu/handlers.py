@@ -527,7 +527,7 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     )
 
     if not all_items:
-        await call.message.answer("Дальше ничего нет.", reply_keyboard=markup_2)
+        await call.message.answer("Дальше ничего нет.", reply_markup=markup_2)
         return
 
     # Проходимся по товарам, пронумеровывая
