@@ -520,8 +520,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     await state.update_data(a=value)
     all_items = await database.Item.query.where(database.Item.category == category).offset(a).limit(3).gino.all()
     markup_2 = InlineKeyboardButton(text="Назад", callback_data="cancel")
+
     if not all_items:
-        await call.message.answer("Дальше ничего нет.", reply_markup=markup_2)
+        await call.message.answer("Дальше ничего нет.", reply_keyboard=markup_2)
         return
 
     # Проходимся по товарам, пронумеровывая
