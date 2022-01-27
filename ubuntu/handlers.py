@@ -520,9 +520,9 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
     await state.update_data(a=value)
     all_items = await database.Item.query.where(database.Item.category == category).offset(a).limit(3).gino.all()
     markup_2 = InlineKeyboardMarkup(
-        inline =
+        inline_keyboard =
         [
-            [InlineKeyboardButton(text="Назад", callback_data="cancel")],
+            [InlineKeyboardButton(text=("Назад"), callback_data="cancel")],
         ]
     )
 
