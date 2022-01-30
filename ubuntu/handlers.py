@@ -19,7 +19,6 @@ import database
 import states
 from config import lp_token, admin_id
 from load_all import dp, bot
-import buttons
 import re
 
 db = database.DBCommands()
@@ -27,6 +26,7 @@ db = database.DBCommands()
 # Используем CallbackData для работы с коллбеками, в данном случае для работы с покупкой товаров
 buy_item = CallbackData("buy", "item_id")
 add_to_basket = CallbackData("add", "item_id")
+list_categories_call = CallbackData("list", "categories")
 
 
 # Для команды /start есть специальный фильтр, который можно тут использовать
@@ -85,17 +85,34 @@ async def categories_list(call: CallbackQuery, state: FSMContext):
     await call.message.edit_reply_markup()
     chat_id = call.from_user.id
     text = "Выберите товар из присутствующих категорий:"
+    magic_categories_markup = InlineKeyboardMarkup(
+    inline_keyboard=
+        [
+            [
+                InlineKeyboardButton(text="Головные уборы", callback_data=list_categories_call.new(categories="hats"))],
+            [
+                InlineKeyboardButton(text="Аксессуары", callback_data=list_categories_call.new(categories="accessories")),
+                InlineKeyboardButton(text="Верхняя одежда", callback_data=list_categories_call.new(categories="malling"))],
+            [
+                InlineKeyboardButton(text="Брюки", callback_data=list_categories_call.new(categories="pants")),
+                InlineKeyboardButton(text="Обувь", callback_data=list_categories_call.new(categories="shoes"))],
+            [
+                InlineKeyboardButton(text="Другое", callback_data=list_categories_call.new(categories="other")),
+                InlineKeyboardButton(text="Отмена", callback_data="cancel")
+            ]
+        ]
+    )
     
-    await bot.send_message(chat_id, text, reply_markup=buttons.magic_categories_markup)
+    await bot.send_message(chat_id, text, reply_markup=magic_categories_markup)
     await states.List_item.Item.set()
 
 
 # Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="hats", state=states.List_item.Item)
-async def show_hats(call: CallbackQuery, state: FSMContext):
+@dp.callback_query_handler(list_categories_call.filter(), state=states.List_item.Item)
+async def show_hats(call: CallbackQuery, callback_data: dict, state: FSMContext):
     # Достаем товары из базы данных
-    category = "add_hat"
-    all_items = await db.show_hats()
+    category = str(callback_data.get("categories"))
+    all_items = await database.Item.query.where(database.Item.category == category).limit(3).gino.all()
     a = 3
     await state.update_data(a=a)
     await state.update_data(category=category)
@@ -159,355 +176,6 @@ async def show_hats(call: CallbackQuery, state: FSMContext):
         await state.update_data(id=id)
         await states.List_item.Next.set()
 
-
-# Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="accessories", state=states.List_item.Item)
-async def show_accessories(call: CallbackQuery, state: FSMContext):
-    # Достаем товары из базы данных
-    all_items = await db.show_accessories()
-    # Проходимся по товарам, пронумеровывая
-    category = "add_accessories"
-    a = 3
-    await state.update_data(a=a)
-    await state.update_data(category=category)
-    for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n")
-
-        if item.description != "none":
-            text += ("{description}\n")
-        
-        text += ("\n<b>Цена:</b> \t{price:,}\n")
-
-        if call.from_user.id == admin_id:
-            text += ("\n"
-                  "id: \t{id}")
-
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=
-                [
-                    [
-                        # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                        InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                    [
-                        InlineKeyboardButton(text="Далее", callback_data="next"),
-                        InlineKeyboardButton(text="Назад", callback_data="cancel")
-                    ],
-                    [
-                        InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
-                    ], 
-                ]
-            )
-        # Отправляем фотку товара с подписью и кнопкой "купить"
-        media = MediaGroup()
-        if item.photo_1 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.photo_2 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_2))
-        if item.photo_3 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_3))
-        if item.photo_4 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_4))
-        if item.photo_5 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_5))
-        if item.photo_6 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_6))
-        if item.photo_7 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_7))
-        if item.video_8 != None:
-            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.video_9))
-        await call.message.answer_media_group(media=media)
-        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
-        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-        await asyncio.sleep(0.3)
-        await state.update_data(id=id)
-        await states.List_item.Next.set()
-
-# Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="malling", state=states.List_item.Item)
-async def show_malling(call: CallbackQuery, state: FSMContext):
-    # Достаем товары из базы данных
-    all_items = await db.show_malling()
-    category = "add_malling"
-    a = 3
-    await state.update_data(a=a)
-    await state.update_data(category=category)
-    # Проходимся по товарам, пронумеровывая
-    for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n")
-
-        if item.description != "none":
-            text += ("{description}\n")
-        
-        text += ("\n<b>Цена:</b> \t{price:,}\n")
-
-        if call.from_user.id == admin_id:
-            text += ("\n"
-                  "id: \t{id}")
-
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=
-                [
-                    [
-                        # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                        InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                    [
-                        InlineKeyboardButton(text="Далее", callback_data="next"),
-                        InlineKeyboardButton(text="Назад", callback_data="cancel")
-                    ],
-                    [
-                        InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
-                    ],
-                ]
-            )
-        media = MediaGroup()
-        if item.photo_1 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.photo_2 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_2))
-        if item.photo_3 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_3))
-        if item.photo_4 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_4))
-        if item.photo_5 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_5))
-        if item.photo_6 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_6))
-        if item.photo_7 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_7))
-        if item.video_8 != None:
-            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.video_9))
-        await call.message.answer_media_group(media=media)
-        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
-        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-        await asyncio.sleep(0.3)
-        await state.update_data(id=id)
-        await states.List_item.Next.set()
-
-
-# Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="pants", state=states.List_item.Item)
-async def show_pants(call: CallbackQuery, state: FSMContext):
-    # Достаем товары из базы данных
-    all_items = await db.show_pants()
-    category = "add_pants"
-    await state.update_data(category=category)
-    a = 3
-    await state.update_data(a=a)
-    # Проходимся по товарам, пронумеровывая
-    for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n")
-
-        if item.description != "none":
-            text += ("{description}\n")
-        
-        text += ("\n<b>Цена:</b> \t{price:,}\n")
-
-        if call.from_user.id == admin_id:
-            text += ("\n"
-                  "id: \t{id}")
-
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                [
-                    InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_data="cancel")
-                ],
-                [
-                    InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
-                ],
-            ]
-        )
-        media = MediaGroup()
-        if item.photo_1 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.photo_2 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_2))
-        if item.photo_3 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_3))
-        if item.photo_4 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_4))
-        if item.photo_5 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_5))
-        if item.photo_6 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_6))
-        if item.photo_7 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_7))
-        if item.video_8 != None:
-            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.video_9))
-        await call.message.answer_media_group(media=media)
-        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
-        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-        await asyncio.sleep(0.3)
-        await state.update_data(id=id)
-        await states.List_item.Next.set()
-
-
-# Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="shoes", state=states.List_item.Item)
-async def show_shoes(call: CallbackQuery, state: FSMContext):
-    # Достаем товары из базы данных
-    all_items = await db.show_shoes()
-    category = "add_shoes"
-    a = 3
-    await state.update_data(a=a)
-    await state.update_data(category=category)
-    # Проходимся по товарам, пронумеровывая
-    for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n")
-
-        if item.description != "none":
-            text += ("{description}\n")
-        
-        text += ("\n<b>Цена:</b> \t{price:,}\n")
-
-        if call.from_user.id == admin_id:
-            text += ("\n"
-                  "id: \t{id}")
-
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                [
-                    InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_data="cancel")
-                ],
-                [
-                    InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
-                ],
-            ]
-        )
-        media = MediaGroup()
-        if item.photo_1 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.photo_2 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_2))
-        if item.photo_3 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_3))
-        if item.photo_4 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_4))
-        if item.photo_5 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_5))
-        if item.photo_6 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_6))
-        if item.photo_7 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_7))
-        if item.video_8 != None:
-            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.video_9))
-        await call.message.answer_media_group(media=media)
-        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
-        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-        await asyncio.sleep(0.3)
-        await state.update_data(id=id)
-        await states.List_item.Next.set()
-
-
-# Показываем список доступных товаров
-@dp.callback_query_handler(text_contains="other", state=states.List_item.Item)
-async def show_other(call: CallbackQuery, state: FSMContext):
-    # Достаем товары из базы данных
-    all_items = await db.show_other()
-    category = "add_other"
-    await state.update_data(category=category)
-    a = 3
-    await state.update_data(a=a)
-    # Проходимся по товарам, пронумеровывая
-    for num, item in enumerate(all_items):
-        text = ("\t<b>{name}</b>\n")
-
-        if item.description != "none":
-            text += ("{description}\n")
-        
-        text += ("\n<b>Цена:</b> \t{price:,}\n")
-
-        if call.from_user.id == admin_id:
-            text += ("\n"
-                  "id: \t{id}")
-        
-        markup = InlineKeyboardMarkup(
-            inline_keyboard=
-            [
-                [
-                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
-                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
-                [
-                    InlineKeyboardButton(text="Далее", callback_data="next"),
-                    InlineKeyboardButton(text="Назад", callback_data="cancel")
-                ],
-                [
-                    InlineKeyboardButton(text='Добавить в корзину', callback_data=add_to_basket.new(item_id=item.id))
-                ],
-            ]
-        )
-        media = MediaGroup()
-        if item.photo_1 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.photo_2 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_2))
-        if item.photo_3 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_3))
-        if item.photo_4 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_4))
-        if item.photo_5 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_5))
-        if item.photo_6 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_6))
-        if item.photo_7 != None:
-            media.attach_photo('{photo}'.format(photo=item.photo_7))
-        if item.video_8 != None:
-            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        price=item.price / 100))
-        if item.video_9 != None:
-            media.attach_video('{video}'.format(video=item.video_9))
-        await call.message.answer_media_group(media=media)
-        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
-        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
-        await asyncio.sleep(0.3)
-        await state.update_data(id=id)
-        await states.List_item.Next.set()
 
 
 @dp.callback_query_handler(text_contains="next", state=states.List_item.Next)

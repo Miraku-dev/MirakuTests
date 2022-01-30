@@ -119,48 +119,6 @@ class DBCommands:
             for num, referral in enumerate(referrals)
         ])
 
-    async def show_hats(self):
-        category = "add_hat"
-        items = await Item.query.where(Item.category == category).limit(3).gino.all()
-
-        return items
-
-    async def show_accessories(self):
-        category = "add_accessories"
-        items = await Item.query.where(Item.category == category).limit(3).gino.all()
-
-        return items
-    
-    async def show_malling(self):
-        category = "add_malling"
-        items = await Item.query.where(Item.category == category).limit(3).gino.all()
-
-        return items
-
-    async def show_pants(self):
-        category = "add_pants"
-        items = await Item.query.where(Item.category == category).limit(3).gino.all()
-
-        return items
-
-    async def show_shoes(self):
-        category = "add_shoes"
-        items = await Item.query.where(Item.category == category).limit(3).gino.all()
-
-        return items
-
-    async def show_other(self):
-        category = "add_other"
-        items = await Item.query.where(Item.category == category).limit(3).gino.all()
-
-        return items
-
-    async def show_order(self):
-        order = await Purchase.query.gino.all()
-
-        return order
-
-
 
 async def create_db():
     await db.set_bind(f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}')
