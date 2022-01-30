@@ -47,7 +47,7 @@ class Item(db.Model):
     video_8 = Column(String(250))
     video_9 = Column(String(250))
     price = Column(Integer)  # Цена в копейках (потом делим на 100)
-    category = Column(String(25))
+    category = Column(String(250))
 
     def __repr__(self):
         return "<Item(id='{}', name='{}', description='{}', price='{}', category='{}')>".format(
