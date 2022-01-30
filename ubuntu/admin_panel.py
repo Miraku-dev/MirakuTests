@@ -76,7 +76,7 @@ async def item_category(call: types.CallbackQuery):
         inline_keyboard=
         [
             [
-                InlineKeyboardButton(text="Головные уборы", callback_data="add_hat")],
+                InlineKeyboardButton(text="Головные уборы", callback_data="add_hats")],
             [
                 InlineKeyboardButton(text="Аксессуары", callback_data="add_accessories"),
                 InlineKeyboardButton(text="Верхняя одежда", callback_data="add_malling")],
@@ -98,7 +98,7 @@ async def item_category(call: types.CallbackQuery):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_hat", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    category = "add_hat"
+    category = "hats"
     item.category =  category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -115,7 +115,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_accessories", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    category = "add_accessories"
+    category = "accessories"
     item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -132,7 +132,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_pants", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    category = "add_pants"
+    category = "pants"
     item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -149,7 +149,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_shoes", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    category = "add_shoes"
+    category = "shoes"
     item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -166,7 +166,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_malling", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    category = "add_malling"
+    category = "malling"
     item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
@@ -183,7 +183,7 @@ async def add_item(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(user_id=admin_id, text_contains="add_other", state=NewItem.Category)
 async def add_item(call: types.CallbackQuery, state: FSMContext):
     item = Item()
-    category = "add_other"
+    category = "other"
     item.category = category
     button = InlineKeyboardMarkup(
         inline_keyboard= 
