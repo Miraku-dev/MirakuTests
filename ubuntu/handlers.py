@@ -27,6 +27,7 @@ db = database.DBCommands()
 buy_item = CallbackData("buy", "item_id")
 add_to_basket = CallbackData("add", "item_id")
 list_categories_call = CallbackData("list", "categories")
+delete_basket = CallbackData("delete", "product_id")
 
 
 # Для команды /start есть специальный фильтр, который можно тут использовать
@@ -329,7 +330,7 @@ async def basket_list(call: CallbackQuery, state: FSMContext):
                     # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
                     InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
                 [
-                    InlineKeyboardButton(text="Удалить из корзины", callback_data="delete_basket"),
+                    InlineKeyboardButton(text="Удалить из корзины", callback_data=delete_basket.new(product_id=item.id)),
                     InlineKeyboardButton(text="Назад", callback_data="cancel")
                 ],
             ]
@@ -365,6 +366,25 @@ async def basket_list(call: CallbackQuery, state: FSMContext):
         await asyncio.sleep(0.3)
         await state.update_data(id=id)
 
+
+@dp.callback_query_handler(delete_basket.filter(), state='*')
+async def basket_delete(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    # То, что мы указали в CallbackData попадает в хендлер под callback_data, как словарь, поэтому достаем айдишник
+    product_id = int(callback_data.get("product_id"))
+
+    button = InlineKeyboardMarkup(
+                inline_keyboard=
+                [
+                    [
+                        InlineKeyboardButton(text="Назад", callback_data="cancel")
+                    ],
+                ]
+            )
+
+    text = ("Товар удалён из корзины.")
+    await call.message.answer(text, reply_markup=button)
+    await database.Basket.delete.where(database.Basket.product_id == product_id).gino.status()
+    await states.List_item.Next.set()
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
