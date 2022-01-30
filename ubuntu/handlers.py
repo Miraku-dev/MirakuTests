@@ -611,11 +611,84 @@ async def basket_add(call: CallbackQuery, callback_data: dict, state: FSMContext
     await call.message.answer(text, reply_markup=button)
 
     basket = database.Basket()
-    basket.item_id = item_id
+    basket.product_id = item_id
 
 
     await basket.create()
     await states.List_item.Next.set()
+
+
+@dp.callback_query_handler(text_contains="basket")
+async def basket_list(call: CallbackQuery, state: FSMContext):
+    data = await state.get_data()
+    product_id = database.Basket.product_id()
+    all_items = await database.Item.query.where(database.Item.id == product_id).gino.all()
+    markup_2 = InlineKeyboardMarkup(
+        inline_keyboard =
+        [
+            [InlineKeyboardButton(text=("Назад"), callback_data="cancel")],
+        ]
+    )
+    if not all_items:
+        await call.message.answer("Корзина пуста.", reply_markup=markup_2)
+        return
+
+    # Проходимся по товарам, пронумеровывая
+    for num, item in enumerate(all_items):
+        text = ("\t<b>{name}</b>\n")
+
+        if item.description != "none":
+            text += ("{description}\n")
+        
+        text += ("\n<b>Цена:</b> \t{price:,}\n")
+
+        if call.from_user.id == admin_id:
+            text += ("\n"
+                  "id: \t{id}")
+        
+        markup = InlineKeyboardMarkup(
+            inline_keyboard=
+            [
+                [
+                    # Создаем кнопку "купить" и передаем ее айдишник в функцию создания коллбека
+                    InlineKeyboardButton(text=("Купить"), callback_data=buy_item.new(item_id=item.id))],
+                [
+                    InlineKeyboardButton(text="Удалить из корзины", callback_data="delete_basket"),
+                    InlineKeyboardButton(text="Назад", callback_data="cancel")
+                ],
+            ]
+        )
+        media = MediaGroup()
+        if item.photo_1 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_1), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.photo_2 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_2))
+        if item.photo_3 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_3))
+        if item.photo_4 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_4))
+        if item.photo_5 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_5))
+        if item.photo_6 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_6))
+        if item.photo_7 != None:
+            media.attach_photo('{photo}'.format(photo=item.photo_7))
+        if item.video_8 != None:
+            media.attach_video('{video}'.format(video=item.video_8), text.format(id=item.id,
+                        name=item.name,
+                        description=item.description,
+                        price=item.price / 100))
+        if item.video_9 != None:
+            media.attach_video('{video}'.format(video=item.video_9))
+        await call.message.answer_media_group(media=media)
+        await call.message.answer("Выберите действие с помощью кнопок ниже:", reply_markup=markup)
+        # Между сообщениями делаем небольшую задержку, чтобы не упереться в лимиты
+        await asyncio.sleep(0.3)
+        await state.update_data(id=id)
+
 
 
 @dp.callback_query_handler(user_id=admin_id, text_contains="order_list")
