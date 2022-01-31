@@ -75,7 +75,7 @@ class Basket(db.Model):
     query: sql.Select
 
     product_id = Column(Integer)
-    user_id = Column(Integer)
+    user_id = Column(BigInteger)
 
 class Order_Status(db.Model):
     __tablname__="order_status"
@@ -83,7 +83,7 @@ class Order_Status(db.Model):
 
     product_id = Column(Integer)
     order_status = Column(String(250))
-    user_id = Column(Integer)
+    user_id = Column(BigInteger)
     
 
 class DBCommands:
