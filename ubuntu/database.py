@@ -77,10 +77,10 @@ class Basket(db.Model):
     product_id = Column(Integer)
     user_id = Column(Integer)
 
-class Order_Status(db.Moedel):
+class Order_Status(db.Model):
     __tablname__="order_status"
     query: sql.Select
-    
+
     product_id = Column(Integer)
     order_status = Column(String(250))
     user_id = Column(Integer)
