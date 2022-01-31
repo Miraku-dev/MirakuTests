@@ -284,12 +284,13 @@ async def basket_add(call: CallbackQuery, callback_data: dict, state: FSMContext
                     ],
                 ]
             )
-
+    
     text = ("Товар добавлен в корзину")
     await call.message.answer(text, reply_markup=button)
 
     basket = database.Basket()
     basket.product_id = item_id
+    basket.user_id = call.from_user.id
 
 
     await basket.create()
@@ -299,7 +300,8 @@ async def basket_add(call: CallbackQuery, callback_data: dict, state: FSMContext
 @dp.callback_query_handler(text_contains="basket")
 async def basket_list(call: CallbackQuery, state: FSMContext):
     data = await state.get_data()
-    all_items = await database.Item.query.where(database.Item.id == database.Basket.product_id).gino.all()
+    product_id = await database.Basket.query.where(database.Basket.user_id == call.from_user.id).gino.all()
+    all_items = await database.Item.query.where(database.Item.id == product_id.product_id).gino.all()
     markup_2 = InlineKeyboardMarkup(
         inline_keyboard =
         [
